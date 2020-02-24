@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,18 @@ public class AppUserController {
     public ResponseEntity<AppUser> insertUser(@RequestBody AppUser appUser)
     {
         return appUserService.insertUserIfNotExists(appUser);
+    }
+
+    @PutMapping("/users")
+    public ResponseEntity<AppUser> updateUser(@RequestBody AppUser appUser)
+    {
+        return appUserService.updateUserIfExists(appUser);
+    }
+
+    @DeleteMapping("/users")
+    public ResponseEntity<AppUser>deleteUser(@RequestBody AppUser appUser)
+    {
+        return appUserService.deleteUserIfExists(appUser);
     }
 
 }

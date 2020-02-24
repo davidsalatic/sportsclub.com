@@ -1,5 +1,8 @@
 package com.eryce.sportsclub.runner;
 
+import com.eryce.sportsclub.controllers.AppUserController;
+import com.eryce.sportsclub.controllers.MemberGroupController;
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.ClubMember;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.repositories.*;
@@ -11,13 +14,9 @@ import org.springframework.stereotype.Component;
 public class RunnerData implements CommandLineRunner {
 
     @Autowired
-    private AppUserRepository appUserRepository;
-    private AttendanceRepository attendanceRepository;
+    private MemberGroupController memberGroupController;
     @Autowired
-    private MemberGroupRepository memberGroupRepository;
-    private MembershipRepository membershipRepository;
-    private PaymentRepository paymentRepository;
-    private TrainingSessionRepository trainingSessionRepository;
+    private AppUserController appUserController;
 
     @Override
     public void run(String... args) {
@@ -26,16 +25,23 @@ public class RunnerData implements CommandLineRunner {
     }
 
     private void insertTestData() {
-        MemberGroup memberGroup = new MemberGroup("grupa1");
-        MemberGroup memberGroup1 = new MemberGroup("grupa2");
+
+        MemberGroup memberGroup = new MemberGroup(1,"grupa1");
+        MemberGroup memberGroup1 = new MemberGroup(2,"grupa2");
+
+        memberGroupController.insertGroup(memberGroup);
+        memberGroupController.insertGroup(memberGroup1);
 
         ClubMember clubMember = new ClubMember("davidsalatic","sifra123","David","Salatic");
+        ClubMember clubMember1 = new ClubMember("dzon","dzon11","Dzon","Dzonic");
+
+        clubMember.setUserId(1);
+        clubMember1.setUserId(2);
         clubMember.setMemberGroup(memberGroup);
+        clubMember1.setMemberGroup(memberGroup1);
 
-        memberGroupRepository.save(memberGroup);
-
-        clubMember.setPhoneNumber("0611868582");
-        appUserRepository.save(clubMember);
+        appUserController.insertUser(clubMember);
+        appUserController.insertUser(clubMember1);
 
         System.out.println("Started in Runner");
     }

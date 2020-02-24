@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class AppUser {
@@ -64,5 +65,25 @@ public class AppUser {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof AppUser) {
+            AppUser secondUser = (AppUser) o;
+            if (this.username.equals(secondUser.username))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 }

@@ -18,6 +18,11 @@ public class ClubMember extends AppUser {
     @JsonIgnore
     private MemberGroup memberGroup;
 
+    public ClubMember()
+    {
+
+    }
+
     public ClubMember(String username, String password, String name, String surname) {
         super(username, password, name, surname);
     }

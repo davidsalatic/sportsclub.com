@@ -5,6 +5,7 @@ import com.eryce.sportsclub.repositories.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -31,6 +32,34 @@ public class AppUserService {
     }
 
     private boolean exists(AppUser appUser) {
-        return appUserRepository.existsById(appUser.getUserId());
+        boolean existsUsername=false;
+
+        for(AppUser u:getAll())
+        {
+            if(u.equals(appUser))
+            {
+                existsUsername=true;
+            }
+        }
+
+        return existsUsername || appUserRepository.existsById(appUser.getUserId());
+    }
+
+    public ResponseEntity<AppUser> updateUserIfExists(AppUser appUser) {
+        if(exists(appUser))
+        {
+            appUserRepository.save(appUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<AppUser> deleteUserIfExists(AppUser appUser) {
+        if(exists(appUser))
+        {
+            appUserRepository.delete(appUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
