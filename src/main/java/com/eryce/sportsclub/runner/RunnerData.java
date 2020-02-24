@@ -20,8 +20,12 @@ public class RunnerData implements CommandLineRunner {
     private TrainingSessionRepository trainingSessionRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
+        insertTestData();
+    }
+
+    private void insertTestData() {
         MemberGroup memberGroup = new MemberGroup("grupa1");
         MemberGroup memberGroup1 = new MemberGroup("grupa2");
 
@@ -34,6 +38,5 @@ public class RunnerData implements CommandLineRunner {
         appUserRepository.save(clubMember);
 
         System.out.println("Started in Runner");
-
     }
 }

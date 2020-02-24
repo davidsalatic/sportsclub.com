@@ -3,7 +3,7 @@ package com.eryce.sportsclub.models;
 import javax.persistence.*;
 
 @Entity
-public class MemberGroup {
+public class MemberGroup{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class MemberGroup {
         this.memberGroupId=id;
     }
 
-    public Integer getMemberGroupId() {
+    public Integer getId() {
         return memberGroupId;
     }
 
