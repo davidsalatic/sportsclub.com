@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Membership {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer membershipId;
 
     private int month;

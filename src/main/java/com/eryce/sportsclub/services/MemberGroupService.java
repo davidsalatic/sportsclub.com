@@ -50,6 +50,10 @@ public class MemberGroupService {
     }
 
     private boolean exists(MemberGroup memberGroup) {
-        return memberGroupRepository.existsById(memberGroup.getId());
+        return existsByUsername(memberGroup.getName()) ||  memberGroupRepository.existsById(memberGroup.getId());
+    }
+
+    private boolean existsByUsername(String name) {
+        return !(memberGroupRepository.findAllByNameContainingIgnoreCase(name).isEmpty());
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AppUserService {
@@ -32,17 +33,11 @@ public class AppUserService {
     }
 
     private boolean exists(AppUser appUser) {
-        boolean existsUsername=false;
+        return existsByUsername(appUser.getUsername()) || appUserRepository.existsById(appUser.getUserId());
+    }
 
-        for(AppUser u:getAll())
-        {
-            if(u.equals(appUser))
-            {
-                existsUsername=true;
-            }
-        }
-
-        return existsUsername || appUserRepository.existsById(appUser.getUserId());
+    private boolean existsByUsername(String username) {
+        return !(appUserRepository.findAllByUsernameContainingIgnoreCase(username).isEmpty());
     }
 
     public ResponseEntity<AppUser> updateUserIfExists(AppUser appUser) {
