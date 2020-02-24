@@ -33,10 +33,16 @@ public class TrainingSessionController {
         return trainingSessionService.insertTrainingSessionIfNotExists(trainingSession);
     }
 
+    @PutMapping("/sessions")
+    public ResponseEntity<TrainingSession> updateTrainingSession(@RequestBody TrainingSession trainingSession)
+    {
+        return trainingSessionService.updateTrainingSessionIfExists(trainingSession);
+    }
+
     @DeleteMapping("/sessions")
     public ResponseEntity<TrainingSession> deleteTrainingSession(@RequestBody TrainingSession trainingSession)
     {
-        return null;
+        return trainingSessionService.deleteTrainingSessionIfExists(trainingSession);
     }
 
 }

@@ -34,12 +34,8 @@ public class MemberGroupService {
     }
 
     public ResponseEntity<MemberGroup> deleteGroupIfExists(MemberGroup memberGroup) {
-        if(memberGroupRepository.existsById(memberGroup.getId()))
-        {
-            memberGroupRepository.delete(memberGroup);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        memberGroupRepository.delete(memberGroup);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -41,20 +41,12 @@ public class AppUserService {
     }
 
     public ResponseEntity<AppUser> updateUserIfExists(AppUser appUser) {
-        if(exists(appUser))
-        {
-            appUserRepository.save(appUser);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        appUserRepository.save(appUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<AppUser> deleteUserIfExists(AppUser appUser) {
-        if(exists(appUser))
-        {
-            appUserRepository.delete(appUser);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        appUserRepository.delete(appUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

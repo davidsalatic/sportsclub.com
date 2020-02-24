@@ -16,7 +16,7 @@ public class Membership {
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "club_member_id", nullable = false)
+    @JoinColumn(name = "club_member_id", nullable = true)
     @JsonIgnore
     private ClubMember clubMember;
 

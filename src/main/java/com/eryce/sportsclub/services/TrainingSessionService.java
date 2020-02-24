@@ -20,22 +20,23 @@ public class TrainingSessionService {
     }
 
     public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {
-        if(exists(trainingSession))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        trainingSession.setMonth(trainingSession.getDateHeld().getMonthValue());
+        trainingSession.setYear(trainingSession.getDateHeld().getYear());
         trainingSessionRepository.save(trainingSession);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean exists(TrainingSession trainingSession) {
-        return trainingSessionRepository.existsById(trainingSession.getId());
-    }
-
-    private boolean existsByDateAndTime(TrainingSession trainingSession) {
-        return !(trainingSessionRepository.findAllByDateHeld(trainingSession.getDateHeld()).isEmpty() &&
-                trainingSessionRepository.findAllByTimeHeld(trainingSession.getTimeHeld()).isEmpty());
-    }
-
     public List<TrainingSession> getAll() {
         return trainingSessionRepository.findAll();
+    }
+
+    public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(TrainingSession trainingSession) {
+        trainingSessionRepository.delete(trainingSession);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<TrainingSession> updateTrainingSessionIfExists(TrainingSession trainingSession) {
+        trainingSessionRepository.save(trainingSession);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

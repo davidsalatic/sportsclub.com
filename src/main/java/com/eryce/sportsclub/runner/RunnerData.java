@@ -21,18 +21,6 @@ public class RunnerData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
-        MemberGroup memberGroup = new MemberGroup();
-        memberGroup.setId(1);
-        memberGroup.setName("grupa1");
-
-        ClubMember appUser = new ClubMember();
-        appUser.setId(1);
-        appUser.setUsername("davidsaltic");
-        appUser.setPassword("123");
-        appUser.setMemberGroup(memberGroup);
-
-        memberGroupController.insertGroup(memberGroup);
-        appUserController.insertUser(appUser);
+        System.out.println("***************APP STARTED*****************");
     }
 }
