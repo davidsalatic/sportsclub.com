@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +43,4 @@ public class AppUserController {
     {
         return appUserService.deleteUserIfExists(appUser);
     }
-
 }

@@ -24,24 +24,17 @@ public class MemberGroupService {
     }
 
     public ResponseEntity<MemberGroup> insertGroupIfNotExists(MemberGroup memberGroup) {
-        if (exists(memberGroup))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-
         memberGroupRepository.save(memberGroup);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<MemberGroup> updateGroupIfExists(MemberGroup memberGroup) {
-        if(exists(memberGroup))
-        {
-            memberGroupRepository.save(memberGroup);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        memberGroupRepository.save(memberGroup);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<MemberGroup> deleteGroupIfExists(MemberGroup memberGroup) {
-        if(exists(memberGroup))
+        if(memberGroupRepository.existsById(memberGroup.getId()))
         {
             memberGroupRepository.delete(memberGroup);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -49,11 +42,4 @@ public class MemberGroupService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private boolean exists(MemberGroup memberGroup) {
-        return existsByUsername(memberGroup.getName()) ||  memberGroupRepository.existsById(memberGroup.getId());
-    }
-
-    private boolean existsByUsername(String name) {
-        return !(memberGroupRepository.findAllByNameContainingIgnoreCase(name).isEmpty());
-    }
 }

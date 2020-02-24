@@ -9,7 +9,7 @@ public class Membership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer membershipId;
+    private Integer id;
 
     private int month;
     private int year;
@@ -19,4 +19,24 @@ public class Membership {
     @JoinColumn(name = "club_member_id", nullable = false)
     @JsonIgnore
     private ClubMember clubMember;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public ClubMember getClubMember() {
+        return clubMember;
+    }
 }

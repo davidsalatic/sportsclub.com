@@ -24,11 +24,10 @@ public class TrainingSessionService {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         trainingSessionRepository.save(trainingSession);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     private boolean exists(TrainingSession trainingSession) {
-        return trainingSessionRepository.existsById(trainingSession.getTrainingSessionId()) || existsByDateAndTime(trainingSession);
+        return trainingSessionRepository.existsById(trainingSession.getId());
     }
 
     private boolean existsByDateAndTime(TrainingSession trainingSession) {

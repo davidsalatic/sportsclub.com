@@ -7,7 +7,7 @@ public class MemberGroup{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer memberGroupId;
+    private Integer id;
 
     private String name;
 
@@ -16,22 +16,12 @@ public class MemberGroup{
 
     }
 
-    public MemberGroup(String name)
-    {
-        this.name=name;
-    }
-
-    public MemberGroup(int id,String name) {
-        this.name = name;
-        this.memberGroupId=id;
-    }
-
     public Integer getId() {
-        return memberGroupId;
+        return id;
     }
 
-    public void setMemberGroupId(Integer memberGroupId) {
-        this.memberGroupId = memberGroupId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

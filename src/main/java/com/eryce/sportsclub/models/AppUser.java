@@ -1,38 +1,25 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     private String username;
     private String password;
     private String name;
     private String surname;
 
-    public AppUser()
-    {
-
+    public Integer getId() {
+        return id;
     }
 
-    public AppUser(String username, String password, String name, String surname) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {

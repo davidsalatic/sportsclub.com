@@ -4,7 +4,6 @@ import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.services.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -40,4 +39,15 @@ public class AttendanceController {
         return attendanceService.insertAttendanceIfNotExists(attendance);
     }
 
+    @PutMapping("/attendances")
+    public ResponseEntity<Attendance> updateAttendance(@RequestBody Attendance attendance)
+    {
+        return attendanceService.updateAttendanceIfExists(attendance);
+    }
+
+    @DeleteMapping("attendances")
+    public ResponseEntity<Attendance> deleteAttendance(@RequestBody Attendance attendance)
+    {
+        return attendanceService.deleteAttendanceIfExists(attendance);
+    }
 }

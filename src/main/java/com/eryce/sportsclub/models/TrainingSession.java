@@ -9,7 +9,7 @@ public class TrainingSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer trainingSessionId;
+    private Integer id;
 
     private Integer month;
     private Integer year;
@@ -22,20 +22,8 @@ public class TrainingSession {
 
     }
 
-    public TrainingSession(Integer id, LocalDate dateHeld, LocalTime timeHeld) {
-        this.trainingSessionId=id;
-        this.dateHeld = dateHeld;
-        this.timeHeld = timeHeld;
-        this.month=dateHeld.getMonthValue();
-        this.year=dateHeld.getYear();
-    }
-
-    public Integer getTrainingSessionId() {
-        return trainingSessionId;
-    }
-
-    public void setTrainingSessionId(Integer trainingSessionId) {
-        this.trainingSessionId = trainingSessionId;
+    public Integer getId() {
+        return id;
     }
 
     public Integer getMonth() {

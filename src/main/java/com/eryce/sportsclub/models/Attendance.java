@@ -9,7 +9,7 @@ public class Attendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer attendanceId;
+    private Integer id;
 
     private boolean present;
 
@@ -21,12 +21,8 @@ public class Attendance {
     @JoinColumn(name = "training_session_id", nullable = false)
     private TrainingSession trainingSession;
 
-    public Integer getAttendanceId() {
-        return attendanceId;
-    }
-
-    public void setAttendanceId(Integer attendanceId) {
-        this.attendanceId = attendanceId;
+    public Integer getId() {
+        return id;
     }
 
     public boolean isPresent() {

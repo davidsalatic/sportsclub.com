@@ -12,4 +12,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Integer> 
     List<Attendance> findAllByAppUser(AppUser appUser);
 
     List<Attendance> findAllByTrainingSession(TrainingSession trainingSession);
+
+    Attendance findByTrainingSession(TrainingSession trainingSession);
 }

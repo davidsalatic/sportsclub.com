@@ -42,7 +42,11 @@ public class AttendanceService {
     }
 
     private boolean exists(Attendance attendance) {
-        return attendanceRepository.existsById(attendance.getAttendanceId());
+        return existsByTrainingSession(attendance);
+    }
+
+    private boolean existsByTrainingSession(Attendance attendance) {
+        return (attendanceRepository.findByTrainingSession(attendance.getTrainingSession())!=null);
     }
 
     public Collection<Attendance> getAll() {
@@ -52,5 +56,24 @@ public class AttendanceService {
     public List<Attendance> findByTrainingSessionId(Integer id) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(id);
         return attendanceRepository.findAllByTrainingSession(trainingSession);
+    }
+
+    public ResponseEntity<Attendance> updateAttendanceIfExists(Attendance attendance) {
+        if(exists(attendance))
+        {
+            attendanceRepository.save(attendance);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<Attendance> deleteAttendanceIfExists(Attendance attendance)
+    {
+        if(exists(attendance))
+        {
+            attendanceRepository.delete(attendance);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

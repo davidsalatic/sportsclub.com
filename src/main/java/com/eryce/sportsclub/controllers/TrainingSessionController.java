@@ -33,4 +33,10 @@ public class TrainingSessionController {
         return trainingSessionService.insertTrainingSessionIfNotExists(trainingSession);
     }
 
+    @DeleteMapping("/sessions")
+    public ResponseEntity<TrainingSession> deleteTrainingSession(@RequestBody TrainingSession trainingSession)
+    {
+        return null;
+    }
+
 }

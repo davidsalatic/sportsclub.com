@@ -10,7 +10,7 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer paymentId;
+    private Integer id;
 
     private LocalDate dateOfPayment;
     private int amount;
@@ -24,4 +24,24 @@ public class Payment {
     @JoinColumn(name = "membership_id", nullable = false)
     @JsonIgnore
     private Membership membership;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public LocalDate getDateOfPayment() {
+        return dateOfPayment;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public ClubMember getClubMember() {
+        return clubMember;
+    }
+
+    public Membership getMembership() {
+        return membership;
+    }
 }

@@ -33,7 +33,7 @@ public class AppUserService {
     }
 
     private boolean exists(AppUser appUser) {
-        return existsByUsername(appUser.getUsername()) || appUserRepository.existsById(appUser.getUserId());
+        return existsByUsername(appUser.getUsername());
     }
 
     private boolean existsByUsername(String username) {
