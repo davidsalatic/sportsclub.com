@@ -20,18 +20,6 @@ public class MembershipController {
         return membershipService.getAll();
     }
 
-//    @GetMapping("/memberships/{id}")
-//    public List<Membership> getAllByUserId(@PathVariable("id") Integer id)
-//    {
-//        return membershipService.getAllByUserId(id);
-//    }
-//
-//    @GetMapping("/memberships/{year}/{month}")
-//    public List<Membership> getAllByYearAndMonth(@PathVariable("year")Integer year,@PathVariable("month")Integer month)
-//    {
-//        return membershipService.getAllByYearAndMonth(year,month);
-//    }
-
     @PutMapping("/memberships")
     public ResponseEntity<Membership> updateMembership(@RequestBody Membership membership)
     {

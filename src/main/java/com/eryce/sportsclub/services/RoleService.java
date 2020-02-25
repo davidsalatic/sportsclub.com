@@ -34,4 +34,8 @@ public class RoleService {
         roleRepository.delete(role);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    public List<Role> findAllByName(String name) {
+        return roleRepository.findAllByNameContainingIgnoreCase(name);
+    }
 }

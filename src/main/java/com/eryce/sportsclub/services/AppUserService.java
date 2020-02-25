@@ -1,11 +1,14 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.Permission;
+import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.AppUserRepository;
+import com.eryce.sportsclub.repositories.PermissionRepository;
+import com.eryce.sportsclub.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

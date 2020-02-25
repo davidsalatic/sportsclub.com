@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.Permission;
+import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,11 @@ public class PermissionController {
     public ResponseEntity<Permission> deletePermission(@RequestBody Permission permission)
     {
         return permissionService.deletePermission(permission);
+    }
+
+    @GetMapping("/permissions/user/{id}")
+    public List<Permission> getPermissionsByUser(@PathVariable Integer id)
+    {
+        return permissionService.getPermissionsByUser(id);
     }
 }

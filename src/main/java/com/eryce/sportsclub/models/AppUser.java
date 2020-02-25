@@ -98,4 +98,20 @@ public class AppUser {
     public void setDateJoined(LocalDate dateJoined) {
         this.dateJoined = dateJoined;
     }
+
+    public MemberGroup getMemberGroup() {
+        return memberGroup;
+    }
+
+    public void setMemberGroup(MemberGroup memberGroup) {
+        this.memberGroup = memberGroup;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

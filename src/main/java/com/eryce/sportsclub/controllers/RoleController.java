@@ -20,6 +20,12 @@ public class RoleController  {
         return roleService.getAll();
     }
 
+    @GetMapping("/roles/{name}")
+    public List<Role>findAllByName(@PathVariable("name")String name)
+    {
+        return roleService.findAllByName(name);
+    }
+
     @PostMapping("/roles")
     public ResponseEntity insertRole(@RequestBody Role role)
     {
@@ -37,5 +43,7 @@ public class RoleController  {
     {
         return roleService.deleteRole(role);
     }
+
+
 
 }

@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Role {
@@ -10,10 +9,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String role;
-
-    @ManyToMany
-    private List<Permission> permissions;
+    private String name;
 
     public Integer getId() {
         return id;
@@ -23,11 +19,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 }

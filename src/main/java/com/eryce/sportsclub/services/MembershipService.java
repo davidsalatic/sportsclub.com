@@ -23,15 +23,6 @@ public class MembershipService {
 
         return membershipRepository.findAll();
     }
-//
-//    public List<Membership> getAllByUserId(Integer userId) {
-//        AppUser appUser = appUserRepository.getOne(userId);
-//        return membershipRepository.findAllByAppUser(appUser);
-//    }
-//
-//    public List<Membership> getAllByYearAndMonth(Integer year, Integer month) {
-//        return membershipRepository.findAllByYearAndMonth(year,month);
-//    }
 
     public ResponseEntity<Membership> updateMembership(Membership membership) {
         membershipRepository.save(membership);

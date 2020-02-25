@@ -10,10 +10,11 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String permission;
+    private String name;
 
-    @ManyToMany(mappedBy = "permissions")
-    private List<Role> roles;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     public Integer getId() {
         return id;
@@ -23,11 +24,19 @@ public class Permission {
         this.id = id;
     }
 
-    public String getPermission() {
-        return permission;
+    public String getName() {
+        return name;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
