@@ -32,20 +32,9 @@ public class AttendanceService {
     }
 
     public ResponseEntity<Attendance> insertAttendanceIfNotExists(Attendance attendance) {
-        if(exists(attendance))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-
         attendanceRepository.save(attendance);
         return new ResponseEntity<>(HttpStatus.OK);
 
-    }
-
-    private boolean exists(Attendance attendance) {
-        return existsByTrainingSession(attendance);
-    }
-
-    private boolean existsByTrainingSession(Attendance attendance) {
-        return (attendanceRepository.findByTrainingSession(attendance.getTrainingSession())!=null);
     }
 
     public Collection<Attendance> getAll() {
@@ -58,21 +47,13 @@ public class AttendanceService {
     }
 
     public ResponseEntity<Attendance> updateAttendanceIfExists(Attendance attendance) {
-        if(exists(attendance))
-        {
             attendanceRepository.save(attendance);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<Attendance> deleteAttendanceIfExists(Attendance attendance)
     {
-        if(exists(attendance))
-        {
             attendanceRepository.delete(attendance);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

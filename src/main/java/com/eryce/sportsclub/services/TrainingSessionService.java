@@ -15,8 +15,8 @@ public class TrainingSessionService {
     @Autowired
     private TrainingSessionRepository trainingSessionRepository;
 
-    public List<TrainingSession> getTrainingSessionsByMonth(Integer month) {
-        return trainingSessionRepository.findAllByMonth(month);
+    public List<TrainingSession> getTrainingSessionsByMonth(Integer year,Integer month) {
+        return trainingSessionRepository.findAllByYearAndMonth(year,month);
     }
 
     public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {

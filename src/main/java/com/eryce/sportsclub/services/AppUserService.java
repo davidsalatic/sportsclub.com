@@ -2,10 +2,9 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Permission;
-import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.PermissionRepository;
-import com.eryce.sportsclub.repositories.RoleRepository;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,8 @@ public class AppUserService {
 
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     public Collection<AppUser> getAll() {
         return appUserRepository.findAll();
@@ -51,5 +52,10 @@ public class AppUserService {
     public ResponseEntity<AppUser> deleteUserIfExists(AppUser appUser) {
         appUserRepository.delete(appUser);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public List<Permission> getUserPermissions(Integer id) {
+        AppUser appUser = getById(id);
+        return appUser.getRole().getPermissions();
     }
 }

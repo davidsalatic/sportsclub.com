@@ -38,9 +38,4 @@ public class PermissionService {
         permissionRepository.save(permission);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    public List<Permission> getPermissionsByUser(Integer id) {
-        AppUser appUser = appUserRepository.getOne(id);
-        return permissionRepository.findAllByRole(appUser.getRole());
-    }
 }

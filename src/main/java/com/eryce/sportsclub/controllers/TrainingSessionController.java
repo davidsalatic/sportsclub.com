@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -15,10 +14,10 @@ public class TrainingSessionController {
     @Autowired
     private TrainingSessionService trainingSessionService;
 
-    @GetMapping("/sessions/{month}")
-    public List<TrainingSession>getAllByMonth(@PathVariable("month") Integer month)
+    @GetMapping("/sessions/{year}/{month}")
+    public List<TrainingSession>getAllByMonth(@PathVariable("year")Integer year,@PathVariable("month") Integer month)
     {
-        return trainingSessionService.getTrainingSessionsByMonth(month);
+        return trainingSessionService.getTrainingSessionsByMonth(year,month);
     }
 
     @GetMapping("/sessions")
@@ -44,5 +43,4 @@ public class TrainingSessionController {
     {
         return trainingSessionService.deleteTrainingSessionIfExists(trainingSession);
     }
-
 }

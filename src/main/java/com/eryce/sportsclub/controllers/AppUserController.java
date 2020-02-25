@@ -1,12 +1,14 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class AppUserController {
@@ -24,6 +26,12 @@ public class AppUserController {
     public AppUser getAppUser(@PathVariable("id")Integer id)
     {
         return appUserService.getById(id);
+    }
+
+    @GetMapping("/users/{id}/permissions")
+    public List<Permission> getUserPermissions(@PathVariable("id")Integer id)
+    {
+        return appUserService.getUserPermissions(id);
     }
 
     @PostMapping("/users")

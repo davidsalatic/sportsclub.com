@@ -1,6 +1,8 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Role {
@@ -10,6 +12,10 @@ public class Role {
     private Integer id;
 
     private String name;
+
+    @ManyToMany
+    @JoinColumn(name = "role_id")
+    private List<Permission> permissions=new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -25,5 +31,13 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 }

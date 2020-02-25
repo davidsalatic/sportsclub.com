@@ -12,10 +12,6 @@ public class Permission {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
     public Integer getId() {
         return id;
     }
@@ -32,11 +28,4 @@ public class Permission {
         this.name = name;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

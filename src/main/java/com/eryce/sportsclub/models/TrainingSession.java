@@ -56,6 +56,28 @@ public class TrainingSession {
 
     public void setDateHeld(LocalDate dateHeld) {
         this.dateHeld = dateHeld;
+        this.year = dateHeld.getYear();
+        this.month=dateHeld.getMonthValue();
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public AppUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(AppUser creator) {
+        this.creator = creator;
+    }
+
+    public MemberGroup getMemberGroup() {
+        return memberGroup;
+    }
+
+    public void setMemberGroup(MemberGroup memberGroup) {
+        this.memberGroup = memberGroup;
     }
 
     public LocalTime getTimeHeld() {
