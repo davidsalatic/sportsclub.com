@@ -32,4 +32,9 @@ public class PermissionController {
         return permissionService.insertPermission(permission);
     }
 
+    @DeleteMapping("/permissions")
+    public ResponseEntity<Permission> deletePermission(@RequestBody Permission permission)
+    {
+        return permissionService.deletePermission(permission);
+    }
 }
