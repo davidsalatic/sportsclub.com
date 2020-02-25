@@ -13,9 +13,8 @@ public class ClubMember extends AppUser {
     private String phoneNumber;
     private LocalDate dateJoined;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_group_id", nullable = true)
-    @JsonIgnore
     private MemberGroup memberGroup;
 
 
