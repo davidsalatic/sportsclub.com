@@ -13,16 +13,14 @@ public class Payment {
     private Integer id;
 
     private LocalDate dateOfPayment;
-    private int amount;
+    private Integer amount;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "club_member_id", nullable = true)
-    @JsonIgnore
-    private ClubMember clubMember;
+    @JoinColumn(name = "app_user_id", nullable = false)
+    private AppUser appUser;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "membership_id", nullable = false)
-    @JsonIgnore
     private Membership membership;
 
     public Integer getId() {
@@ -37,8 +35,28 @@ public class Payment {
         return amount;
     }
 
-    public ClubMember getClubMember() {
-        return clubMember;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setDateOfPayment(LocalDate dateOfPayment) {
+        this.dateOfPayment = dateOfPayment;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public void setMembership(Membership membership) {
+        this.membership = membership;
     }
 
     public Membership getMembership() {

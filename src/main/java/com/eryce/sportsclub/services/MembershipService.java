@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.models.ClubMember;
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MembershipRepository;
@@ -26,8 +25,8 @@ public class MembershipService {
     }
 
     public List<Membership> getAllByUserId(Integer userId) {
-        ClubMember clubMember = (ClubMember) appUserRepository.getOne(userId);
-        return membershipRepository.findAllByClubMember(clubMember);
+        AppUser appUser = appUserRepository.getOne(userId);
+        return membershipRepository.findAllByAppUser(appUser);
     }
 
     public List<Membership> getAllByYearAndMonth(Integer year, Integer month) {

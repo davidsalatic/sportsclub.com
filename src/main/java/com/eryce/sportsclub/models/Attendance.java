@@ -11,8 +11,6 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private boolean present;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
@@ -23,14 +21,6 @@ public class Attendance {
 
     public Integer getId() {
         return id;
-    }
-
-    public boolean isPresent() {
-        return present;
-    }
-
-    public void setPresent(boolean present) {
-        this.present = present;
     }
 
     public AppUser getAppUser() {

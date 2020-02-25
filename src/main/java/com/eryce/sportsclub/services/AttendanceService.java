@@ -2,7 +2,6 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Attendance;
-import com.eryce.sportsclub.models.ClubMember;
 import com.eryce.sportsclub.models.TrainingSession;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.AttendanceRepository;

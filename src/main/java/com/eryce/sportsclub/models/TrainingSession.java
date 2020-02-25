@@ -17,6 +17,14 @@ public class TrainingSession {
     private LocalDate dateHeld;
     private LocalTime timeHeld;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "app_user_id", nullable = false)
+    private AppUser creator;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_group_id", nullable = false)
+    private MemberGroup memberGroup;
+
     public TrainingSession()
     {
 
