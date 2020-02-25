@@ -32,6 +32,7 @@ public class AppUserController {
     public List<Permission> getUserPermissions(@PathVariable("id")Integer id)
     {
         return appUserService.getUserPermissions(id);
+
     }
 
     @PostMapping("/users")
