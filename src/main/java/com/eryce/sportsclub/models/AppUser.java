@@ -23,6 +23,10 @@ public class AppUser {
     @JoinColumn(name = "member_group_id", nullable = true)
     private MemberGroup memberGroup;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = true)
+    private Role role;
+
     public Integer getId() {
         return id;
     }

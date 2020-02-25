@@ -12,8 +12,10 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDate dateOfPayment;
     private Integer amount;
+    private Integer monthOfPayment;
+    private Integer dayOfMonth;
+    private Integer yearOfPayment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "app_user_id", nullable = false)
@@ -27,20 +29,12 @@ public class Payment {
         return id;
     }
 
-    public LocalDate getDateOfPayment() {
-        return dateOfPayment;
-    }
-
     public int getAmount() {
         return amount;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setDateOfPayment(LocalDate dateOfPayment) {
-        this.dateOfPayment = dateOfPayment;
     }
 
     public void setAmount(int amount) {
@@ -61,5 +55,33 @@ public class Payment {
 
     public Membership getMembership() {
         return membership;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Integer getMonthOfPayment() {
+        return monthOfPayment;
+    }
+
+    public void setMonthOfPayment(Integer monthOfPayment) {
+        this.monthOfPayment = monthOfPayment;
+    }
+
+    public Integer getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(Integer dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public Integer getYearOfPayment() {
+        return yearOfPayment;
+    }
+
+    public void setYearOfPayment(Integer yearOfPayment) {
+        this.yearOfPayment = yearOfPayment;
     }
 }

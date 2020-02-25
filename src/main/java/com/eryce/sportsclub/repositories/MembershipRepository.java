@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MembershipRepository extends JpaRepository<Membership,Integer> {
 
-    List<Membership> findAllByAppUser(AppUser appUser);
-    List<Membership> findAllByYearAndMonth(Integer year,Integer month);
+//    List<Membership> findAllByAppUser(AppUser appUser);
+//    List<Membership> findAllByYearAndMonth(Integer year,Integer month);
 
 }

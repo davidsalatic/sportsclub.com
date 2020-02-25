@@ -12,13 +12,9 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int month;
-    private int year;
-    private int price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "app_user_id", nullable = false)
-    private AppUser appUser;
+    private Integer month;
+    private Integer year;
+    private Integer price;
 
     public Integer getId() {
         return id;
@@ -50,13 +46,5 @@ public class Membership {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
     }
 }
