@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class AppUserController {
     public List<Permission> getUserPermissions(@PathVariable("id")Integer id)
     {
         return appUserService.getUserPermissions(id);
-
     }
 
     @PostMapping("/users")
@@ -51,5 +51,11 @@ public class AppUserController {
     public ResponseEntity<AppUser>deleteUser(@RequestBody AppUser appUser)
     {
         return appUserService.deleteUserIfExists(appUser);
+    }
+
+    @PostMapping("/users/{id}/assign")
+    public ResponseEntity<AppUser> assignGroup(@PathVariable("id")Integer id, @RequestBody MemberGroup memberGroup)
+    {
+        return appUserService.assignGroup(id,memberGroup);
     }
 }

@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.PermissionRepository;
@@ -57,5 +58,12 @@ public class AppUserService {
     public List<Permission> getUserPermissions(Integer id) {
         AppUser appUser = getById(id);
         return appUser.getRole().getPermissions();
+    }
+
+    public ResponseEntity<AppUser> assignGroup(Integer id, MemberGroup memberGroup) {
+        AppUser appUser = getById(id);
+        appUser.setMemberGroup(memberGroup);
+        appUserRepository.save(appUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

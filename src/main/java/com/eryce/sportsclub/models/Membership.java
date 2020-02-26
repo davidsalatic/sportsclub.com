@@ -14,7 +14,7 @@ public class Membership {
 
     private Integer month;
     private Integer year;
-    private Integer price;
+    private Integer  price;
 
     public Integer getId() {
         return id;
