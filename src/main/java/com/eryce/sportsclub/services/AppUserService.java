@@ -66,4 +66,8 @@ public class AppUserService {
         appUserRepository.save(appUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    public List<AppUser> findAllByNameOrSurnameContainingIgnoreCase(String name, String surname) {
+        return appUserRepository.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
+    }
 }

@@ -35,6 +35,12 @@ public class AppUserController {
         return appUserService.getUserPermissions(id);
     }
 
+    @GetMapping("/users/search")
+    public List<AppUser> searchUsers(@RequestParam String name,@RequestParam String surname)
+    {
+        return appUserService.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
+    }
+
     @PostMapping("/users")
     public ResponseEntity<AppUser> insertUser(@RequestBody AppUser appUser)
     {
