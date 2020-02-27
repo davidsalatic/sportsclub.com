@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class AppUserController {
 
-    @Autowired
+    @Autowired//
     private AppUserService appUserService;
 
     @GetMapping("/users")
