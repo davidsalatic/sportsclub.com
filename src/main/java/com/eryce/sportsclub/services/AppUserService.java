@@ -4,6 +4,7 @@ import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.repositories.AppUserRepository;
+import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.PermissionRepository;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class AppUserService {
     private AppUserRepository appUserRepository;
     @Autowired
     private PermissionRepository permissionRepository;
+    @Autowired
+    private MemberGroupRepository memberGroupRepository;
 
     public Collection<AppUser> getAll() {
         return appUserRepository.findAll();
@@ -69,5 +72,10 @@ public class AppUserService {
 
     public List<AppUser> findAllByNameOrSurnameContainingIgnoreCase(String name, String surname) {
         return appUserRepository.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
+    }
+
+    public List<AppUser> getUsersInGroup(Integer id) {
+        MemberGroup memberGroup = memberGroupRepository.getOne(id);
+        return appUserRepository.findAllByMemberGroup(memberGroup);
     }
 }

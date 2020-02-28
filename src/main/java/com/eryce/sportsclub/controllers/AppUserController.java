@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class AppUserController {
 
-    @Autowired//
+    @Autowired
     private AppUserService appUserService;
 
     @GetMapping("/users")
@@ -34,6 +34,12 @@ public class AppUserController {
     public List<Permission> getUserPermissions(@PathVariable("id")Integer id)
     {
         return appUserService.getUserPermissions(id);
+    }
+
+    @GetMapping("/users/group/{id}")
+    public List<AppUser> getUsersInGroup(@PathVariable("id")Integer id)
+    {
+        return appUserService.getUsersInGroup(id);
     }
 
     @GetMapping("/users/search")
