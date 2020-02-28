@@ -54,6 +54,11 @@ public class AppUserController {
         return appUserService.insertUserIfNotExists(appUser);
     }
 
+    @PostMapping("/users/{id}")
+    public ResponseEntity<AppUser> removeMemberGroup(@PathVariable Integer id) {
+        return appUserService.removeMemberGroup(id);
+    }
+
     @PutMapping("/users")
     public ResponseEntity<AppUser> updateUser(@RequestBody AppUser appUser)
     {

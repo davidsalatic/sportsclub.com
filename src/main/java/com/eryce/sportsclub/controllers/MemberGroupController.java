@@ -1,12 +1,15 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.MemberGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -38,9 +41,9 @@ public class MemberGroupController {
         return memberGroupService.updateGroupIfExists(memberGroup);
     }
 
-    @DeleteMapping("/groups")
-    public ResponseEntity<MemberGroup>deleteGroup(@RequestBody MemberGroup memberGroup)
+    @DeleteMapping("/groups/{id}")
+    public ResponseEntity<MemberGroup>deleteGroup(@PathVariable Integer id)
     {
-        return memberGroupService.deleteGroupIfExists(memberGroup);
+        return memberGroupService.deleteGroupIfExists(id);
     }
 }

@@ -30,8 +30,8 @@ public class TrainingSessionService {
         return trainingSessionRepository.findAll();
     }
 
-    public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(TrainingSession trainingSession) {
-        trainingSessionRepository.delete(trainingSession);
+    public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(Integer id) {
+        trainingSessionRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

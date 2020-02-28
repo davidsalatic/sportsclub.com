@@ -78,4 +78,10 @@ public class AppUserService {
         MemberGroup memberGroup = memberGroupRepository.getOne(id);
         return appUserRepository.findAllByMemberGroup(memberGroup);
     }
+
+    public ResponseEntity<AppUser> removeMemberGroup(Integer id) {
+        AppUser appUser = getById(id);
+        appUser.setMemberGroup(null);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

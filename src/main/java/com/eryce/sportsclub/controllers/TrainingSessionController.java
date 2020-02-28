@@ -39,9 +39,9 @@ public class TrainingSessionController {
         return trainingSessionService.updateTrainingSessionIfExists(trainingSession);
     }
 
-    @DeleteMapping("/sessions")
-    public ResponseEntity<TrainingSession> deleteTrainingSession(@RequestBody TrainingSession trainingSession)
+    @DeleteMapping("/sessions/{id}")
+    public ResponseEntity<TrainingSession> deleteTrainingSession(@PathVariable Integer id)
     {
-        return trainingSessionService.deleteTrainingSessionIfExists(trainingSession);
+        return trainingSessionService.deleteTrainingSessionIfExists(id);
     }
 }
