@@ -20,11 +20,11 @@ public class AppUser {
     private LocalDate dateJoined;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_group_id", nullable = true)
+    @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
     public Integer getId() {

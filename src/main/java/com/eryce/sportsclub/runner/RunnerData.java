@@ -33,7 +33,7 @@ public class RunnerData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//        insertTestData();
+        insertTestData();
         System.out.println("***************APP STARTED*****************");
     }
 
@@ -186,19 +186,19 @@ public class RunnerData implements CommandLineRunner {
         payment.setAppUser(member);
         payment.setMembership(membership);
         payment.setDayOfMonth(14);
-        payment.setMonthOfPayment(01);
+        payment.setMonthOfPayment(1);
         payment.setYearOfPayment(2020);
         Payment payment1 = new Payment();
         payment1.setAmount(1000);
         payment1.setAppUser(member);
         payment1.setMembership(membership);
         payment1.setDayOfMonth(16);
-        payment1.setMonthOfPayment(01);
+        payment1.setMonthOfPayment(1);
         payment1.setYearOfPayment(2020);
 
         Payment payment2 = new Payment();
         payment2.setYearOfPayment(2020);
-        payment2.setMonthOfPayment(01);
+        payment2.setMonthOfPayment(1);
         payment2.setDayOfMonth(25);
         payment2.setMembership(membership);
         payment2.setAppUser(member1);
@@ -206,8 +206,8 @@ public class RunnerData implements CommandLineRunner {
 
         Payment payment3 = new Payment();
         payment3.setYearOfPayment(2020);
-        payment3.setMonthOfPayment(02);
-        payment3.setDayOfMonth(01);
+        payment3.setMonthOfPayment(2);
+        payment3.setDayOfMonth(1);
         payment3.setMembership(membership1);
         payment3.setAppUser(member);
         payment3.setAmount(2000);

@@ -1,11 +1,7 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.models.MemberGroup;
-import com.eryce.sportsclub.models.Permission;
-import com.eryce.sportsclub.repositories.AppUserRepository;
-import com.eryce.sportsclub.repositories.MemberGroupRepository;
-import com.eryce.sportsclub.repositories.PermissionRepository;
+import com.eryce.sportsclub.models.*;
+import com.eryce.sportsclub.repositories.*;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +20,10 @@ public class AppUserService {
     private PermissionRepository permissionRepository;
     @Autowired
     private MemberGroupRepository memberGroupRepository;
+    @Autowired
+    private AttendanceRepository attendanceRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public Collection<AppUser> getAll() {
         return appUserRepository.findAll();
@@ -54,8 +54,23 @@ public class AppUserService {
     }
 
     public ResponseEntity<AppUser> deleteUserIfExists(Integer id) {
+        AppUser appUser = getById(id);
+        clearDependencies(appUser);
         appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void clearDependencies(AppUser appUser) {
+        appUser.setMemberGroup(null);
+        appUser.setRole(null);
+        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
+        {
+            attendanceRepository.delete(attendance);
+        }
+        for(Payment payment: paymentRepository.findAllByAppUser(appUser))
+        {
+            paymentRepository.delete(payment);
+        }
     }
 
     public List<Permission> getUserPermissions(Integer id) {

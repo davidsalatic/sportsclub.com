@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.repositories;
 
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,5 @@ public interface PaymentRepository extends JpaRepository<Payment,Integer> {
 
     List<Payment> findAllByYearOfPaymentAndMonthOfPayment(Integer yearOfPayment,Integer monthOfPayment);
 
+    List<Payment> findAllByAppUser(AppUser appUser);
 }

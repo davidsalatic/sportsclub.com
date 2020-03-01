@@ -12,7 +12,7 @@ public class Attendance {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "app_user_id", nullable = false)
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
