@@ -53,8 +53,8 @@ public class AppUserService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<AppUser> deleteUserIfExists(AppUser appUser) {
-        appUserRepository.delete(appUser);
+    public ResponseEntity<AppUser> deleteUserIfExists(Integer id) {
+        appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

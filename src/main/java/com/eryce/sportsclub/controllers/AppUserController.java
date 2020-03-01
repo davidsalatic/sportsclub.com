@@ -65,10 +65,10 @@ public class AppUserController {
         return appUserService.updateUserIfExists(appUser);
     }
 
-    @DeleteMapping("/users")
-    public ResponseEntity<AppUser>deleteUser(@RequestBody AppUser appUser)
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<AppUser>deleteUser(@PathVariable ("id") Integer id)
     {
-        return appUserService.deleteUserIfExists(appUser);
+        return appUserService.deleteUserIfExists(id);
     }
 
     @PostMapping("/users/{id}/assign")
