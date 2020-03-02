@@ -40,6 +40,7 @@ public class MemberGroupController {
     {
         return memberGroupService.updateGroupIfExists(memberGroup);
     }
+    
 
     @DeleteMapping("/groups/{id}")
     public ResponseEntity<MemberGroup>deleteGroup(@PathVariable Integer id)

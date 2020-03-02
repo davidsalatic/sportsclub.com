@@ -33,7 +33,7 @@ public class RunnerData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        insertTestData();
+//        insertTestData();
         System.out.println("***************APP STARTED*****************");
     }
 
