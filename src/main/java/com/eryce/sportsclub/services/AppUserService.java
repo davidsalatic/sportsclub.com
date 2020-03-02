@@ -78,15 +78,6 @@ public class AppUserService {
         return appUser.getRole().getPermissions();
     }
 
-    public ResponseEntity<AppUser> assignGroup(Integer id, MemberGroup memberGroup) {
-        AppUser appUser = getById(id);
-
-        System.out.println("before assign: "+appUser.getMemberGroup().getName());
-        System.out.println("after assign"+memberGroup.getName() );
-        appUser.setMemberGroup(memberGroup);
-        appUserRepository.save(appUser);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     public List<AppUser> findAllByNameOrSurnameContainingIgnoreCase(String name, String surname) {
         return appUserRepository.findAllByNameOrSurnameContainingIgnoreCase(name,surname);

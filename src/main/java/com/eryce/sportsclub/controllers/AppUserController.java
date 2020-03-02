@@ -70,10 +70,4 @@ public class AppUserController {
     {
         return appUserService.deleteUserIfExists(id);
     }
-
-    @PostMapping("/users/{id}/assign")
-    public ResponseEntity<AppUser> assignGroup(@PathVariable("id")Integer id, @RequestBody MemberGroup memberGroup)
-    {
-        return appUserService.assignGroup(id,memberGroup);
-    }
 }
