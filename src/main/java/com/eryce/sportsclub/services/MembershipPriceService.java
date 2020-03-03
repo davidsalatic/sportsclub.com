@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -34,8 +35,15 @@ public class MembershipPriceService {
     }
 
 
-    public Integer getMembershipPrice() {
-        MembershipPrice membershipPrice = membershipPriceRepository.getOne(DEFAULT_ID);
-        return membershipPrice.getPrice();
+    public MembershipPrice getMembershipPrice() {
+        try{
+            return membershipPriceRepository.getOne(DEFAULT_ID);
+        }catch(Exception e)
+        {
+            MembershipPrice membershipPrice = new MembershipPrice();
+            membershipPrice.setId(DEFAULT_ID);
+            membershipPrice.setPrice(0);
+            return membershipPrice;
+        }
     }
 }
