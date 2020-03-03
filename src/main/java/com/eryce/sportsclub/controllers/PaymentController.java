@@ -15,10 +15,10 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping("/payments/{year}/{month}")
-    public List<Payment> getAllPaymentsInMonth(@PathVariable("year")Integer year,@PathVariable("month")Integer month)
+    @GetMapping("/payments/membership/{membershipId}/user/{userId}")
+    public List<Payment> getAllPaymentsForMembershipByAppUser(@PathVariable("membershipId") Integer membershipId,@PathVariable("userId")Integer userId)
     {
-        return paymentService.getAllPaymentsInMonth(year,month);
+        return paymentService.getAllPaymentsForMembershipByAppUser(membershipId,userId);
     }
 
     @PostMapping("/payments")
