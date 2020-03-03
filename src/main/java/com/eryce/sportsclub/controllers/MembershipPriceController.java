@@ -22,9 +22,8 @@ public class MembershipPriceController {
     }
 
     @GetMapping("/membership-price")
-    public List<MembershipPrice> getMembershipPrice()
+    public MembershipPrice getMembershipPrice()
     {
         return membershipPriceService.getMembershipPrice();
     }
-
 }
