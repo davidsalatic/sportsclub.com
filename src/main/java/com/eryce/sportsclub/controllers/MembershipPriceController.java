@@ -16,13 +16,13 @@ public class MembershipPriceController {
     private MembershipPriceService membershipPriceService;
 
     @PostMapping("/membership-price")
-    public ResponseEntity<MembershipPrice> setMembershipPrice(@RequestBody Integer price)
+    public ResponseEntity<MembershipPrice> setMembershipPrice(@RequestBody MembershipPrice membershipPrice)
     {
-        return membershipPriceService.setMembershipPrice(price);
+        return membershipPriceService.setMembershipPrice(membershipPrice);
     }
 
     @GetMapping("/membership-price")
-    public MembershipPrice getMembershipPrice()
+    public Integer getMembershipPrice()
     {
         return membershipPriceService.getMembershipPrice();
     }

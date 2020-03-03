@@ -18,25 +18,24 @@ public class MembershipPriceService {
 
     private final int DEFAULT_ID=997;
 
-    public ResponseEntity<MembershipPrice> setMembershipPrice(Integer price) {
+    public ResponseEntity<MembershipPrice> setMembershipPrice(MembershipPrice membershipPrice) {
         if(membershipPriceRepository.findAll().isEmpty())
         {
-            MembershipPrice membershipPrice = new MembershipPrice();
             membershipPrice.setId(DEFAULT_ID);
-            membershipPrice.setPrice(price);
             membershipPriceRepository.save(membershipPrice);
         }
         else
         {
-            MembershipPrice membershipPrice = membershipPriceRepository.getOne(DEFAULT_ID);
-            membershipPrice.setPrice(price);
-            membershipPriceRepository.save(membershipPrice);
+            MembershipPrice existingPrice = membershipPriceRepository.getOne(DEFAULT_ID);
+            existingPrice.setPrice(membershipPrice.getPrice());
+            membershipPriceRepository.save(existingPrice);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    public MembershipPrice getMembershipPrice() {
-        return membershipPriceRepository.getOne(DEFAULT_ID);
+    public Integer getMembershipPrice() {
+        MembershipPrice membershipPrice = membershipPriceRepository.getOne(DEFAULT_ID);
+        return membershipPrice.getPrice();
     }
 }
