@@ -34,8 +34,16 @@ public class MembershipService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Membership> insertMemberShipIfExists(Membership membership) {
+    public ResponseEntity<Membership> insertMembership(Membership membership) {
         membershipRepository.save(membership);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public Membership getById(Integer id) {
+        return membershipRepository.getOne(id);
+    }
+
+    public Membership getByMonthAndYear(Integer month, Integer year) {
+        return membershipRepository.findByMonthAndYear(month,year);
     }
 }

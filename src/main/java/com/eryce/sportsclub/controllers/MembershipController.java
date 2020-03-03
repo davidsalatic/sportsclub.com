@@ -21,6 +21,18 @@ public class MembershipController {
         return membershipService.getAll();
     }
 
+    @GetMapping("/memberships/{id}")
+    public Membership getById(@PathVariable ("id")Integer id)
+    {
+        return membershipService.getById(id);
+    }
+
+    @GetMapping("/memberships/{month}/{year}")
+    public Membership getByMonthAndYear(@PathVariable("month")Integer month,@PathVariable("year")Integer year)
+    {
+        return membershipService.getByMonthAndYear(month,year);
+    }
+
     @PutMapping("/memberships")
     public ResponseEntity<Membership> updateMembership(@RequestBody Membership membership)
     {
@@ -30,7 +42,7 @@ public class MembershipController {
     @PostMapping("/memberships")
     public ResponseEntity<Membership> insertMembership(@RequestBody Membership membership)
     {
-        return membershipService.insertMemberShipIfExists(membership);
+        return membershipService.insertMembership(membership);
     }
 
     @DeleteMapping("/memberships")
