@@ -18,10 +18,6 @@ public class TrainingSession {
     private LocalTime timeHeld;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "app_user_id", nullable = false)
-    private AppUser creator;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_group_id", nullable = false)
     private MemberGroup memberGroup;
 
@@ -62,14 +58,6 @@ public class TrainingSession {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public AppUser getCreator() {
-        return creator;
-    }
-
-    public void setCreator(AppUser creator) {
-        this.creator = creator;
     }
 
     public MemberGroup getMemberGroup() {
