@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TrainingSessionRepository extends JpaRepository<TrainingSession,Integer> {
 
-    List<TrainingSession> findAllByYearAndMonth(Integer year,Integer month);
+    List<TrainingSession> findAllByMonthAndYear(Integer month,Integer year);
 }

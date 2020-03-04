@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -138,18 +139,15 @@ public class RunnerData implements CommandLineRunner {
 
         //TRAININGS
         TrainingSession trainingSession = new TrainingSession();
-        trainingSession.setDateHeld(LocalDate.now());
-        trainingSession.setTimeHeld(LocalTime.now());
+        trainingSession.setDateHeld(LocalDateTime.now());
         trainingSession.setMemberGroup(memberGroup);
 
         TrainingSession trainingSession1 = new TrainingSession();
-        trainingSession1.setDateHeld(LocalDate.now().plusDays(2));
-        trainingSession1.setTimeHeld(LocalTime.now().plusHours(1));
+        trainingSession1.setDateHeld(LocalDateTime.now().plusDays(2));
         trainingSession1.setMemberGroup(memberGroup);
 
         TrainingSession trainingSession2 = new TrainingSession();
-        trainingSession2.setDateHeld(LocalDate.now().plusDays(1));
-        trainingSession2.setTimeHeld(LocalTime.now().plusHours(2));
+        trainingSession2.setDateHeld(LocalDateTime.now().plusDays(1));
         trainingSession2.setMemberGroup(memberGroup);
 
         //ATTENDANCES

@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -15,8 +18,8 @@ public class TrainingSessionService {
     @Autowired
     private TrainingSessionRepository trainingSessionRepository;
 
-    public List<TrainingSession> getTrainingSessionsByMonth(Integer year,Integer month) {
-        return trainingSessionRepository.findAllByYearAndMonth(year,month);
+    public List<TrainingSession> getTrainingSessionsByMonth(Integer month, Integer year) {
+        return trainingSessionRepository.findAllByMonthAndYear(month,year);
     }
 
     public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {
@@ -36,7 +39,7 @@ public class TrainingSessionService {
     }
 
     public ResponseEntity<TrainingSession> updateTrainingSessionIfExists(TrainingSession trainingSession) {
-        trainingSessionRepository.save(trainingSession);
+        this.insertTrainingSessionIfNotExists(trainingSession);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
