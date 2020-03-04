@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ public class AppUserController {
     private AppUserService appUserService;
 
     @GetMapping("/users")
-    public Collection<AppUser> getAll()
+    public List<AppUser> getAllMembers()
     {
-        return appUserService.getAll();
+        return appUserService.getAllMembers();
     }
 
     @GetMapping("/users/{id}")
@@ -52,12 +51,6 @@ public class AppUserController {
     public List<AppUser> getUsersInGroup(@PathVariable("id")Integer id)
     {
         return appUserService.getUsersInGroup(id);
-    }
-
-    @GetMapping("/users/search")
-    public List<AppUser> searchUsers(@RequestParam String name,@RequestParam String surname)
-    {
-        return appUserService.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
     }
 
     @PostMapping("/users")

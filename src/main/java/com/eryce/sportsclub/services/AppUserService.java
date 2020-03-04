@@ -25,7 +25,7 @@ public class AppUserService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public Collection<AppUser> getAll() {
+    public List<AppUser> getAllMembers() {
         return appUserRepository.findAll();
     }
 
@@ -44,17 +44,23 @@ public class AppUserService {
     }
 
     public ResponseEntity<AppUser> deleteUserIfExists(Integer id) {
+        AppUser appUser = getById(id);
+        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
+        {
+            attendanceRepository.delete(attendance);
+        }
+        for(Payment payment : paymentRepository.findAllByAppUser(appUser))
+        {
+            paymentRepository.delete(payment);
+        }
         appUserRepository.deleteById(id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<Permission> getUserPermissions(Integer id) {
         AppUser appUser = getById(id);
         return appUser.getRole().getPermissions();
-    }
-
-    public List<AppUser> findAllByNameOrSurnameContainingIgnoreCase(String name, String surname) {
-        return appUserRepository.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
     }
 
     public List<AppUser> getUsersInGroup(Integer id) {
