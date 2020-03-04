@@ -33,19 +33,9 @@ public class AppUserService {
         return appUserRepository.getOne(id);
     }
 
-    public ResponseEntity<AppUser> insertUserIfNotExists(AppUser appUser) {
-        if(exists(appUser))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    public ResponseEntity<AppUser> insertUser(AppUser appUser) {
         appUserRepository.save(appUser);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private boolean exists(AppUser appUser) {
-        return existsByUsername(appUser.getUsername());
-    }
-
-    private boolean existsByUsername(String username) {
-        return !(appUserRepository.findAllByUsernameContainingIgnoreCase(username).isEmpty());
     }
 
     public ResponseEntity<AppUser> updateUserIfExists(AppUser appUser) {
@@ -54,30 +44,14 @@ public class AppUserService {
     }
 
     public ResponseEntity<AppUser> deleteUserIfExists(Integer id) {
-        AppUser appUser = getById(id);
-        clearDependencies(appUser);
         appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private void clearDependencies(AppUser appUser) {
-        appUser.setMemberGroup(null);
-        appUser.setRole(null);
-        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
-        {
-            attendanceRepository.delete(attendance);
-        }
-        for(Payment payment: paymentRepository.findAllByAppUser(appUser))
-        {
-            paymentRepository.delete(payment);
-        }
     }
 
     public List<Permission> getUserPermissions(Integer id) {
         AppUser appUser = getById(id);
         return appUser.getRole().getPermissions();
     }
-
 
     public List<AppUser> findAllByNameOrSurnameContainingIgnoreCase(String name, String surname) {
         return appUserRepository.findAllByNameOrSurnameContainingIgnoreCase(name,surname);
@@ -92,5 +66,13 @@ public class AppUserService {
         AppUser appUser = getById(id);
         appUser.setMemberGroup(null);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public List<AppUser> getUsersByUsername(String username) {
+        return appUserRepository.findAllByUsernameIgnoreCase(username);
+    }
+
+    public List<AppUser> getUsersByJmbg(String jmbg) {
+        return appUserRepository.findAllByJmbgIgnoreCase(jmbg);
     }
 }

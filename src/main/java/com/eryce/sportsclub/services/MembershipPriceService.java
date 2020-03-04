@@ -36,14 +36,15 @@ public class MembershipPriceService {
 
 
     public MembershipPrice getMembershipPrice() {
-        try{
-            return membershipPriceRepository.getOne(DEFAULT_ID);
-        }catch(Exception e)
+        List<MembershipPrice> prices = membershipPriceRepository.findAll();
+        if(prices.isEmpty())
         {
             MembershipPrice membershipPrice = new MembershipPrice();
             membershipPrice.setId(DEFAULT_ID);
             membershipPrice.setPrice(0);
             return membershipPrice;
         }
+        else
+            return prices.get(0);
     }
 }

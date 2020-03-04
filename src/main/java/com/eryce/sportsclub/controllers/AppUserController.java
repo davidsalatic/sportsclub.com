@@ -36,6 +36,18 @@ public class AppUserController {
         return appUserService.getUserPermissions(id);
     }
 
+    @GetMapping("users/search/username")
+    public List<AppUser> getUsersByUsername(@RequestParam String username)
+    {
+        return appUserService.getUsersByUsername(username);
+    }
+
+    @GetMapping("users/search/jmbg")
+    public List<AppUser> getUsersByJmbg(@RequestParam String jmbg)
+    {
+        return appUserService.getUsersByJmbg(jmbg);
+    }
+
     @GetMapping("/users/group/{id}")
     public List<AppUser> getUsersInGroup(@PathVariable("id")Integer id)
     {
@@ -51,7 +63,7 @@ public class AppUserController {
     @PostMapping("/users")
     public ResponseEntity<AppUser> insertUser(@RequestBody AppUser appUser)
     {
-        return appUserService.insertUserIfNotExists(appUser);
+        return appUserService.insertUser(appUser);
     }
 
     @PostMapping("/users/{id}")

@@ -21,6 +21,11 @@ public class PaymentController {
         return paymentService.getAllPaymentsForMembershipByAppUser(membershipId,userId);
     }
 
+    @GetMapping("/payments/{id}")
+    public Payment getById(@PathVariable("id")Integer id){
+        return paymentService.getById(id);
+    }
+
     @PostMapping("/payments")
     public ResponseEntity<Payment> insertPayment(@RequestBody Payment payment)
     {
@@ -33,9 +38,9 @@ public class PaymentController {
         return paymentService.updatePayment(payment);
     }
 
-    @DeleteMapping("/payments")
-    public ResponseEntity<Payment> deletePayment(@RequestBody Payment payment)
+    @DeleteMapping("/payments/{id}")
+    public ResponseEntity<Payment> deletePayment(@PathVariable Integer id)
     {
-        return paymentService.deletePayment(payment);
+        return paymentService.deletePayment(id);
     }
 }

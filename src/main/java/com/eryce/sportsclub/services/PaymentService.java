@@ -33,8 +33,8 @@ public class PaymentService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Payment> deletePayment(Payment payment) {
-        paymentRepository.delete(payment);
+    public ResponseEntity<Payment> deletePayment(Integer id) {
+        paymentRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -42,5 +42,9 @@ public class PaymentService {
         Membership membership = membershipRepository.getOne(membershipId);
         AppUser appUser = appUserRepository.getOne(appUserId);
         return paymentRepository.findAllByMembershipAndAppUser(membership,appUser);
+    }
+
+    public Payment getById(Integer id) {
+        return paymentRepository.getOne(id);
     }
 }
