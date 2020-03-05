@@ -1,6 +1,8 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.TrainingSession;
+import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,12 @@ public class TrainingSessionService {
 
     @Autowired
     private TrainingSessionRepository trainingSessionRepository;
+    @Autowired
+    private MemberGroupRepository memberGroupRepository;
 
-    public List<TrainingSession> getTrainingSessionsByMonth(Integer month, Integer year) {
-        return trainingSessionRepository.findAllByMonthAndYear(month,year);
+    public List<TrainingSession> getTrainingSessionsByGroupId(Integer groupId) {
+        MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
+        return trainingSessionRepository.findAllByMemberGroup(memberGroup);
     }
 
     public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -17,10 +15,10 @@ public class TrainingSessionController {
     @Autowired
     private TrainingSessionService trainingSessionService;
 
-    @GetMapping("/sessions/{month}/{year}")
-    public List<TrainingSession>getAllByMonth(@PathVariable("month") Integer month,@PathVariable("year")Integer year)
+    @GetMapping("/sessions/group/{groupId}")
+    public List<TrainingSession>getAllByMonth(@PathVariable("groupId")Integer groupId)
     {
-        return trainingSessionService.getTrainingSessionsByMonth(month,year);
+        return trainingSessionService.getTrainingSessionsByGroupId(groupId);
     }
 
     @GetMapping("/sessions")

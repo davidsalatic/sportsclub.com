@@ -1,6 +1,9 @@
 package com.eryce.sportsclub.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,7 +13,7 @@ public class TrainingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDateTime dateHeld;
+    private LocalDate dateHeld;
     private Integer month;
     private Integer year;
 
@@ -23,11 +26,12 @@ public class TrainingSession {
 
     }
 
-    public LocalDateTime getDateHeld() {
+    @JsonFormat(pattern="mm-dd-yyyy")
+    public LocalDate getDateHeld() {
         return dateHeld;
     }
 
-    public void setDateHeld(LocalDateTime dateHeld) {
+    public void setDateHeld(LocalDate dateHeld) {
         this.dateHeld = dateHeld;
     }
 

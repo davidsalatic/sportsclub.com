@@ -139,15 +139,15 @@ public class RunnerData implements CommandLineRunner {
 
         //TRAININGS
         TrainingSession trainingSession = new TrainingSession();
-        trainingSession.setDateHeld(LocalDateTime.now());
+        trainingSession.setDateHeld(LocalDate.now());
         trainingSession.setMemberGroup(memberGroup);
 
         TrainingSession trainingSession1 = new TrainingSession();
-        trainingSession1.setDateHeld(LocalDateTime.now().plusDays(2));
+        trainingSession1.setDateHeld(LocalDate.now().plusDays(2));
         trainingSession1.setMemberGroup(memberGroup);
 
         TrainingSession trainingSession2 = new TrainingSession();
-        trainingSession2.setDateHeld(LocalDateTime.now().plusDays(1));
+        trainingSession2.setDateHeld(LocalDate.now().plusDays(1));
         trainingSession2.setMemberGroup(memberGroup);
 
         //ATTENDANCES
