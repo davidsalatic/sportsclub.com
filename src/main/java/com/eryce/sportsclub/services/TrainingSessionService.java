@@ -1,7 +1,9 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.TrainingSession;
+import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class TrainingSessionService {
     private TrainingSessionRepository trainingSessionRepository;
     @Autowired
     private MemberGroupRepository memberGroupRepository;
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
     public List<TrainingSession> getTrainingSessionsByGroupId(Integer groupId) {
         MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
@@ -28,8 +32,6 @@ public class TrainingSessionService {
     }
 
     public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {
-        trainingSession.setMonth(trainingSession.getDateHeld().getMonthValue());
-        trainingSession.setYear(trainingSession.getDateHeld().getYear());
         trainingSessionRepository.save(trainingSession);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -39,6 +41,12 @@ public class TrainingSessionService {
     }
 
     public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(Integer id) {
+        TrainingSession trainingSession = trainingSessionRepository.getOne(id);
+        List<Attendance> attendances = attendanceRepository.findAllByTrainingSession(trainingSession);
+        for(Attendance attendance: attendances)
+        {
+            attendanceRepository.delete(attendance);
+        }
         trainingSessionRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
