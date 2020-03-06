@@ -13,7 +13,7 @@ public class TrainingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonFormat(pattern = "M/dd/yyyy")
+    @JsonFormat(pattern = "M/d/yyyy")
     private LocalDate dateHeld;
 
     @ManyToOne(fetch = FetchType.LAZY)

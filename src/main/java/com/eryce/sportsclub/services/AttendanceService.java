@@ -51,9 +51,15 @@ public class AttendanceService {
             return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Attendance> deleteAttendanceIfExists(Attendance attendance)
+    public ResponseEntity<Attendance> deleteAttendanceIfExists(Integer id)
     {
-            attendanceRepository.delete(attendance);
+            attendanceRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public Attendance getByTrainingSessionAndAppUser(Integer sessionId, Integer userId) {
+        TrainingSession trainingSession = trainingSessionRepository.getOne(sessionId);
+        AppUser appUser = appUserRepository.getOne(userId);
+        return attendanceRepository.findByTrainingSessionAndAppUser(trainingSession,appUser);
     }
 }

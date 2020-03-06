@@ -40,15 +40,22 @@ public class AttendanceController {
         return attendanceService.insertAttendanceIfNotExists(attendance);
     }
 
+    @GetMapping("/attendances/session/{sessionId}/user/{userId}")
+    public Attendance getByTrainingSessionAndAppUser(@PathVariable("sessionId")Integer sessionId,
+                                                                     @PathVariable("userId")Integer userId)
+    {
+        return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
+    }
+
     @PutMapping("/attendances")
     public ResponseEntity<Attendance> updateAttendance(@RequestBody Attendance attendance)
     {
         return attendanceService.updateAttendanceIfExists(attendance);
     }
 
-    @DeleteMapping("attendances")
-    public ResponseEntity<Attendance> deleteAttendance(@RequestBody Attendance attendance)
+    @DeleteMapping("attendances/{id}")
+    public ResponseEntity<Attendance> deleteAttendance(@PathVariable("id")Integer id)
     {
-        return attendanceService.deleteAttendanceIfExists(attendance);
+        return attendanceService.deleteAttendanceIfExists(id);
     }
 }

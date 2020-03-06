@@ -40,6 +40,11 @@ public class TrainingSessionService {
         return trainingSessionRepository.findAll();
     }
 
+    public TrainingSession getById(Integer id)
+    {
+        return trainingSessionRepository.getOne(id);
+    }
+
     public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(Integer id) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(id);
         List<Attendance> attendances = attendanceRepository.findAllByTrainingSession(trainingSession);

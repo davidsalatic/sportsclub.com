@@ -27,6 +27,11 @@ public class TrainingSessionController {
         return trainingSessionService.getAll();
     }
 
+    @GetMapping("/sessions/{id}")
+    public TrainingSession getById(@PathVariable("id")Integer id){
+        return trainingSessionService.getById(id);
+    }
+
     @PostMapping("/sessions")
     public ResponseEntity<TrainingSession> insertTrainingSession(@RequestBody TrainingSession trainingSession)
     {
