@@ -23,21 +23,6 @@ public class PaymentService {
     @Autowired
     private MembershipRepository membershipRepository;
 
-    public ResponseEntity<Payment> insertPayment(Payment payment) {
-        paymentRepository.save(payment);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Payment> updatePayment(Payment payment) {
-        paymentRepository.save(payment);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Payment> deletePayment(Integer id) {
-        paymentRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     public List<Payment> getAllPaymentsForMembershipByAppUser(Integer membershipId, Integer appUserId) {
         Membership membership = membershipRepository.getOne(membershipId);
         AppUser appUser = appUserRepository.getOne(appUserId);
@@ -47,4 +32,18 @@ public class PaymentService {
     public Payment getById(Integer id) {
         return paymentRepository.getOne(id);
     }
+
+    public ResponseEntity<Payment> insert(Payment payment) {
+        paymentRepository.save(payment);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Payment> delete(Integer id) {
+        paymentRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+
 }

@@ -1,6 +1,5 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.PermissionRepository;
@@ -23,18 +22,7 @@ public class PermissionService {
         return permissionRepository.findAll();
     }
 
-    public ResponseEntity<Permission> updatePermission(Permission permission) {
-        permissionRepository.save(permission);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Permission> deletePermission(Permission permission)
-    {
-        permissionRepository.delete(permission);
-        return  new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Permission> insertPermission(Permission permission) {
+    public ResponseEntity<Permission> insert(Permission permission) {
         permissionRepository.save(permission);
         return new ResponseEntity<>(HttpStatus.OK);
     }

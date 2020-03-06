@@ -21,21 +21,9 @@ public class PermissionController {
         return permissionService.getAll();
     }
 
-    @PutMapping("/permissions")
-    public ResponseEntity<Permission> updatePermission(@RequestBody Permission permission)
-    {
-        return permissionService.updatePermission(permission);
-    }
-
     @PostMapping("/permissions")
-    public ResponseEntity<Permission> insertPermission(@RequestBody Permission permission)
+    public ResponseEntity<Permission> insert(@RequestBody Permission permission)
     {
-        return permissionService.insertPermission(permission);
-    }
-
-    @DeleteMapping("/permissions")
-    public ResponseEntity<Permission> deletePermission(@RequestBody Permission permission)
-    {
-        return permissionService.deletePermission(permission);
+        return permissionService.insert(permission);
     }
 }

@@ -33,21 +33,15 @@ public class MembershipController {
         return membershipService.getByMonthAndYear(month,year);
     }
 
-    @PutMapping("/memberships")
-    public ResponseEntity<Membership> updateMembership(@RequestBody Membership membership)
-    {
-        return membershipService.updateMembership(membership);
-    }
-
     @PostMapping("/memberships")
-    public ResponseEntity<Membership> insertMembership(@RequestBody Membership membership)
+    public ResponseEntity<Membership> insert(@RequestBody Membership membership)
     {
-        return membershipService.insertMembership(membership);
+        return membershipService.insert(membership);
     }
 
-    @DeleteMapping("/memberships")
-    public ResponseEntity<Membership> deleteMembership(@RequestBody Membership membership)
+    @PutMapping("/memberships")
+    public ResponseEntity<Membership> update(@RequestBody Membership membership)
     {
-        return membershipService.deleteMembership(membership);
+        return membershipService.update(membership);
     }
 }

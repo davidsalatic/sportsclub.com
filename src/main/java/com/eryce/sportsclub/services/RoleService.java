@@ -19,23 +19,8 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public ResponseEntity insertRole(Role role) {
+    public ResponseEntity<Role> insert(Role role) {
         roleRepository.save(role);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    public ResponseEntity updateRole(Role role) {
-        roleRepository.save(role);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    public ResponseEntity deleteRole(Role role)
-    {
-        roleRepository.delete(role);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    public List<Role> findAllByName(String name) {
-        return roleRepository.findAllByNameContainingIgnoreCase(name);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

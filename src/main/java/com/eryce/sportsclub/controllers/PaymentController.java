@@ -27,20 +27,14 @@ public class PaymentController {
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<Payment> insertPayment(@RequestBody Payment payment)
+    public ResponseEntity<Payment> insert(@RequestBody Payment payment)
     {
-        return paymentService.insertPayment(payment);
-    }
-
-    @PutMapping("/payments")
-    public ResponseEntity<Payment> updatePayment(@RequestBody Payment payment)
-    {
-        return paymentService.updatePayment(payment);
+        return paymentService.insert(payment);
     }
 
     @DeleteMapping("/payments/{id}")
-    public ResponseEntity<Payment> deletePayment(@PathVariable Integer id)
+    public ResponseEntity<Payment> delete(@PathVariable Integer id)
     {
-        return paymentService.deletePayment(id);
+        return paymentService.delete(id);
     }
 }

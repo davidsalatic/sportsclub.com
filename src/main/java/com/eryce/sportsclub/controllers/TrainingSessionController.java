@@ -16,15 +16,9 @@ public class TrainingSessionController {
     private TrainingSessionService trainingSessionService;
 
     @GetMapping("/sessions/group/{groupId}")
-    public List<TrainingSession>getAllByMonth(@PathVariable("groupId")Integer groupId)
+    public List<TrainingSession>getAllByMemberGroup(@PathVariable("groupId")Integer groupId)
     {
-        return trainingSessionService.getTrainingSessionsByGroupId(groupId);
-    }
-
-    @GetMapping("/sessions")
-    public List<TrainingSession>getAll()
-    {
-        return trainingSessionService.getAll();
+        return trainingSessionService.getAllByMemberGroup(groupId);
     }
 
     @GetMapping("/sessions/{id}")
@@ -33,20 +27,14 @@ public class TrainingSessionController {
     }
 
     @PostMapping("/sessions")
-    public ResponseEntity<TrainingSession> insertTrainingSession(@RequestBody TrainingSession trainingSession)
+    public ResponseEntity<TrainingSession> insert(@RequestBody TrainingSession trainingSession)
     {
-        return trainingSessionService.insertTrainingSessionIfNotExists(trainingSession);
-    }
-
-    @PutMapping("/sessions")
-    public ResponseEntity<TrainingSession> updateTrainingSession(@RequestBody TrainingSession trainingSession)
-    {
-        return trainingSessionService.updateTrainingSessionIfExists(trainingSession);
+        return trainingSessionService.insert(trainingSession);
     }
 
     @DeleteMapping("/sessions/{id}")
-    public ResponseEntity<TrainingSession> deleteTrainingSession(@PathVariable Integer id)
+    public ResponseEntity<TrainingSession> delete(@PathVariable Integer id)
     {
-        return trainingSessionService.deleteTrainingSessionIfExists(id);
+        return trainingSessionService.delete(id);
     }
 }

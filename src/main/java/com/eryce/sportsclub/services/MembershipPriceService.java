@@ -1,15 +1,11 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.models.MembershipPrice;
 import com.eryce.sportsclub.repositories.MembershipPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Service
 public class MembershipPriceService {
@@ -19,32 +15,42 @@ public class MembershipPriceService {
 
     private final int DEFAULT_ID=997;
 
+    public MembershipPrice getMembershipPrice() {
+
+        if(priceExists())
+        {
+            return membershipPriceRepository.getOne(DEFAULT_ID);
+        }
+        else
+        {
+            return createDefaultMembershipPrice();
+        }
+    }
+
+    private boolean priceExists()
+    {
+        return !(membershipPriceRepository.findAll().isEmpty());
+    }
+
+    private MembershipPrice createDefaultMembershipPrice() {
+        MembershipPrice membershipPrice = new MembershipPrice();
+        membershipPrice.setId(DEFAULT_ID);
+        membershipPrice.setPrice(0);
+        return membershipPrice;
+    }
+
     public ResponseEntity<MembershipPrice> setMembershipPrice(MembershipPrice membershipPrice) {
-        if(membershipPriceRepository.findAll().isEmpty())
+        if(priceExists())
+        {
+            MembershipPrice existingPrice = getMembershipPrice();
+            existingPrice.setPrice(membershipPrice.getPrice());
+            membershipPriceRepository.save(existingPrice);
+        }
+        else
         {
             membershipPrice.setId(DEFAULT_ID);
             membershipPriceRepository.save(membershipPrice);
         }
-        else
-        {
-            MembershipPrice existingPrice = membershipPriceRepository.getOne(DEFAULT_ID);
-            existingPrice.setPrice(membershipPrice.getPrice());
-            membershipPriceRepository.save(existingPrice);
-        }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    public MembershipPrice getMembershipPrice() {
-        List<MembershipPrice> prices = membershipPriceRepository.findAll();
-        if(prices.isEmpty())
-        {
-            MembershipPrice membershipPrice = new MembershipPrice();
-            membershipPrice.setId(DEFAULT_ID);
-            membershipPrice.setPrice(0);
-            return membershipPrice;
-        }
-        else
-            return prices.get(0);
     }
 }

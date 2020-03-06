@@ -7,6 +7,4 @@ import java.util.List;
 
 
 public interface RoleRepository extends JpaRepository<Role,Integer> {
-
-    List<Role> findAllByNameContainingIgnoreCase(String name);
 }

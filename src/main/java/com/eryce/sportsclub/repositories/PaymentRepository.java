@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment,Integer> {
 
-    List<Payment> findAllByAppUser(AppUser appUser);
-
     List<Payment> findAllByMembershipAndAppUser(Membership membership, AppUser appUser);
+
+    List<Payment> findAllByAppUser(AppUser appUser);
 }

@@ -28,23 +28,26 @@ public class MemberGroupService {
         return memberGroupRepository.getOne(id);
     }
 
-    public ResponseEntity<MemberGroup> insertGroupIfNotExists(MemberGroup memberGroup) {
+    public ResponseEntity<MemberGroup> insert(MemberGroup memberGroup) {
         memberGroupRepository.save(memberGroup);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<MemberGroup> updateGroupIfExists(MemberGroup memberGroup) {
-        memberGroupRepository.save(memberGroup);
+    public ResponseEntity<MemberGroup> update(MemberGroup memberGroup) {
+        return this.insert(memberGroup);
+    }
+
+    public ResponseEntity<MemberGroup> delete(Integer id) {
+        MemberGroup memberGroup = getById(id);
+        removeMemberGroupFromUsersInMemberGroup(memberGroup);
+        memberGroupRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<MemberGroup> deleteGroupIfExists(Integer id) {
-        List<AppUser> appUsersInGroup = appUserRepository.findAllByMemberGroup(getById(id));
+    private void removeMemberGroupFromUsersInMemberGroup(MemberGroup memberGroup) {
+        List<AppUser> appUsersInGroup = appUserRepository.findAllByMemberGroup(memberGroup);
         for(AppUser appUser: appUsersInGroup)
             appUser.setMemberGroup(null);
-        memberGroupRepository.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

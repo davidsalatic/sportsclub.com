@@ -1,6 +1,5 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MembershipRepository;
@@ -24,26 +23,20 @@ public class MembershipService {
         return membershipRepository.findAll();
     }
 
-    public ResponseEntity<Membership> updateMembership(Membership membership) {
-        membershipRepository.save(membership);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Membership> deleteMembership(Membership membership) {
-        membershipRepository.delete(membership);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Membership> insertMembership(Membership membership) {
-        membershipRepository.save(membership);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     public Membership getById(Integer id) {
         return membershipRepository.getOne(id);
     }
 
     public Membership getByMonthAndYear(Integer month, Integer year) {
         return membershipRepository.findByMonthAndYear(month,year);
+    }
+
+    public ResponseEntity<Membership> insert(Membership membership) {
+        membershipRepository.save(membership);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Membership> update(Membership membership) {
+        return this.insert(membership);
     }
 }

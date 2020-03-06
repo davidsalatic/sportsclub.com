@@ -11,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,18 +23,9 @@ public class TrainingSessionService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
-    public List<TrainingSession> getTrainingSessionsByGroupId(Integer groupId) {
+    public List<TrainingSession> getAllByMemberGroup(Integer groupId) {
         MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
         return trainingSessionRepository.findAllByMemberGroup(memberGroup);
-    }
-
-    public ResponseEntity<TrainingSession> insertTrainingSessionIfNotExists(TrainingSession trainingSession) {
-        trainingSessionRepository.save(trainingSession);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public List<TrainingSession> getAll() {
-        return trainingSessionRepository.findAll();
     }
 
     public TrainingSession getById(Integer id)
@@ -45,19 +33,23 @@ public class TrainingSessionService {
         return trainingSessionRepository.getOne(id);
     }
 
-    public ResponseEntity<TrainingSession> deleteTrainingSessionIfExists(Integer id) {
+    public ResponseEntity<TrainingSession> insert(TrainingSession trainingSession) {
+        trainingSessionRepository.save(trainingSession);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<TrainingSession> delete(Integer id) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(id);
+        deleteAttendancesForTrainingSession(trainingSession);
+        trainingSessionRepository.delete(trainingSession);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void deleteAttendancesForTrainingSession(TrainingSession trainingSession) {
         List<Attendance> attendances = attendanceRepository.findAllByTrainingSession(trainingSession);
         for(Attendance attendance: attendances)
         {
             attendanceRepository.delete(attendance);
         }
-        trainingSessionRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<TrainingSession> updateTrainingSessionIfExists(TrainingSession trainingSession) {
-        this.insertTrainingSessionIfNotExists(trainingSession);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

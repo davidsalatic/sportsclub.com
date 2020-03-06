@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin
@@ -16,46 +15,28 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @GetMapping("/attendances")
-    public Collection<Attendance> getAll()
-    {
-        return attendanceService.getAll();
-    }
-
-    @GetMapping("/attendances/{id}")
-    public List<Attendance> findByAppUserId(@PathVariable("id")Integer id)
-    {
-        return attendanceService.findByAppUserId(id);
-    }
-
     @GetMapping("/attendances/training/{id}")
-    public List<Attendance> findByTrainingSessionId(@PathVariable("id")Integer id)
+    public List<Attendance> getAllByTrainingSessionId(@PathVariable("id")Integer id)
     {
-        return attendanceService.findByTrainingSessionId(id);
-    }
-
-    @PostMapping("/attendances")
-    public ResponseEntity<Attendance> insertAttendance(@RequestBody Attendance attendance)
-    {
-        return attendanceService.insertAttendanceIfNotExists(attendance);
+        return attendanceService.getAllByTrainingSessionId(id);
     }
 
     @GetMapping("/attendances/session/{sessionId}/user/{userId}")
     public Attendance getByTrainingSessionAndAppUser(@PathVariable("sessionId")Integer sessionId,
-                                                                     @PathVariable("userId")Integer userId)
+                                                     @PathVariable("userId")Integer userId)
     {
         return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
     }
 
-    @PutMapping("/attendances")
-    public ResponseEntity<Attendance> updateAttendance(@RequestBody Attendance attendance)
+    @PostMapping("/attendances")
+    public ResponseEntity<Attendance> insert(@RequestBody Attendance attendance)
     {
-        return attendanceService.updateAttendanceIfExists(attendance);
+        return attendanceService.insert(attendance);
     }
 
     @DeleteMapping("attendances/{id}")
-    public ResponseEntity<Attendance> deleteAttendance(@PathVariable("id")Integer id)
+    public ResponseEntity<Attendance> delete(@PathVariable("id")Integer id)
     {
-        return attendanceService.deleteAttendanceIfExists(id);
+        return attendanceService.delete(id);
     }
 }

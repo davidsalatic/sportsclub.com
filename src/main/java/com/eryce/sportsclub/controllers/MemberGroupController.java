@@ -21,27 +21,26 @@ public class MemberGroupController {
     }
 
     @GetMapping("/groups/{id}")
-    public MemberGroup getGroup(@PathVariable("id")Integer id)
+    public MemberGroup getById(@PathVariable("id")Integer id)
     {
         return memberGroupService.getById(id);
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<MemberGroup>insertGroup(@RequestBody MemberGroup memberGroup)
+    public ResponseEntity<MemberGroup>insert(@RequestBody MemberGroup memberGroup)
     {
-        return memberGroupService.insertGroupIfNotExists(memberGroup);
+        return memberGroupService.insert(memberGroup);
     }
 
     @PutMapping("/groups")
-    public ResponseEntity<MemberGroup>updateGroup(@RequestBody MemberGroup memberGroup)
+    public ResponseEntity<MemberGroup>update(@RequestBody MemberGroup memberGroup)
     {
-        return memberGroupService.updateGroupIfExists(memberGroup);
+        return memberGroupService.update(memberGroup);
     }
-    
 
     @DeleteMapping("/groups/{id}")
-    public ResponseEntity<MemberGroup>deleteGroup(@PathVariable Integer id)
+    public ResponseEntity<MemberGroup>delete(@PathVariable Integer id)
     {
-        return memberGroupService.deleteGroupIfExists(id);
+        return memberGroupService.delete(id);
     }
 }

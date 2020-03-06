@@ -2,13 +2,11 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.*;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -29,56 +27,52 @@ public class AppUserService {
         return appUserRepository.findAll();
     }
 
-    public AppUser getById(Integer id) {
-        return appUserRepository.getOne(id);
-    }
-
-    public ResponseEntity<AppUser> insertUser(AppUser appUser) {
-        appUserRepository.save(appUser);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<AppUser> updateUserIfExists(AppUser appUser) {
-        appUserRepository.save(appUser);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<AppUser> deleteUserIfExists(Integer id) {
-        AppUser appUser = getById(id);
-        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
-        {
-            attendanceRepository.delete(attendance);
-        }
-        for(Payment payment : paymentRepository.findAllByAppUser(appUser))
-        {
-            paymentRepository.delete(payment);
-        }
-        appUserRepository.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public List<Permission> getUserPermissions(Integer id) {
-        AppUser appUser = getById(id);
-        return appUser.getRole().getPermissions();
-    }
-
-    public List<AppUser> getUsersInGroup(Integer id) {
+    public List<AppUser> getAllInMemberGroup(Integer id) {
         MemberGroup memberGroup = memberGroupRepository.getOne(id);
         return appUserRepository.findAllByMemberGroup(memberGroup);
     }
 
-    public ResponseEntity<AppUser> removeMemberGroup(Integer id) {
-        AppUser appUser = getById(id);
-        appUser.setMemberGroup(null);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public AppUser getById(Integer id) {
+        return appUserRepository.getOne(id);
     }
 
-    public List<AppUser> getUsersByUsername(String username) {
+    public List<AppUser> getByUsername(String username) {
         return appUserRepository.findAllByUsernameIgnoreCase(username);
     }
 
-    public List<AppUser> getUsersByJmbg(String jmbg) {
+    public List<AppUser> getByJmbg(String jmbg) {
         return appUserRepository.findAllByJmbgIgnoreCase(jmbg);
+    }
+
+    public ResponseEntity<AppUser> insert(AppUser appUser) {
+        appUserRepository.save(appUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<AppUser> update(AppUser appUser) {
+        return this.insert(appUser);
+    }
+
+    public ResponseEntity<AppUser> delete(Integer id) {
+        AppUser appUser = getById(id);
+        deleteAttendancesForUser(appUser);
+        deletePaymentsForUser(appUser);
+        appUserRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void deleteAttendancesForUser(AppUser appUser)
+    {
+        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
+        {
+            attendanceRepository.delete(attendance);
+        }
+    }
+
+    private void deletePaymentsForUser(AppUser appUser) {
+        for(Payment payment : paymentRepository.findAllByAppUser(appUser))
+        {
+            paymentRepository.delete(payment);
+        }
     }
 }
