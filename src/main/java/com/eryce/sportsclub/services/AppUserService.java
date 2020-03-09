@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,17 @@ public class AppUserService {
 
     public List<AppUser> getAllMembers() {
         return appUserRepository.findAll();
+    }
+
+    public List<AppUser> getUngroupedMembers() {
+        List<AppUser>ungrouped = new ArrayList<>();
+        List<AppUser> allMembers = this.getAllMembers();
+        for(AppUser appUser : allMembers)
+        {
+            if(appUser.getMemberGroup()==null)
+                ungrouped.add(appUser);
+        }
+        return ungrouped;
     }
 
     public List<AppUser> getAllInMemberGroup(Integer id) {

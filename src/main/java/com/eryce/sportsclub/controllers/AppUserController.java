@@ -21,6 +21,12 @@ public class AppUserController {
         return appUserService.getAllMembers();
     }
 
+    @GetMapping("/users/members/ungrouped")
+    public List<AppUser> getUngroupedMembers()
+    {
+        return appUserService.getUngroupedMembers();
+    }
+
     @GetMapping("/users/group/{id}")
     public List<AppUser> getAllInMemberGroup(@PathVariable("id")Integer id)
     {
