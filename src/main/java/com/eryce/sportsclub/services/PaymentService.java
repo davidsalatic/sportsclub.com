@@ -29,6 +29,11 @@ public class PaymentService {
         return paymentRepository.findAllByMembershipAndAppUser(membership,appUser);
     }
 
+    public List<Payment> getAllPaymentsForMembership(Integer membershipId) {
+        Membership membership = membershipRepository.getOne(membershipId);
+        return paymentRepository.findAllByMembership(membership);
+    }
+
     public Payment getById(Integer id) {
         return paymentRepository.getOne(id);
     }
@@ -42,8 +47,4 @@ public class PaymentService {
         paymentRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
-
 }

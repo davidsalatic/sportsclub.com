@@ -12,4 +12,6 @@ public interface PaymentRepository extends JpaRepository<Payment,Integer> {
     List<Payment> findAllByMembershipAndAppUser(Membership membership, AppUser appUser);
 
     List<Payment> findAllByAppUser(AppUser appUser);
+
+    List<Payment> findAllByMembership(Membership membership);
 }
