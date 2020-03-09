@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,12 @@ public class RoleController  {
     public List<Role> getAll()
     {
         return roleService.getAll();
+    }
+
+    @GetMapping("roles/search")
+    public Role getByName(@RequestParam String name)
+    {
+        return roleService.getByName(name);
     }
 
     @PostMapping("/roles")

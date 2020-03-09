@@ -2,6 +2,7 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
+import com.eryce.sportsclub.models.TrainingSession;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class MemberGroupService {
     private MemberGroupRepository memberGroupRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private TrainingSessionService trainingSessionService;
 
     public Collection<MemberGroup> getAll() {
         return memberGroupRepository.findAll();
@@ -40,6 +43,7 @@ public class MemberGroupService {
     public ResponseEntity<MemberGroup> delete(Integer id) {
         MemberGroup memberGroup = getById(id);
         removeMemberGroupFromUsersInMemberGroup(memberGroup);
+        deleteTrainingSessionsForGroup(memberGroup);
         memberGroupRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -50,4 +54,11 @@ public class MemberGroupService {
             appUser.setMemberGroup(null);
     }
 
+    private void deleteTrainingSessionsForGroup(MemberGroup memberGroup) {
+        List<TrainingSession> trainingSessions = trainingSessionService.getAllByMemberGroup(memberGroup.getId());
+        for(TrainingSession trainingSession:trainingSessions)
+        {
+            trainingSessionService.delete(trainingSession.getId());
+        }
+    }
 }

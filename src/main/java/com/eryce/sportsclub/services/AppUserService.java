@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,12 @@ public class AppUserService {
     private AttendanceRepository attendanceRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public List<AppUser> getAllMembers() {
-        return appUserRepository.findAll();
+        Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
+        return appUserRepository.findAllByRole(memberRole);
     }
 
     public List<AppUser> getUngroupedMembers() {

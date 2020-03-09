@@ -19,6 +19,10 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
+    public Role getByName(String name) {
+        return roleRepository.findByNameIgnoreCase(name);
+    }
+
     public ResponseEntity<Role> insert(Role role) {
         roleRepository.save(role);
         return new ResponseEntity<>(HttpStatus.OK);
