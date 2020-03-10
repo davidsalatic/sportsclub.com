@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.RoleService;
@@ -16,19 +17,19 @@ public class RoleController  {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("/roles")
+    @GetMapping(Routes.ROLES_BASE)
     public List<Role> getAll()
     {
         return roleService.getAll();
     }
 
-    @GetMapping("roles/search")
+    @GetMapping(Routes.ROLES_BASE+"/search")
     public Role getByName(@RequestParam String name)
     {
         return roleService.getByName(name);
     }
 
-    @PostMapping("/roles")
+    @PostMapping(Routes.ROLES_BASE)
     public ResponseEntity<Role> insert(@RequestBody Role role)
     {
         return roleService.insert(role);

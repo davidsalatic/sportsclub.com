@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.services.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,26 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @GetMapping("/attendances/training/{id}")
+    @GetMapping(Routes.ATTENDANCES_BASE+"/training/{id}")
     public List<Attendance> getAllByTrainingSessionId(@PathVariable("id")Integer id)
     {
         return attendanceService.getAllByTrainingSessionId(id);
     }
 
-    @GetMapping("/attendances/session/{sessionId}/user/{userId}")
+    @GetMapping(Routes.ATTENDANCES_BASE+"/session/{sessionId}/user/{userId}")
     public Attendance getByTrainingSessionAndAppUser(@PathVariable("sessionId")Integer sessionId,
                                                      @PathVariable("userId")Integer userId)
     {
         return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
     }
 
-    @PostMapping("/attendances")
+    @PostMapping(Routes.ATTENDANCES_BASE)
     public ResponseEntity<Attendance> insert(@RequestBody Attendance attendance)
     {
         return attendanceService.insert(attendance);
     }
 
-    @DeleteMapping("attendances/{id}")
+    @DeleteMapping(Routes.ATTENDANCES_BASE+"/{id}")
     public ResponseEntity<Attendance> delete(@PathVariable("id")Integer id)
     {
         return attendanceService.delete(id);

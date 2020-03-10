@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.TrainingSession;
 import com.eryce.sportsclub.services.TrainingSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +16,24 @@ public class TrainingSessionController {
     @Autowired
     private TrainingSessionService trainingSessionService;
 
-    @GetMapping("/sessions/group/{groupId}")
+    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}")
     public List<TrainingSession>getAllByMemberGroup(@PathVariable("groupId")Integer groupId)
     {
         return trainingSessionService.getAllByMemberGroup(groupId);
     }
 
-    @GetMapping("/sessions/{id}")
+    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")
     public TrainingSession getById(@PathVariable("id")Integer id){
         return trainingSessionService.getById(id);
     }
 
-    @PostMapping("/sessions")
+    @PostMapping(Routes.TRAINING_SESSIONS_BASE)
     public ResponseEntity<TrainingSession> insert(@RequestBody TrainingSession trainingSession)
     {
         return trainingSessionService.insert(trainingSession);
     }
 
-    @DeleteMapping("/sessions/{id}")
+    @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")
     public ResponseEntity<TrainingSession> delete(@PathVariable Integer id)
     {
         return trainingSessionService.delete(id);

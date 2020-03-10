@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface AppUserRepository extends JpaRepository<AppUser,Integer> {
 
-    List<AppUser> findAllByUsernameIgnoreCase(String username);
+    AppUser findByUsernameIgnoreCase(String username);
 
     List<AppUser> findAllByMemberGroup(MemberGroup memberGroup);
 
-    List<AppUser> findAllByJmbgIgnoreCase(String jmbg);
+    AppUser findByJmbgIgnoreCase(String jmbg);
 
     AppUser findByUsernameAndPassword(String username, String password);
 

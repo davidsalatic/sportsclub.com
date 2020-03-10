@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.services.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-    @GetMapping("/permissions")
+    @GetMapping(Routes.PERMISSIONS_BASE)
     public List<Permission> getAll()
     {
         return permissionService.getAll();
     }
 
-    @PostMapping("/permissions")
+    @PostMapping(Routes.PERMISSIONS_BASE)
     public ResponseEntity<Permission> insert(@RequestBody Permission permission)
     {
         return permissionService.insert(permission);

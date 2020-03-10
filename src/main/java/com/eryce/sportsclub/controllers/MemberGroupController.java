@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.MemberGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +16,30 @@ public class MemberGroupController {
     @Autowired
     private MemberGroupService memberGroupService;
 
-    @GetMapping("/groups")
+    @GetMapping(Routes.MEMBER_GROUPS_BASE)
     public Collection<MemberGroup> getAll() {
         return memberGroupService.getAll();
     }
 
-    @GetMapping("/groups/{id}")
+    @GetMapping(Routes.MEMBER_GROUPS_BASE+"/{id}")
     public MemberGroup getById(@PathVariable("id")Integer id)
     {
         return memberGroupService.getById(id);
     }
 
-    @PostMapping("/groups")
+    @PostMapping(Routes.MEMBER_GROUPS_BASE)
     public ResponseEntity<MemberGroup>insert(@RequestBody MemberGroup memberGroup)
     {
         return memberGroupService.insert(memberGroup);
     }
 
-    @PutMapping("/groups")
+    @PutMapping(Routes.MEMBER_GROUPS_BASE)
     public ResponseEntity<MemberGroup>update(@RequestBody MemberGroup memberGroup)
     {
         return memberGroupService.update(memberGroup);
     }
 
-    @DeleteMapping("/groups/{id}")
+    @DeleteMapping(Routes.MEMBER_GROUPS_BASE+"/{id}")
     public ResponseEntity<MemberGroup>delete(@PathVariable Integer id)
     {
         return memberGroupService.delete(id);

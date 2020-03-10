@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,55 +16,55 @@ public class AppUserController {
     @Autowired
     private AppUserService appUserService;
 
-    @GetMapping("/users/members")
+    @GetMapping(Routes.APP_USERS_BASE+"/members")
     public List<AppUser> getAllMembers()
     {
         return appUserService.getAllMembers();
     }
 
-    @GetMapping("/users/members/ungrouped")
+    @GetMapping(Routes.APP_USERS_BASE+"/members/ungrouped")
     public List<AppUser> getUngroupedMembers()
     {
         return appUserService.getUngroupedMembers();
     }
 
-    @GetMapping("/users/group/{id}")
+    @GetMapping(Routes.APP_USERS_BASE+"/group/{id}")
     public List<AppUser> getAllInMemberGroup(@PathVariable("id")Integer id)
     {
         return appUserService.getAllInMemberGroup(id);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping(Routes.APP_USERS_BASE+"/{id}")
     public AppUser getById(@PathVariable("id")Integer id)
     {
         return appUserService.getById(id);
     }
 
-    @GetMapping("users/search/username")
-    public List<AppUser> getByUsername(@RequestParam String username)
+    @GetMapping(Routes.APP_USERS_BASE+"/search/username")
+    public AppUser getByUsername(@RequestParam String username)
     {
         return appUserService.getByUsername(username);
     }
 
-    @GetMapping("users/search/jmbg")
-    public List<AppUser> getByJmbg(@RequestParam String jmbg)
+    @GetMapping(Routes.APP_USERS_BASE+"/search/jmbg")
+    public AppUser getByJmbg(@RequestParam String jmbg)
     {
         return appUserService.getByJmbg(jmbg);
     }
 
-    @PostMapping("/users")
+    @PostMapping(Routes.APP_USERS_BASE)
     public ResponseEntity<AppUser> insert(@RequestBody AppUser appUser)
     {
         return appUserService.insert(appUser);
     }
 
-    @PutMapping("/users")
+    @PutMapping(Routes.APP_USERS_BASE)
     public ResponseEntity<AppUser> update(@RequestBody AppUser appUser)
     {
         return appUserService.update(appUser);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping(Routes.APP_USERS_BASE+"{id}")
     public ResponseEntity<AppUser>delete(@PathVariable ("id") Integer id)
     {
         return appUserService.delete(id);
