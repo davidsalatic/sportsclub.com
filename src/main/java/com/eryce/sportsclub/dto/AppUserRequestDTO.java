@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AppUserDTO {
+public class AppUserRequestDTO {
 
     private Integer id;
 
@@ -25,13 +25,7 @@ public class AppUserDTO {
     private String address;
     private String phoneNumber;
     private LocalDate dateJoined;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
     private Role role;
 
     public Integer getId() {

@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.dto.PaymentRequestDTO;
 import com.eryce.sportsclub.models.Payment;
 import com.eryce.sportsclub.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class PaymentController {
     }
 
     @PostMapping(Routes.PAYMENTS_BASE)
-    public ResponseEntity<Payment> insert(@RequestBody Payment payment)
+    public ResponseEntity<Payment> insert(@RequestBody PaymentRequestDTO paymentRequestDTO)
     {
-        return paymentService.insert(payment);
+        return paymentService.insert(paymentRequestDTO);
     }
 
     @DeleteMapping(Routes.PAYMENTS_BASE+"/{id}")

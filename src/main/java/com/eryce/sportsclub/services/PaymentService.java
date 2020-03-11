@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.PaymentRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.models.Payment;
@@ -38,8 +39,8 @@ public class PaymentService {
         return paymentRepository.getOne(id);
     }
 
-    public ResponseEntity<Payment> insert(Payment payment) {
-        paymentRepository.save(payment);
+    public ResponseEntity<Payment> insert(PaymentRequestDTO paymentRequestDTO) {
+        paymentRepository.save(paymentRequestDTO.generatePayment());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

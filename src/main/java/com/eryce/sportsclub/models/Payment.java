@@ -34,9 +34,6 @@ public class Payment {
         this.id = id;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 
     public AppUser getAppUser() {
         return appUser;
