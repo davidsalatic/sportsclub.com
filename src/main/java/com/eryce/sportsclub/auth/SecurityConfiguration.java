@@ -1,7 +1,9 @@
 package com.eryce.sportsclub.auth;
 
+import com.eryce.sportsclub.constants.Permissions;
 import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,14 +29,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.ATTENDANCES_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.MEMBER_GROUPS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.MEMBERSHIPS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
-                .antMatchers(Routes.PAYMENTS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
-                .antMatchers(Routes.PERMISSIONS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
-                .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
-                .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
+                .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
+                .antMatchers(Routes.ATTENDANCES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
+                .antMatchers(Routes.MEMBER_GROUPS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
+                .antMatchers(Routes.MEMBERSHIPS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
+                .antMatchers(Routes.PAYMENTS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
+                .antMatchers(Routes.PERMISSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
+                .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
+                .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.AUTHENTICATE_BASE+Routes.ANY).permitAll()
                 .and().formLogin();
     }

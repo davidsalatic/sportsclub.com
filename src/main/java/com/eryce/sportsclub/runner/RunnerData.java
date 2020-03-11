@@ -36,6 +36,9 @@ public class RunnerData implements CommandLineRunner {
             Permission accessTrainingSessions = new Permission();
             accessTrainingSessions.setName(Permissions.ACCESS_TRAINING_SESSIONS);
 
+            Permission accessMembers = new Permission();
+            accessMembers.setName(Permissions.ACCESS_MEMBERS);
+
             Permission accessSelf = new Permission();
             accessSelf.setName(Permissions.ACCESS_SELF);
 
@@ -47,15 +50,18 @@ public class RunnerData implements CommandLineRunner {
             coachRole.setName(Roles.COACH);
             coachRole.getPermissions().add(accessTrainingSessions);
             coachRole.getPermissions().add(accessSelf);
+            coachRole.getPermissions().add(accessMembers);
 
             Role managerRole = new Role();
             managerRole.setName(Roles.MANAGER);
             managerRole.getPermissions().add(accessMemberships);
             managerRole.getPermissions().add(accessTrainingSessions);
             managerRole.getPermissions().add(accessSelf);
+            managerRole.getPermissions().add(accessMembers);
 
             permissionController.insert(accessMemberships);
             permissionController.insert(accessTrainingSessions);
+            permissionController.insert(accessMembers);
             permissionController.insert(accessSelf);
 
             roleController.insert(memberRole);

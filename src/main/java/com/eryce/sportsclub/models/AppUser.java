@@ -8,8 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class AppUser implements UserDetails {
@@ -121,7 +123,13 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(this.role.getName() ));
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for(Permission permission:this.role.getPermissions())
+        {
+            authorities.add(new SimpleGrantedAuthority(permission.getName()));
+        }
+        return authorities;
     }
 
     public void setAuthority(Role role)
