@@ -30,20 +30,6 @@ public class AppUserRequestDTO {
     private Role role;
 
     public AppUserRequestDTO(){}
-//
-//    public AppUserRequestDTO(AppUser appUser)
-//    {
-//        this.id=appUser.getId();
-//        this.username=appUser.getUsername();
-//        this.name=appUser.getName();
-//        this.surname=appUser.getSurname();
-//        this.jmbg=appUser.getJmbg();
-//        this.address=appUser.getAddress();
-//        this.phoneNumber=appUser.getPhoneNumber();
-//        this.dateJoined=appUser.getDateJoined();
-//        this.memberGroup=appUser.getMemberGroup();
-//        this.role=appUser.getRole();
-//    }
 
     public Integer getId() {
         return id;
