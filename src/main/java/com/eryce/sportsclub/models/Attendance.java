@@ -38,4 +38,8 @@ public class Attendance {
     public void setTrainingSession(TrainingSession trainingSession) {
         this.trainingSession = trainingSession;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

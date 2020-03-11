@@ -2,16 +2,12 @@ package com.eryce.sportsclub.dto;
 
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
-import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.models.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class AppUserRequestDTO {
 
@@ -25,8 +21,29 @@ public class AppUserRequestDTO {
     private String address;
     private String phoneNumber;
     private LocalDate dateJoined;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
     private Role role;
+
+    public AppUserRequestDTO(){}
+//
+//    public AppUserRequestDTO(AppUser appUser)
+//    {
+//        this.id=appUser.getId();
+//        this.username=appUser.getUsername();
+//        this.name=appUser.getName();
+//        this.surname=appUser.getSurname();
+//        this.jmbg=appUser.getJmbg();
+//        this.address=appUser.getAddress();
+//        this.phoneNumber=appUser.getPhoneNumber();
+//        this.dateJoined=appUser.getDateJoined();
+//        this.memberGroup=appUser.getMemberGroup();
+//        this.role=appUser.getRole();
+//    }
 
     public Integer getId() {
         return id;
