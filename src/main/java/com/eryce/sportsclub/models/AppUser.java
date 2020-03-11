@@ -31,7 +31,7 @@ public class AppUser implements UserDetails {
     @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -121,7 +121,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(Roles.MEMBER));//TODO REPLACE WITH REAL VALUES
+        return Arrays.asList(new SimpleGrantedAuthority(this.role.getName() ));
+    }
+
+    public void setAuthority(Role role)
+    {
+        this.role=role;
     }
 
     @Override

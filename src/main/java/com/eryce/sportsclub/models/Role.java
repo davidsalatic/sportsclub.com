@@ -13,7 +13,7 @@ public class Role {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private List<Permission> permissions=new ArrayList<>();
 

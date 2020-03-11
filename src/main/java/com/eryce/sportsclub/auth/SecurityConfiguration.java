@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.PERMISSIONS_BASE).hasRole(Roles.MANAGER)
                 .antMatchers(Routes.ROLES_BASE).hasRole(Roles.MANAGER)
                 .antMatchers(Routes.TRAINING_SESSIONS_BASE).hasAnyRole(Roles.MANAGER,Roles.COACH)
-//                .antMatchers(Routes.AUTHENTICATE_BASE).permitAll()
+                .antMatchers(Routes.AUTHENTICATE_BASE).permitAll()
                 .and().formLogin();
     }
 
