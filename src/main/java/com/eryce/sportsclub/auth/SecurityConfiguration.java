@@ -26,15 +26,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(Routes.APP_USERS_BASE).hasAnyRole(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.ATTENDANCES_BASE).hasAnyRole(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.MEMBER_GROUPS_BASE).hasAnyRole(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.MEMBERSHIPS_BASE).hasRole(Roles.MANAGER)
-                .antMatchers(Routes.PAYMENTS_BASE).hasRole(Roles.MANAGER)
-                .antMatchers(Routes.PERMISSIONS_BASE).hasRole(Roles.MANAGER)
-                .antMatchers(Routes.ROLES_BASE).hasRole(Roles.MANAGER)
-                .antMatchers(Routes.TRAINING_SESSIONS_BASE).hasAnyRole(Roles.MANAGER,Roles.COACH)
-                .antMatchers(Routes.AUTHENTICATE_BASE).permitAll()
+        http.authorizeRequests()
+                .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
+                .antMatchers(Routes.ATTENDANCES_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
+                .antMatchers(Routes.MEMBER_GROUPS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
+                .antMatchers(Routes.MEMBERSHIPS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
+                .antMatchers(Routes.PAYMENTS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
+                .antMatchers(Routes.PERMISSIONS_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
+                .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Roles.MANAGER)
+                .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAnyAuthority(Roles.MANAGER,Roles.COACH)
+                .antMatchers(Routes.AUTHENTICATE_BASE+Routes.ANY).permitAll()
                 .and().formLogin();
     }
 

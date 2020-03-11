@@ -11,4 +11,5 @@ public class Routes {
     public static final String ROLES_BASE="/roles";
     public static final String TRAINING_SESSIONS_BASE="/sessions";
     public static final String AUTHENTICATE_BASE="/authenticate";
+    public static final String ANY="/**";
 }
