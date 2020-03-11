@@ -1,14 +1,12 @@
 package com.eryce.sportsclub.auth;
 
 import com.eryce.sportsclub.constants.Permissions;
-import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.Permission;
-import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,8 +35,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.PERMISSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
                 .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
                 .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
-                .antMatchers(Routes.AUTHENTICATE_BASE+Routes.ANY).permitAll()
-                .and().formLogin();
+                .antMatchers(Routes.AUTHENTICATE_BASE+Routes.ANY).anonymous().anyRequest().permitAll()
+                .and().formLogin().and().csrf().disable();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(Routes.AUTHENTICATE_BASE);
     }
 
     @Bean

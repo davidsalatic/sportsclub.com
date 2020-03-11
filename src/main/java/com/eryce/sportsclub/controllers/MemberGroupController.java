@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.Collection;
 
 @CrossOrigin
@@ -27,6 +28,7 @@ public class MemberGroupController {
         return memberGroupService.getById(id);
     }
 
+    @PermitAll
     @PostMapping(Routes.MEMBER_GROUPS_BASE)
     public ResponseEntity<MemberGroup>insert(@RequestBody MemberGroup memberGroup)
     {

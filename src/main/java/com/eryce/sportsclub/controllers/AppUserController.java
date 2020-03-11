@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.dto.AppUserDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,18 +54,18 @@ public class AppUserController {
     }
 
     @PostMapping(Routes.APP_USERS_BASE)
-    public ResponseEntity<AppUser> insert(@RequestBody AppUser appUser)
+    public ResponseEntity<AppUser> insert(@RequestBody AppUserDTO appUserDTO)
     {
-        return appUserService.insert(appUser);
+        return appUserService.insert(appUserDTO);
     }
 
     @PutMapping(Routes.APP_USERS_BASE)
-    public ResponseEntity<AppUser> update(@RequestBody AppUser appUser)
+    public ResponseEntity<AppUser> update(@RequestBody AppUserDTO appUserDTO)
     {
-        return appUserService.update(appUser);
+        return appUserService.update(appUserDTO);
     }
 
-    @DeleteMapping(Routes.APP_USERS_BASE+"{id}")
+    @DeleteMapping(Routes.APP_USERS_BASE+"/{id}")
     public ResponseEntity<AppUser>delete(@PathVariable ("id") Integer id)
     {
         return appUserService.delete(id);

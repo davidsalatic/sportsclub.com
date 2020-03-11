@@ -13,8 +13,12 @@ public class AuthService {
     private AppUserRepository appUserRepository;
 
     public String authenticate(AppUser appUser) {
-       AppUser ex = appUserRepository.findByUsernameAndPassword(appUser.getUsername(),appUser.getPassword());
-       String tok= JWT.generateToken(ex);
-       return tok;
+       AppUser existingUser = appUserRepository.findByUsernameAndPassword(appUser.getUsername(),appUser.getPassword());
+       if(existingUser!=null)
+       {
+           return JWT.generateToken(existingUser);
+       }
+       else
+           return null;
     }
 }

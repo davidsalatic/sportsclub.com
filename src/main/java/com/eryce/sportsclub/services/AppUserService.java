@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.constants.Roles;
+import com.eryce.sportsclub.dto.AppUserDTO;
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +64,13 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findByJmbgIgnoreCase(jmbg);
     }
 
-    public ResponseEntity<AppUser> insert(AppUser appUser) {
-        appUserRepository.save(appUser);
+    public ResponseEntity<AppUser> insert(AppUserDTO appUserDTO) {
+        appUserRepository.save(appUserDTO.generateAppUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<AppUser> update(AppUser appUser) {
-        return this.insert(appUser);
+    public ResponseEntity<AppUser> update(AppUserDTO appUserDTO) {
+        return null;//TODO
     }
 
     public ResponseEntity<AppUser> delete(Integer id) {
