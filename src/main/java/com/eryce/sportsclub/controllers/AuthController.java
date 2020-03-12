@@ -25,6 +25,8 @@ public class AuthController {
     @GetMapping("/auth/claims")
     public Claims extractAllClaims(@RequestParam String token )
     {
-        return JWT.extractAllClaims(token);
+        if(token.length()>0)
+            return JWT.extractAllClaims(token);
+        return null;
     }
 }
