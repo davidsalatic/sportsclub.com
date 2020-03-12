@@ -3,7 +3,9 @@ package com.eryce.sportsclub.controllers;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.security.jwt.JWT;
 import com.eryce.sportsclub.services.AppUserService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,12 +53,6 @@ public class AppUserController {
     public AppUser getByJmbg(@RequestParam String jmbg)
     {
         return appUserService.getByJmbg(jmbg);
-    }
-
-    @GetMapping("/logged/details")
-    public String getLoggedInUser()
-    {
-        return appUserService.getLoggedInUser();
     }
 
     @PostMapping(Routes.APP_USERS_BASE)

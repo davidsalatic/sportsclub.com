@@ -4,7 +4,6 @@ import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.AttendanceRequestDTO;
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.services.AttendanceService;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

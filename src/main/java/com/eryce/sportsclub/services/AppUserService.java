@@ -42,10 +42,8 @@ public class AppUserService implements UserDetailsService {
         List<AppUser>ungrouped = new ArrayList<>();
         List<AppUser> allMembers = this.getAllMembers();
         for(AppUser appUser : allMembers)
-        {
             if(appUser.getMemberGroup()==null)
                 ungrouped.add(appUser);
-        }
         return ungrouped;
     }
 
@@ -86,30 +84,16 @@ public class AppUserService implements UserDetailsService {
     private void deleteAttendancesForUser(AppUser appUser)
     {
         for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
-        {
             attendanceRepository.delete(attendance);
-        }
     }
 
     private void deletePaymentsForUser(AppUser appUser) {
         for(Payment payment : paymentRepository.findAllByAppUser(appUser))
-        {
             paymentRepository.delete(payment);
-        }
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return this.getByUsername(s);
-    }
-
-    public String getLoggedInUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            AppUser appUser = ((AppUser)principal);
-            return JWT.generateToken(appUser);
-        } else {
-            return null;
-        }
     }
 }
