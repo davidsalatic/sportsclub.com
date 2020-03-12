@@ -21,15 +21,8 @@ public class AppUserRequestDTO {
     private String address;
     private String phoneNumber;
     private LocalDate dateJoined;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
     private Role role;
-
-    public AppUserRequestDTO(){}
 
     public Integer getId() {
         return id;

@@ -34,7 +34,6 @@ public class Payment {
         this.id = id;
     }
 
-
     public AppUser getAppUser() {
         return appUser;
     }

@@ -53,6 +53,12 @@ public class AppUserController {
         return appUserService.getByJmbg(jmbg);
     }
 
+    @GetMapping("/logged/details")
+    public String getLoggedInUser()
+    {
+        return appUserService.getLoggedInUser();
+    }
+
     @PostMapping(Routes.APP_USERS_BASE)
     public ResponseEntity<AppUser> insert(@RequestBody AppUserRequestDTO appUserRequestDTO)
     {

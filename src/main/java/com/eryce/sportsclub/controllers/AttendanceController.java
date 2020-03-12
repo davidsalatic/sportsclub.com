@@ -1,8 +1,10 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.dto.AttendanceRequestDTO;
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.services.AttendanceService;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +32,9 @@ public class AttendanceController {
     }
 
     @PostMapping(Routes.ATTENDANCES_BASE)
-    public ResponseEntity<Attendance> insert(@RequestBody Attendance attendance)
+    public ResponseEntity<Attendance> insert(@RequestBody AttendanceRequestDTO attendanceRequestDTO)
     {
-        return attendanceService.insert(attendance);
+        return attendanceService.insert(attendanceRequestDTO);
     }
 
     @DeleteMapping(Routes.ATTENDANCES_BASE+"/{id}")

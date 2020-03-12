@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.security.jwt.JWT;
 import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.*;
@@ -7,6 +8,7 @@ import com.eryce.sportsclub.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -99,5 +101,15 @@ public class AppUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return this.getByUsername(s);
+    }
+
+    public String getLoggedInUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            AppUser appUser = ((AppUser)principal);
+            return JWT.generateToken(appUser);
+        } else {
+            return null;
+        }
     }
 }

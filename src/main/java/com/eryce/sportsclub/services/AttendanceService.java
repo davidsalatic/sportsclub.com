@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.AttendanceRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.models.TrainingSession;
@@ -34,8 +35,8 @@ public class AttendanceService {
         return attendanceRepository.findByTrainingSessionAndAppUser(trainingSession,appUser);
     }
 
-    public ResponseEntity<Attendance> insert(Attendance attendance) {
-        attendanceRepository.save(attendance);
+    public ResponseEntity<Attendance> insert(AttendanceRequestDTO attendanceRequestDTO) {
+        attendanceRepository.save(attendanceRequestDTO.generateAttendance());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

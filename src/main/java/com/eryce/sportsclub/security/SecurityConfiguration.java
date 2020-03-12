@@ -1,4 +1,4 @@
-package com.eryce.sportsclub.auth;
+package com.eryce.sportsclub.security;
 
 import com.eryce.sportsclub.constants.Permissions;
 import com.eryce.sportsclub.constants.Routes;
@@ -26,17 +26,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(Routes.ATTENDANCES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.MEMBER_GROUPS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
                 .antMatchers(Routes.MEMBERSHIPS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
                 .antMatchers(Routes.PAYMENTS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
                 .antMatchers(Routes.PERMISSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
-                .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
+                .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
-                .antMatchers(Routes.AUTHENTICATE_BASE+Routes.ANY).anonymous().anyRequest().permitAll()
-                .and().formLogin().and().csrf().disable();
+                .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
+                .antMatchers("/logged/details").permitAll()
+                .and().formLogin().defaultSuccessUrl("http://localhost:4200/home");
     }
 
     @Override

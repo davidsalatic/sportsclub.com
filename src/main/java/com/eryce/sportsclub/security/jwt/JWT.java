@@ -1,4 +1,4 @@
-package com.eryce.sportsclub.auth.jwt;
+package com.eryce.sportsclub.security.jwt;
 
 import com.eryce.sportsclub.models.AppUser;
 import io.jsonwebtoken.Claims;
