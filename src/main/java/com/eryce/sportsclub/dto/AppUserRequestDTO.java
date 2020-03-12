@@ -24,6 +24,10 @@ public class AppUserRequestDTO {
     private MemberGroup memberGroup;
     private Role role;
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Integer getId() {
         return id;
     }

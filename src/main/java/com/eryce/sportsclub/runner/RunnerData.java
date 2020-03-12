@@ -2,8 +2,11 @@ package com.eryce.sportsclub.runner;
 
 import com.eryce.sportsclub.constants.Permissions;
 import com.eryce.sportsclub.constants.Roles;
+import com.eryce.sportsclub.controllers.AppUserController;
 import com.eryce.sportsclub.controllers.PermissionController;
 import com.eryce.sportsclub.controllers.RoleController;
+import com.eryce.sportsclub.dto.AppUserRequestDTO;
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class RunnerData implements CommandLineRunner {
     private PermissionController permissionController;
     @Autowired
     private RoleController roleController;
+    @Autowired
+    private AppUserController appUserController;
 
     @Override
     public void run(String... args) {
@@ -26,6 +31,7 @@ public class RunnerData implements CommandLineRunner {
 
         System.out.println("***************APP STARTED*****************");
     }
+
 
     private void insertRolesAndPermissions() {
         if(permissionController.getAll().isEmpty())
@@ -67,6 +73,17 @@ public class RunnerData implements CommandLineRunner {
             roleController.insert(memberRole);
             roleController.insert(coachRole);
             roleController.insert(managerRole);
+
+            if(appUserController.getAllStaff().isEmpty())
+            {
+                AppUserRequestDTO defaultManager = new AppUserRequestDTO();
+                defaultManager.setId(99999);
+                defaultManager.setName("Manager");
+                defaultManager.setUsername("manager");
+                defaultManager.setPassword("manager");
+                defaultManager.setRole(managerRole);
+                appUserController.insert(defaultManager);
+            }
         }
     }
 }

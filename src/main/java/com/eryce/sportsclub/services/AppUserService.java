@@ -38,6 +38,17 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findAllByRole(memberRole);
     }
 
+    public List<AppUser> getAllStaff() {
+        Role coachRole = roleRepository.findByNameIgnoreCase(Roles.COACH);
+        Role managerRole = roleRepository.findByNameIgnoreCase(Roles.MANAGER);
+        List<AppUser>coaches = appUserRepository.findAllByRole(coachRole);
+        List<AppUser>managers = appUserRepository.findAllByRole(managerRole);
+
+        List<AppUser>staff = new ArrayList<>(coaches);
+        staff.addAll(managers);
+        return staff;
+    }
+
     public List<AppUser> getUngroupedMembers() {
         List<AppUser>ungrouped = new ArrayList<>();
         List<AppUser> allMembers = this.getAllMembers();

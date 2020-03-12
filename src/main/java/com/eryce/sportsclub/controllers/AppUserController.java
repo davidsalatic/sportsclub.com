@@ -25,6 +25,11 @@ public class AppUserController {
         return appUserService.getAllMembers();
     }
 
+    @GetMapping(Routes.APP_USERS_BASE+"/staff")
+    public List<AppUser>getAllStaff(){
+        return appUserService.getAllStaff();
+    }
+
     @GetMapping(Routes.APP_USERS_BASE+"/members/ungrouped")
     public List<AppUser> getUngroupedMembers()
     {
