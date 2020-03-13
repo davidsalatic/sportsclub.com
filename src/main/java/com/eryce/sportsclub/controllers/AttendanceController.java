@@ -30,6 +30,12 @@ public class AttendanceController {
         return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
     }
 
+    @GetMapping(Routes.ATTENDANCES_BASE+"/member/{id}")
+    public List<Attendance> getByAppUser(@PathVariable ("id") Integer appUserId)
+    {
+        return this.attendanceService.getByAppUser(appUserId);
+    }
+
     @PostMapping(Routes.ATTENDANCES_BASE)
     public ResponseEntity<Attendance> insert(@RequestBody AttendanceRequestDTO attendanceRequestDTO)
     {

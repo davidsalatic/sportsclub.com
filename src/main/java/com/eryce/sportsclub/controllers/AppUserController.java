@@ -72,9 +72,17 @@ public class AppUserController {
         return appUserService.update(appUserRequestDTO);
     }
 
+    @PutMapping(Routes.APP_USERS_BASE+"/update-self")
+    public ResponseEntity<AppUser> updateSelf(@RequestBody AppUserRequestDTO appUserRequestDTO)
+    {
+        return appUserService.updateSelf(appUserRequestDTO);
+    }
+
     @DeleteMapping(Routes.APP_USERS_BASE+"/{id}")
     public ResponseEntity<AppUser>delete(@PathVariable ("id") Integer id)
     {
         return appUserService.delete(id);
     }
+
+
 }

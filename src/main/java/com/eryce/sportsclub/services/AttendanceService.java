@@ -35,6 +35,11 @@ public class AttendanceService {
         return attendanceRepository.findByTrainingSessionAndAppUser(trainingSession,appUser);
     }
 
+    public List<Attendance> getByAppUser(Integer appUserId) {
+        AppUser appUser=appUserRepository.getOne(appUserId);
+        return attendanceRepository.findAllByAppUser(appUser);
+    }
+
     public ResponseEntity<Attendance> insert(AttendanceRequestDTO attendanceRequestDTO) {
         attendanceRepository.save(attendanceRequestDTO.generateAttendance());
         return new ResponseEntity<>(HttpStatus.OK);

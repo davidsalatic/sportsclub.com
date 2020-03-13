@@ -107,4 +107,9 @@ public class AppUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return this.getByUsername(s);
     }
+
+    public ResponseEntity<AppUser> updateSelf(AppUserRequestDTO appUserRequestDTO) {
+        appUserRepository.save(appUserRequestDTO.generateAppUser());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
