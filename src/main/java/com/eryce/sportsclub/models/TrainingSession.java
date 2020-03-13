@@ -20,10 +20,9 @@ public class TrainingSession {
     @JoinColumn(name = "member_group_id", nullable = false)
     private MemberGroup memberGroup;
 
-    public TrainingSession()
-    {
-
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="term_id")
+    private Term term;
 
     public LocalDate getDateHeld() {
         return dateHeld;

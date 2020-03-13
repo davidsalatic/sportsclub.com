@@ -46,10 +46,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(Routes.AUTHENTICATE_BASE);
-    }
 
     @Bean
     public PasswordEncoder getPasswordEncoder(){return NoOpPasswordEncoder.getInstance();}
