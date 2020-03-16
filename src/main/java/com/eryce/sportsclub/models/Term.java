@@ -1,9 +1,6 @@
 package com.eryce.sportsclub.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalTime;
 
 @Entity
@@ -14,8 +11,20 @@ public class Term {
     private Integer id;
 
     private LocalTime startTime;
-    private Integer duration;
+    private Integer durationMinutes;
     private Integer dayOfWeek;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_group_id", nullable = false)
+    private MemberGroup memberGroup;
+
+    public MemberGroup getMemberGroup() {
+        return memberGroup;
+    }
+
+    public void setMemberGroup(MemberGroup memberGroup) {
+        this.memberGroup = memberGroup;
+    }
 
     public Integer getId() {
         return id;
@@ -33,12 +42,12 @@ public class Term {
         this.startTime = startTime;
     }
 
-    public Integer getDuration() {
-        return duration;
+    public Integer getDurationMinutes() {
+        return durationMinutes;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
     }
 
     public Integer getDayOfWeek() {

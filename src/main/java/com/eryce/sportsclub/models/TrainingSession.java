@@ -1,10 +1,13 @@
 package com.eryce.sportsclub.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class TrainingSession {
@@ -16,13 +19,11 @@ public class TrainingSession {
     @JsonFormat(pattern = "M/d/yyyy")
     private LocalDate dateHeld;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_group_id", nullable = false)
-    private MemberGroup memberGroup;
+    private LocalTime timeHeld;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="term_id")
-    private Term term;
+    @JoinColumn(name = "member_group_id", nullable = true)
+    private MemberGroup memberGroup;
 
     public LocalDate getDateHeld() {
         return dateHeld;
@@ -30,6 +31,14 @@ public class TrainingSession {
 
     public void setDateHeld(LocalDate dateHeld) {
         this.dateHeld = dateHeld;
+    }
+
+    public LocalTime getTimeHeld() {
+        return timeHeld;
+    }
+
+    public void setTimeHeld(LocalTime timeHeld) {
+        this.timeHeld = timeHeld;
     }
 
     public Integer getId() {

@@ -16,15 +16,21 @@ public class TermController {
     @Autowired
     private TermService termService;
 
-    @GetMapping(Routes.TERM_BASE)
-    public List<Term> getAll()
+    @GetMapping(Routes.TERM_BASE+"/group/{groupId}")
+    public List<Term> getAllByMemberGroup(@PathVariable("groupId")Integer memberGroupId)
     {
-        return termService.getAll();
+        return termService.getAllByMemberGroup(memberGroupId);
     }
 
     @PostMapping(Routes.TERM_BASE)
     public ResponseEntity<Term> insert(@RequestBody Term term)
     {
         return termService.insert(term);
+    }
+
+    @DeleteMapping(Routes.TERM_BASE+"/{id}")
+    public ResponseEntity<Term> delete(@PathVariable("id")Integer id)
+    {
+        return termService.delete(id);
     }
 }

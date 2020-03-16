@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class MemberGroup{
@@ -10,11 +11,6 @@ public class MemberGroup{
     private Integer id;
 
     private String name;
-
-    public MemberGroup()
-    {
-
-    }
 
     public Integer getId() {
         return id;

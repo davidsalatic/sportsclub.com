@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.models.Term;
 import com.eryce.sportsclub.models.TrainingSession;
 import com.eryce.sportsclub.services.TrainingSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,12 @@ public class TrainingSessionController {
     public ResponseEntity<TrainingSession> insert(@RequestBody TrainingSession trainingSession)
     {
         return trainingSessionService.insert(trainingSession);
+    }
+
+    @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/group/{groupId}")
+    public ResponseEntity<TrainingSession> generateInTerm(@RequestBody Term term,@PathVariable("groupId")Integer groupId)
+    {
+        return this.trainingSessionService.generateInTerm(term,groupId);
     }
 
     @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")

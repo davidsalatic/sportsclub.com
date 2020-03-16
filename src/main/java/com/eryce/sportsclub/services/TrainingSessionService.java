@@ -2,15 +2,20 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.models.MemberGroup;
+import com.eryce.sportsclub.models.Term;
 import com.eryce.sportsclub.models.TrainingSession;
 import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -52,4 +57,30 @@ public class TrainingSessionService {
             attendanceRepository.delete(attendance);
         }
     }
+
+    public ResponseEntity<TrainingSession> generateInTerm(Term term,Integer groupId) {
+
+        MemberGroup memberGroup = memberGroupRepository.getOne(groupId);
+
+        LocalDate today = LocalDate.now();
+        int numberOfDaysInCurrentMonth=today.lengthOfMonth();
+        int currentYear = today.getYear();
+        int currentMonth = today.getMonthValue();
+        for(int i=1;i<=numberOfDaysInCurrentMonth;i++)
+        {
+            LocalDate date = LocalDate.of(currentYear,currentMonth,i);
+            if(date.getDayOfWeek().getValue()==term.getDayOfWeek())
+            {
+                TrainingSession trainingSession = new TrainingSession();
+                trainingSession.setDateHeld(date);
+                trainingSession.setTimeHeld(term.getStartTime());
+                trainingSession.setMemberGroup(memberGroup);
+                trainingSessionRepository.save(trainingSession);
+            }
+        }
+
+
+       return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

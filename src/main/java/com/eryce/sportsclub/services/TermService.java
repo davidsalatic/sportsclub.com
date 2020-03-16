@@ -1,6 +1,8 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Term;
+import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.TermRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,21 @@ public class TermService {
 
     @Autowired
     private TermRepository termRepository;
+    @Autowired
+    private MemberGroupRepository memberGroupRepository;
 
-    public List<Term> getAll() {
-        return termRepository.findAll();
+    public List<Term> getAllByMemberGroup(Integer memberGroupId) {
+        MemberGroup memberGroup = memberGroupRepository.getOne(memberGroupId);
+        return termRepository.findAllByMemberGroup(memberGroup);
     }
 
     public ResponseEntity<Term> insert(Term term) {
         termRepository.save(term);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Term> delete(Integer id) {
+        termRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
