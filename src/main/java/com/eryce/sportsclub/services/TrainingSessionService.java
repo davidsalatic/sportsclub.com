@@ -66,14 +66,12 @@ public class TrainingSessionService {
         }
     }
 
-    public ResponseEntity<TrainingSession> generateInTerms(Term[] terms,Integer generateFromDay) {
+    public ResponseEntity<TrainingSession> generateInTerms(Term[] terms,Integer periodId,Integer generateFromDay) {
 
         LocalDate today = LocalDate.now();
         int numberOfDaysInCurrentMonth=today.lengthOfMonth();
 
-        int currentYear = today.getYear();
-        int currentMonth = today.getMonthValue();
-        Period period = periodRepository.findByMonthAndYear(currentMonth,currentYear);
+        Period period = periodRepository.getOne(periodId);
 
         if(generateFromDay.equals(FIRST_DAY_OF_MONTH))
             deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(),period,FIRST_DAY_OF_MONTH);
@@ -82,7 +80,7 @@ public class TrainingSessionService {
 
         for(int i=generateFromDay;i<=numberOfDaysInCurrentMonth;i++)
         {
-            LocalDate date = LocalDate.of(currentYear,currentMonth,i);
+            LocalDate date = LocalDate.of(period.getYear(),period.getMonth(),i);
             for (Term term : terms) {
                 if (date.getDayOfWeek().getValue() == term.getDayOfWeek()) {
                     TrainingSession trainingSession = new TrainingSession();
