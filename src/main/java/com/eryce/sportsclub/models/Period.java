@@ -1,10 +1,12 @@
 package com.eryce.sportsclub.models;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-public class Month {
+@Entity
+public class Period {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

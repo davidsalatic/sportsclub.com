@@ -27,9 +27,9 @@ public class MembershipService {
         return membershipRepository.getOne(id);
     }
 
-    public Membership getByMonthAndYear(Integer month, Integer year) {
-        return membershipRepository.findByMonthAndYear(month,year);
-    }
+//    public Membership getByMonthAndYear(Integer month, Integer year) {
+//        return membershipRepository.findByMonthAndYear(month,year);
+//    }
 
     public ResponseEntity<Membership> insert(Membership membership) {
         membershipRepository.save(membership);

@@ -9,20 +9,26 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer month;
-    private Integer year;
     private Integer price;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "month_id", nullable = false)
+    private Period period;
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
 
     public Integer getId() {
         return id;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
     }
 
     public int getPrice() {
@@ -31,14 +37,6 @@ public class Membership {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public void setPrice(int price) {
