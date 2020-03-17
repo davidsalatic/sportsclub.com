@@ -52,4 +52,10 @@ public class TrainingSessionController {
     {
         return trainingSessionService.delete(id);
     }
+
+    @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}/{periodId}")
+    public ResponseEntity<TrainingSession> deleteByMemberGroupAndPeriod(@PathVariable("groupId")Integer groupId,@PathVariable("periodId")Integer periodId)
+    {
+        return trainingSessionService.deleteByMemberGroupAndPeriod(groupId,periodId);
+    }
 }

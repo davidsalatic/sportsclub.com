@@ -5,7 +5,11 @@ import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.services.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.RouteMatcher;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.Path;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -13,6 +17,18 @@ public class PeriodController {
 
     @Autowired
     private PeriodService periodService;
+
+    @GetMapping(Routes.PERIOD_BASE)
+    public List<Period> getAll()
+    {
+        return periodService.getAll();
+    }
+
+    @GetMapping(Routes.PERIOD_BASE+"/{id}")
+    public Period getById(@PathVariable("id")Integer id)
+    {
+        return periodService.getById(id);
+    }
 
     @GetMapping(Routes.PERIOD_BASE+"/month/{month}/year/{year}")
     public Period getByMonthAndYear(@PathVariable("month")Integer month,@PathVariable("year")Integer year)
