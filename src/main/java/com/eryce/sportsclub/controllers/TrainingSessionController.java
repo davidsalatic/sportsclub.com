@@ -34,10 +34,10 @@ public class TrainingSessionController {
         return trainingSessionService.insert(trainingSession);
     }
 
-    @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/group/{groupId}")
-    public ResponseEntity<TrainingSession> generateInTerm(@RequestBody Term term,@PathVariable("groupId")Integer groupId)
+        @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/day/{day}")
+    public ResponseEntity<TrainingSession> generateInTerm(@RequestBody Term[] terms,@PathVariable("day")Integer day)
     {
-        return this.trainingSessionService.generateInTerm(term,groupId);
+        return this.trainingSessionService.generateInTerm(terms,day);
     }
 
     @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")

@@ -28,6 +28,8 @@ public class TrainingSessionService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    private final Integer FIRST_DAY_OF_MONTH=1;
+
     public List<TrainingSession> getAllByMemberGroup(Integer groupId) {
         MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
         return trainingSessionRepository.findAllByMemberGroup(memberGroup);
@@ -58,29 +60,36 @@ public class TrainingSessionService {
         }
     }
 
-    public ResponseEntity<TrainingSession> generateInTerm(Term term,Integer groupId) {
-
-        MemberGroup memberGroup = memberGroupRepository.getOne(groupId);
+    public ResponseEntity<TrainingSession> generateInTerm(Term[] terms,Integer generateFromDay) {
 
         LocalDate today = LocalDate.now();
         int numberOfDaysInCurrentMonth=today.lengthOfMonth();
         int currentYear = today.getYear();
         int currentMonth = today.getMonthValue();
-        for(int i=1;i<=numberOfDaysInCurrentMonth;i++)
+
+        if(!(generateFromDay.equals(FIRST_DAY_OF_MONTH)))
+            deleteTrainingSessionsInGroupForCurrentMonth(terms[0].getMemberGroup());
+
+        for(int i=generateFromDay;i<=numberOfDaysInCurrentMonth;i++)
         {
             LocalDate date = LocalDate.of(currentYear,currentMonth,i);
-            if(date.getDayOfWeek().getValue()==term.getDayOfWeek())
-            {
-                TrainingSession trainingSession = new TrainingSession();
-                trainingSession.setDateHeld(date);
-                trainingSession.setTimeHeld(term.getStartTime());
-                trainingSession.setMemberGroup(memberGroup);
-                trainingSessionRepository.save(trainingSession);
+            for (Term term : terms) {
+                if (date.getDayOfWeek().getValue() == term.getDayOfWeek()) {
+                    TrainingSession trainingSession = new TrainingSession();
+                    trainingSession.setDateHeld(date);
+                    trainingSession.setTimeHeld(term.getStartTime());
+                    trainingSession.setMemberGroup(term.getMemberGroup());
+                    trainingSessionRepository.save(trainingSession);
+                }
             }
         }
 
 
        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void deleteTrainingSessionsInGroupForCurrentMonth(MemberGroup memberGroup) {
+
     }
 
 }

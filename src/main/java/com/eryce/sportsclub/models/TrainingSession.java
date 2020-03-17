@@ -25,6 +25,8 @@ public class TrainingSession {
     @JoinColumn(name = "member_group_id", nullable = true)
     private MemberGroup memberGroup;
 
+
+
     public LocalDate getDateHeld() {
         return dateHeld;
     }
