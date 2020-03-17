@@ -1,11 +1,9 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.Attendance;
-import com.eryce.sportsclub.models.MemberGroup;
-import com.eryce.sportsclub.models.Term;
-import com.eryce.sportsclub.models.TrainingSession;
+import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
+import com.eryce.sportsclub.repositories.PeriodRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +25,20 @@ public class TrainingSessionService {
     private MemberGroupRepository memberGroupRepository;
     @Autowired
     private AttendanceRepository attendanceRepository;
+    @Autowired
+    private PeriodRepository periodRepository;
 
     private final Integer FIRST_DAY_OF_MONTH=1;
 
     public List<TrainingSession> getAllByMemberGroup(Integer groupId) {
         MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
         return trainingSessionRepository.findAllByMemberGroup(memberGroup);
+    }
+
+    public List<TrainingSession> getAllByMemberGroupAndPeriod(Integer groupId, Integer periodId) {
+        MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
+        Period period = periodRepository.getOne(periodId);
+        return trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
     }
 
     public TrainingSession getById(Integer id)
@@ -60,15 +66,19 @@ public class TrainingSessionService {
         }
     }
 
-    public ResponseEntity<TrainingSession> generateInTerm(Term[] terms,Integer generateFromDay) {
+    public ResponseEntity<TrainingSession> generateInTerms(Term[] terms,Integer generateFromDay) {
 
         LocalDate today = LocalDate.now();
         int numberOfDaysInCurrentMonth=today.lengthOfMonth();
+
         int currentYear = today.getYear();
         int currentMonth = today.getMonthValue();
+        Period period = periodRepository.findByMonthAndYear(currentMonth,currentYear);
 
-        if(!(generateFromDay.equals(FIRST_DAY_OF_MONTH)))
-            deleteTrainingSessionsInGroupForCurrentMonth(terms[0].getMemberGroup());
+        if(generateFromDay.equals(FIRST_DAY_OF_MONTH))
+            deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(),period,FIRST_DAY_OF_MONTH);
+        else
+            deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(),period,generateFromDay);
 
         for(int i=generateFromDay;i<=numberOfDaysInCurrentMonth;i++)
         {
@@ -79,17 +89,24 @@ public class TrainingSessionService {
                     trainingSession.setDateHeld(date);
                     trainingSession.setTimeHeld(term.getStartTime());
                     trainingSession.setMemberGroup(term.getMemberGroup());
+                    trainingSession.setPeriod(period);
                     trainingSessionRepository.save(trainingSession);
                 }
             }
         }
-
-
        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void deleteTrainingSessionsInGroupForCurrentMonth(MemberGroup memberGroup) {
-
+    private void deleteTrainingSessionsInGroupInPeriodIfGreaterThan(MemberGroup memberGroup,Period period,Integer fromDay) {
+        List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
+        for(TrainingSession trainingSession : trainingSessions)
+        {
+            if(trainingSession.getDateHeld().getDayOfMonth()>=fromDay)
+            {
+                this.deleteAttendancesForTrainingSession(trainingSession);
+                trainingSessionRepository.delete(trainingSession);
+            }
+        }
     }
 
 }

@@ -23,6 +23,12 @@ public class TrainingSessionController {
         return trainingSessionService.getAllByMemberGroup(groupId);
     }
 
+    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}/period/{periodId}")
+    public List<TrainingSession>getAllByMemberGroupAndPeriod(@PathVariable("groupId")Integer groupId,@PathVariable("periodId")Integer periodId)
+    {
+        return trainingSessionService.getAllByMemberGroupAndPeriod(groupId,periodId);
+    }
+
     @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")
     public TrainingSession getById(@PathVariable("id")Integer id){
         return trainingSessionService.getById(id);
@@ -34,10 +40,10 @@ public class TrainingSessionController {
         return trainingSessionService.insert(trainingSession);
     }
 
-        @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/day/{day}")
-    public ResponseEntity<TrainingSession> generateInTerm(@RequestBody Term[] terms,@PathVariable("day")Integer day)
+    @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/day/{day}")
+    public ResponseEntity<TrainingSession> generateInTerms(@RequestBody Term[] terms,@PathVariable("day")Integer day)
     {
-        return this.trainingSessionService.generateInTerm(terms,day);
+        return this.trainingSessionService.generateInTerms(terms,day);
     }
 
     @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")

@@ -22,10 +22,20 @@ public class TrainingSession {
     private LocalTime timeHeld;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_group_id", nullable = true)
+    @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "period_id")
+    private Period period;
 
+    public Period getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
 
     public LocalDate getDateHeld() {
         return dateHeld;
