@@ -35,7 +35,12 @@ public class MemberGroupService {
         return memberGroupRepository.getOne(id);
     }
 
+    public MemberGroup getByName(String name) {
+        return memberGroupRepository.findByName(name.trim());
+    }
+
     public ResponseEntity<MemberGroup> insert(MemberGroup memberGroup) {
+        memberGroup.setName(memberGroup.getName().trim());
         memberGroupRepository.save(memberGroup);
         return new ResponseEntity<>(HttpStatus.OK);
     }

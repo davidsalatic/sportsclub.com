@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.MemberGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,12 @@ public class MemberGroupController {
         return memberGroupService.getById(id);
     }
 
-    @PermitAll
+    @GetMapping(Routes.MEMBER_GROUPS_BASE+"/search/name")
+    public MemberGroup getByName(@RequestParam String name)
+    {
+        return memberGroupService.getByName(name);
+    }
+
     @PostMapping(Routes.MEMBER_GROUPS_BASE)
     public ResponseEntity<MemberGroup>insert(@RequestBody MemberGroup memberGroup)
     {
