@@ -29,6 +29,12 @@ public class PaymentController {
         return paymentService.getAllPaymentsForMembership(membershipId);
     }
 
+    @GetMapping(Routes.PAYMENTS_BASE+"/member/{memberId}")
+    public List<Payment> getAllPaymentsForAppUser(@PathVariable("memberId")Integer memberId)
+    {
+        return paymentService.getAllPaymentsForAppUser(memberId);
+    }
+
     @GetMapping(Routes.PAYMENTS_BASE+"/{id}")
     public Payment getById(@PathVariable("id")Integer id){
         return paymentService.getById(id);

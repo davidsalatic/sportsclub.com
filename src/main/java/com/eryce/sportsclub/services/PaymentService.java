@@ -48,4 +48,9 @@ public class PaymentService {
         paymentRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    public List<Payment> getAllPaymentsForAppUser(Integer memberId) {
+        AppUser appUser = appUserRepository.getOne(memberId);
+        return paymentRepository.findAllByAppUser(appUser);
+    }
 }

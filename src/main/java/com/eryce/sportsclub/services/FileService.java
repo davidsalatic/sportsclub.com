@@ -37,7 +37,7 @@ public class FileService {
                 response = response.concat("Skipped line:\n"+line+"\n");
         }
 
-        response=response.concat("\nBecause of invalid input or duplicate username/jmbg values.");
+        response=response.concat("\nLines with incorrect input / duplicate values are automatically skipped.");
         return response;
     }
 
