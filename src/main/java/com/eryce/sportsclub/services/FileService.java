@@ -92,6 +92,7 @@ public class FileService {
         appUser.setName(name);
         appUser.setSurname(surname);
         appUser.setJmbg(jmbg);
+        appUser.setPassword(jmbg);
         appUser.setAddress(address);
         appUser.setPhoneNumber(phoneNumber);
         appUser.setMemberGroup(memberGroup);
