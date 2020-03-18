@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.constants.Roles;
+import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.dto.FileRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
@@ -70,6 +71,8 @@ public class FileService {
 
     private void parseLine(String line)
     {
+        line = line.replace('\r',' ');
+
         String [] userProperties = line.split(",");
         String username = userProperties[0];
         String name = userProperties[1];
@@ -78,16 +81,16 @@ public class FileService {
         String address= userProperties[4];
         String phoneNumber = userProperties[5];
         String groupName = userProperties[6].trim();
-        String roleName = userProperties[7];
+        String roleName = userProperties[7].trim();
 
         MemberGroup memberGroup=null;
 
         if(groupName.length()>0)
             memberGroup = findMemberGroupByNameOrCreateNew(groupName);
 
-        Role role = roleRepository.findByNameIgnoreCase(roleName);
+        Role role = roleRepository.findByNameContainingIgnoreCase(roleName);
 
-        AppUser appUser = new AppUser();
+        AppUserRequestDTO appUser = new AppUserRequestDTO();
         appUser.setUsername(username);
         appUser.setName(name);
         appUser.setSurname(surname);
@@ -98,7 +101,7 @@ public class FileService {
         appUser.setMemberGroup(memberGroup);
         appUser.setRole(role);
 
-        appUserRepository.save(appUser);
+        appUserRepository.save(appUser.generateAppUser());
     }
 
     private MemberGroup findMemberGroupByNameOrCreateNew(String groupName) {
