@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
+import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.security.jwt.JWT;
 import com.eryce.sportsclub.services.AuthService;
 import io.jsonwebtoken.Claims;
@@ -16,17 +17,15 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("/auth/token")
+    @GetMapping(Routes.AUTH_BASE+"/token")
     public String getToken()
     {
         return authService.getToken();
     }
 
-    @GetMapping("/auth/claims")
+    @GetMapping(Routes.AUTH_BASE+"/claims")
     public Claims extractAllClaims(@RequestParam String token )
     {
-        if(token.length()>0)
-            return JWT.extractAllClaims(token);
-        return null;
+        return authService.extractAllClaims(token);
     }
 }

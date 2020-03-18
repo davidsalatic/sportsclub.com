@@ -4,7 +4,6 @@ import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.FileRequestDTO;
 import com.eryce.sportsclub.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

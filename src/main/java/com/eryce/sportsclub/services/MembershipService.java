@@ -1,8 +1,10 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.Membership;
+import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MembershipRepository;
+import com.eryce.sportsclub.repositories.PeriodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +19,23 @@ public class MembershipService {
     private MembershipRepository membershipRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private PeriodRepository periodRepository;
 
     public List<Membership> getAll() {
 
         return membershipRepository.findAll();
     }
 
+    public Membership getByPeriod(Integer periodId) {
+        Period period = periodRepository.getOne(periodId);
+        return membershipRepository.findByPeriod(period);
+    }
+
     public Membership getById(Integer id) {
         return membershipRepository.getOne(id);
     }
 
-//    public Membership getByMonthAndYear(Integer month, Integer year) {
-//        return membershipRepository.findByMonthAndYear(month,year);
-//    }
 
     public ResponseEntity<Membership> insert(Membership membership) {
         membershipRepository.save(membership);
@@ -39,4 +45,5 @@ public class MembershipService {
     public ResponseEntity<Membership> update(Membership membership) {
         return this.insert(membership);
     }
+
 }

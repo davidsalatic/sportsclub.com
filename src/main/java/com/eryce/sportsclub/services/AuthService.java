@@ -2,6 +2,7 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.security.jwt.JWT;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,11 @@ public class AuthService {
         } else {
             return null;
         }
+    }
+
+    public Claims extractAllClaims(String token) {
+        if(token.length()>0)
+            return JWT.extractAllClaims(token);
+        return null;
     }
 }

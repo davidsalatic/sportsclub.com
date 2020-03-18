@@ -15,7 +15,5 @@ public interface AppUserRepository extends JpaRepository<AppUser,Integer> {
 
     AppUser findByJmbgIgnoreCase(String jmbg);
 
-    AppUser findByUsernameAndPassword(String username, String password);
-
     List<AppUser> findAllByRole(Role memberRole);
 }

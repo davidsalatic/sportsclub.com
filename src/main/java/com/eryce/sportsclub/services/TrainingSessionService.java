@@ -67,7 +67,11 @@ public class TrainingSessionService {
         {
             LocalDate date = LocalDate.of(period.getYear(),period.getMonth(),i);
             for (Term term : terms) {
-                if (date.getDayOfWeek().getValue() == term.getDayOfWeek()) {
+                int curDayOfWeek = date.getDayOfWeek().getValue();
+                int termDayOfWeek = term.getDayOfWeek();
+                if(termDayOfWeek==0)
+                    termDayOfWeek=7;
+                if (curDayOfWeek == termDayOfWeek) {
                     TrainingSession trainingSession = new TrainingSession();
                     trainingSession.setDateHeld(date);
                     trainingSession.setTimeHeld(term.getStartTime());

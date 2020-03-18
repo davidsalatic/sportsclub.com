@@ -28,11 +28,11 @@ public class MembershipController {
         return membershipService.getById(id);
     }
 
-//    @GetMapping(Routes.MEMBERSHIPS_BASE+"/{month}/{year}")
-//    public Membership getByMonthAndYear(@PathVariable("month")Integer month,@PathVariable("year")Integer year)
-//    {
-//        return membershipService.getByMonthAndYear(month,year);
-//    }
+    @GetMapping(Routes.MEMBERSHIPS_BASE+"/period/{periodId}")
+    public Membership getByPeriod(@PathVariable ("periodId")Integer periodId)
+    {
+        return membershipService.getByPeriod(periodId);
+    }
 
     @PostMapping(Routes.MEMBERSHIPS_BASE)
     public ResponseEntity<Membership> insert(@RequestBody Membership membership)
