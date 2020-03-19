@@ -15,9 +15,8 @@ public class AuthService {
         if (principal instanceof UserDetails) {
             AppUser appUser = ((AppUser)principal);
             return JWT.generateToken(appUser);
-        } else {
+        } else
             return null;
-        }
     }
 
     public Claims extractAllClaims(String token) {

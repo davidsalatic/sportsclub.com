@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.models;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class MemberGroup{

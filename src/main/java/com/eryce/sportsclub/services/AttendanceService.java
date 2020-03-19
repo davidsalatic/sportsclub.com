@@ -29,15 +29,15 @@ public class AttendanceService {
         return attendanceRepository.findAllByTrainingSession(trainingSession);
     }
 
+    public List<Attendance> getByAppUser(Integer appUserId) {
+        AppUser appUser=appUserRepository.getOne(appUserId);
+        return attendanceRepository.findAllByAppUser(appUser);
+    }
+
     public Attendance getByTrainingSessionAndAppUser(Integer sessionId, Integer userId) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(sessionId);
         AppUser appUser = appUserRepository.getOne(userId);
         return attendanceRepository.findByTrainingSessionAndAppUser(trainingSession,appUser);
-    }
-
-    public List<Attendance> getByAppUser(Integer appUserId) {
-        AppUser appUser=appUserRepository.getOne(appUserId);
-        return attendanceRepository.findAllByAppUser(appUser);
     }
 
     public ResponseEntity<Attendance> insert(AttendanceRequestDTO attendanceRequestDTO) {

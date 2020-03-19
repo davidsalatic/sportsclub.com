@@ -8,7 +8,6 @@ public class MembershipPrice {
 
     @Id
     private Integer id;
-
     private Integer price;
 
     public Integer getPrice() {

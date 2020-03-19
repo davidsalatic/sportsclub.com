@@ -8,12 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AppUserRepository extends JpaRepository<AppUser,Integer> {
-
     AppUser findByUsernameIgnoreCase(String username);
-
     List<AppUser> findAllByMemberGroup(MemberGroup memberGroup);
-
     AppUser findByJmbgIgnoreCase(String jmbg);
-
     List<AppUser> findAllByRole(Role memberRole);
 }

@@ -67,11 +67,14 @@ public class TrainingSessionService {
         {
             LocalDate date = LocalDate.of(period.getYear(),period.getMonth(),i);
             for (Term term : terms) {
-                int curDayOfWeek = date.getDayOfWeek().getValue();
+                int loopDayOfWeek = date.getDayOfWeek().getValue();
                 int termDayOfWeek = term.getDayOfWeek();
+
+                //Sunday in JS is 0, in LocalDate is 7
                 if(termDayOfWeek==0)
                     termDayOfWeek=7;
-                if (curDayOfWeek == termDayOfWeek) {
+
+                if (loopDayOfWeek == termDayOfWeek) {
                     TrainingSession trainingSession = new TrainingSession();
                     trainingSession.setDateHeld(date);
                     trainingSession.setTimeHeld(term.getStartTime());
@@ -116,9 +119,7 @@ public class TrainingSessionService {
         Period period = periodRepository.getOne(periodId);
         List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
         for(TrainingSession trainingSession : trainingSessions)
-        {
             this.delete(trainingSession.getId());
-        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

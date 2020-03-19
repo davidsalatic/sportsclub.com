@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TrainingSessionRepository extends JpaRepository<TrainingSession,Integer> {
-
     List<TrainingSession> findAllByMemberGroupAndPeriod(MemberGroup memberGroup, Period period);
-
     List<TrainingSession> findAllByMemberGroup(MemberGroup memberGroup);
 }

@@ -3,15 +3,12 @@ package com.eryce.sportsclub.services;
 import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.dto.FileRequestDTO;
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,11 +22,11 @@ public class FileService {
     private RoleRepository roleRepository;
 
     public String parseCsv(FileRequestDTO fileRequestDTO) {
-        String[] lines = fileRequestDTO.getCsvText().split("\n");
+        String[] linesInFile = fileRequestDTO.getCsvText().split("\n");
 
         String response="Completed.\n\n";
 
-        for(String line:lines)
+        for(String line:linesInFile)
         {
             if(isValidLine(line))
                 parseLine(line);

@@ -75,8 +75,6 @@ public class MemberGroupService {
     private void deleteTermsForGroup(MemberGroup memberGroup) {
         List<Term> terms = termRepository.findAllByMemberGroup(memberGroup);
         for(Term term : terms)
-        {
             termRepository.delete(term);
-        }
     }
 }

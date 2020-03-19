@@ -44,10 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.FILE_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
                 .antMatchers("/logged/details").permitAll()
                 .and().formLogin().defaultSuccessUrl("http://localhost:4200/home")
-                .and().logout()
-        ;
+                .and().logout();
     }
-
 
     @Bean
     public PasswordEncoder getPasswordEncoder(){return NoOpPasswordEncoder.getInstance();}

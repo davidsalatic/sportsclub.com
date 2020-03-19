@@ -35,6 +35,11 @@ public class PaymentService {
         return paymentRepository.findAllByMembership(membership);
     }
 
+    public List<Payment> getAllPaymentsForAppUser(Integer memberId) {
+        AppUser appUser = appUserRepository.getOne(memberId);
+        return paymentRepository.findAllByAppUser(appUser);
+    }
+
     public Payment getById(Integer id) {
         return paymentRepository.getOne(id);
     }
@@ -47,10 +52,5 @@ public class PaymentService {
     public ResponseEntity<Payment> delete(Integer id) {
         paymentRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public List<Payment> getAllPaymentsForAppUser(Integer memberId) {
-        AppUser appUser = appUserRepository.getOne(memberId);
-        return paymentRepository.findAllByAppUser(appUser);
     }
 }

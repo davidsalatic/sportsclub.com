@@ -23,17 +23,17 @@ public class AttendanceController {
         return attendanceService.getAllByTrainingSessionId(id);
     }
 
+    @GetMapping(Routes.ATTENDANCES_BASE+"/member/{id}")
+    public List<Attendance> getAllByAppUser(@PathVariable ("id") Integer appUserId)
+    {
+        return this.attendanceService.getByAppUser(appUserId);
+    }
+
     @GetMapping(Routes.ATTENDANCES_BASE+"/session/{sessionId}/user/{userId}")
     public Attendance getByTrainingSessionAndAppUser(@PathVariable("sessionId")Integer sessionId,
                                                      @PathVariable("userId")Integer userId)
     {
         return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
-    }
-
-    @GetMapping(Routes.ATTENDANCES_BASE+"/member/{id}")
-    public List<Attendance> getByAppUser(@PathVariable ("id") Integer appUserId)
-    {
-        return this.attendanceService.getByAppUser(appUserId);
     }
 
     @PostMapping(Routes.ATTENDANCES_BASE)

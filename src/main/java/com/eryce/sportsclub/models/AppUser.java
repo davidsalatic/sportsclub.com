@@ -1,7 +1,5 @@
 package com.eryce.sportsclub.models;
 
-
-import com.eryce.sportsclub.constants.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

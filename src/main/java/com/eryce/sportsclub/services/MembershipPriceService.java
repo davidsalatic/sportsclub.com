@@ -16,15 +16,10 @@ public class MembershipPriceService {
     private final int DEFAULT_ID=997;
 
     public MembershipPrice getMembershipPrice() {
-
         if(priceExists())
-        {
             return membershipPriceRepository.getOne(DEFAULT_ID);
-        }
         else
-        {
             return createDefaultMembershipPrice();
-        }
     }
 
     private boolean priceExists()

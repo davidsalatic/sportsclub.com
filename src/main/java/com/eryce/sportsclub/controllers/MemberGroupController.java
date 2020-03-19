@@ -1,7 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
 import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.services.MemberGroupService;
 import org.springframework.beans.factory.annotation.Autowired;

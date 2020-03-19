@@ -6,13 +6,11 @@ import com.eryce.sportsclub.controllers.AppUserController;
 import com.eryce.sportsclub.controllers.PermissionController;
 import com.eryce.sportsclub.controllers.RoleController;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class RunnerData implements CommandLineRunner {
@@ -26,9 +24,7 @@ public class RunnerData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         insertRolesAndPermissions();
-
         System.out.println("***************APP STARTED*****************");
     }
 

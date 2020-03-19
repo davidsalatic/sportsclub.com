@@ -25,6 +25,12 @@ public class AppUserController {
         return appUserService.getAllMembers();
     }
 
+    @GetMapping(Routes.APP_USERS_BASE+"/{id}")
+    public AppUser getById(@PathVariable("id")Integer id)
+    {
+        return appUserService.getById(id);
+    }
+
     @GetMapping(Routes.APP_USERS_BASE+"/staff")
     public List<AppUser>getAllStaff(){
         return appUserService.getAllStaff();
@@ -40,12 +46,6 @@ public class AppUserController {
     public List<AppUser> getAllInMemberGroup(@PathVariable("id")Integer id)
     {
         return appUserService.getAllInMemberGroup(id);
-    }
-
-    @GetMapping(Routes.APP_USERS_BASE+"/{id}")
-    public AppUser getById(@PathVariable("id")Integer id)
-    {
-        return appUserService.getById(id);
     }
 
     @GetMapping(Routes.APP_USERS_BASE+"/search/username")
@@ -83,6 +83,4 @@ public class AppUserController {
     {
         return appUserService.delete(id);
     }
-
-
 }
