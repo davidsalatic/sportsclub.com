@@ -11,6 +11,9 @@ import com.eryce.sportsclub.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class FileService {
 
@@ -47,7 +50,18 @@ public class FileService {
         String jmbg = userProperties[3];
         String role = userProperties[7].trim();
 
-        return username!=null && name!=null && surname!=null && isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
+        return usernameIsValid(username) && name!=null && surname!=null && isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
+    }
+
+    private boolean usernameIsValid(String username)
+    {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        return pat.matcher(username).matches();
     }
 
     private boolean isValidJmbg(String jmbg)
