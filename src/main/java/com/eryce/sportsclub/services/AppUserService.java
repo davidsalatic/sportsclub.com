@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class AppUserService implements UserDetailsService {
 
     public ResponseEntity<AppUser> insert(AppUserRequestDTO appUserRequestDTO) {
         AppUser appUser = appUserRequestDTO.generateAppUser();
+        if(appUser.getDateJoined()==null)
+            appUser.setDateJoined(LocalDate.now());
         appUserRepository.save(appUser);
 
         final String token = JWT.generateToken(appUser);
