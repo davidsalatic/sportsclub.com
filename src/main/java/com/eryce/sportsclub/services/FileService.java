@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class FileService {
 
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AppUserService appUserService;
     @Autowired
     private MemberGroupRepository memberGroupRepository;
     @Autowired
@@ -77,7 +77,7 @@ public class FileService {
 
     private boolean appUserNotExists(String username,String jmbg)
     {
-        return appUserRepository.findByUsernameIgnoreCase(username)==null && appUserRepository.findByJmbgIgnoreCase(jmbg)==null;
+        return appUserService.getByUsername(username)==null && appUserService.getByJmbg(jmbg)==null;
     }
 
     private void parseLine(String line)
@@ -106,13 +106,12 @@ public class FileService {
         appUser.setName(name);
         appUser.setSurname(surname);
         appUser.setJmbg(jmbg);
-        appUser.setPassword(jmbg);
         appUser.setAddress(address);
         appUser.setPhoneNumber(phoneNumber);
         appUser.setMemberGroup(memberGroup);
         appUser.setRole(role);
 
-        appUserRepository.save(appUser.generateAppUser());
+        appUserService.insert(appUser);
     }
 
     private MemberGroup findMemberGroupByNameOrCreateNew(String groupName) {

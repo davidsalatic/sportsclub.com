@@ -10,6 +10,8 @@ import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +27,7 @@ public class RunnerData implements CommandLineRunner {
     @Override
     public void run(String... args) {
         insertRolesAndPermissions();
+
         System.out.println("***************APP STARTED*****************");
     }
 

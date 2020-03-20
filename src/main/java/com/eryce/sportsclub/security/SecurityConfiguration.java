@@ -36,13 +36,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.ROLES_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.TRAINING_SESSIONS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.APP_USERS_BASE+"/staff").hasAuthority(Permissions.ACCESS_MEMBERSHIPS)
-                .antMatchers(Routes.APP_USERS_BASE+"/search/username").hasAuthority(Permissions.ACCESS_SELF)
-                .antMatchers(Routes.APP_USERS_BASE+"/update-self").hasAuthority(Permissions.ACCESS_SELF)
+                .antMatchers(Routes.APP_USERS_BASE+"/search/username").permitAll()
+                .antMatchers(Routes.APP_USERS_BASE+"/update-self").permitAll()
                 .antMatchers(Routes.APP_USERS_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
                 .antMatchers(Routes.TERM_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.PERIOD_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_TRAINING_SESSIONS)
                 .antMatchers(Routes.FILE_BASE+Routes.ANY).hasAuthority(Permissions.ACCESS_MEMBERS)
-                .antMatchers("/logged/details").permitAll()
                 .and().formLogin().defaultSuccessUrl("http://localhost:4200/home")
                 .and().logout();
     }

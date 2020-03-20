@@ -1,6 +1,7 @@
 package com.eryce.sportsclub.constants;
 
 public class Routes {
+    public static final String REGISTRATION_FRONT_LINK = "http://localhost:4200/register";
     public static final String APP_USERS_BASE = "/users";
     public static final String ATTENDANCES_BASE = "/attendances";
     public static final String MEMBER_GROUPS_BASE = "/groups";
