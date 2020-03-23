@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MemberGroupService {
     private TermRepository termRepository;
 
     public Collection<MemberGroup> getAll() {
+        List<MemberGroup> memberGroups = memberGroupRepository.findAll();
         return memberGroupRepository.findAll();
     }
 

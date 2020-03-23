@@ -48,6 +48,7 @@ public class AppUserController {
         return appUserService.getAllInMemberGroup(id);
     }
 
+
     @GetMapping(Routes.APP_USERS_BASE+"/search/username")
     public AppUser getByUsername(@RequestParam String username)
     {
