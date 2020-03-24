@@ -5,6 +5,7 @@ import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.*;
 import com.eryce.sportsclub.security.jwt.JWT;
+import com.eryce.sportsclub.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,8 @@ public class AppUserService implements UserDetailsService {
     private RoleRepository roleRepository;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     public List<AppUser> getAllMembers() {
         Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
@@ -85,7 +88,7 @@ public class AppUserService implements UserDetailsService {
             appUser.setDateJoined(LocalDate.now());
         appUserRepository.save(appUser);
 
-        final String token = JWT.generateToken(appUser);
+        final String token = jwtTokenProvider.createToken(appUser.getUsername(),appUser);
         //async sending email
         mailService.sendRegistrationMessage(appUser.getUsername(),token);
 
