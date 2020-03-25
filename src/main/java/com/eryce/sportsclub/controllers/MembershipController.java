@@ -14,41 +14,38 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.MEMBERSHIPS_BASE)
+@PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
 public class MembershipController {
 
     @Autowired
     private MembershipService membershipService;
 
-    @GetMapping(Routes.MEMBERSHIPS_BASE)
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping
     public List<Membership> getAll()
     {
         return membershipService.getAll();
     }
 
-    @GetMapping(Routes.MEMBERSHIPS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/{id}")
     public Membership getById(@PathVariable ("id")Integer id)
     {
         return membershipService.getById(id);
     }
 
-    @GetMapping(Routes.MEMBERSHIPS_BASE+"/period/{periodId}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/period/{periodId}")
     public Membership getByPeriod(@PathVariable ("periodId")Integer periodId)
     {
         return membershipService.getByPeriod(periodId);
     }
 
-    @PostMapping(Routes.MEMBERSHIPS_BASE)
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @PostMapping
     public ResponseEntity<Membership> insert(@RequestBody Membership membership)
     {
         return membershipService.insert(membership);
     }
 
-    @PutMapping(Routes.MEMBERSHIPS_BASE)
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @PutMapping
     public ResponseEntity<Membership> update(@RequestBody Membership membership)
     {
         return membershipService.update(membership);

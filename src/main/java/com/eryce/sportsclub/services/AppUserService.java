@@ -4,17 +4,14 @@ import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.*;
-import com.eryce.sportsclub.security.jwt.JWT;
 import com.eryce.sportsclub.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -88,16 +85,39 @@ public class AppUserService implements UserDetailsService {
             appUser.setDateJoined(LocalDate.now());
         appUserRepository.save(appUser);
 
-        final String token = jwtTokenProvider.createToken(appUser.getUsername(),appUser);
-        //async sending email
-        mailService.sendRegistrationMessage(appUser.getUsername(),token);
+        if(appUserRequestDTO.getUsername()!="")//if email was entered, send reg mail
+            sendRegistationEmail(appUser);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    private void sendRegistationEmail(AppUser appUser)
+    {
+        final String token = jwtTokenProvider.createToken(appUser.getUsername(),appUser);
+        //async sending email
+        mailService.sendRegistrationMessage(appUser.getUsername(),token);
+    }
+
     public ResponseEntity<AppUser> update(AppUserRequestDTO appUserRequestDTO) {
+        String usernameBeforeUpdate = appUserRepository.getOne(appUserRequestDTO.getId()).getUsername();
+        String usernameInRequest = appUserRequestDTO.getUsername();
+
+        if(isAddingEmail(usernameBeforeUpdate,usernameInRequest)
+                || isEditingEmail(usernameBeforeUpdate,usernameInRequest))
+            sendRegistationEmail(appUserRequestDTO.generateAppUser());
+
         this.appUserRepository.save(appUserRequestDTO.generateAppUser());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean isAddingEmail(String usernameBeforeUpdate, String usernameInRequest)
+    {
+        return usernameBeforeUpdate==null && usernameInRequest!=null;
+    }
+
+    private boolean isEditingEmail(String usernameBeforeUpdate,String usernameInRequest)
+    {
+        return usernameBeforeUpdate!=null && (!usernameBeforeUpdate.equals(usernameInRequest));
     }
 
     public ResponseEntity<AppUser> updateSelf(AppUserRequestDTO appUserRequestDTO) {

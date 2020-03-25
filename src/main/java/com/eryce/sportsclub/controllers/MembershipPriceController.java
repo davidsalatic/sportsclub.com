@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.MEMBERSHIPS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
 public class MembershipPriceController {
 
     @Autowired
     private MembershipPriceService membershipPriceService;
 
-    @GetMapping(Routes.MEMBERSHIPS_BASE+"/price")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/price")
     public MembershipPrice getMembershipPrice()
     {
         return membershipPriceService.getMembershipPrice();
     }
 
-    @PostMapping(Routes.MEMBERSHIPS_BASE+"/price")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @PostMapping("/price")
     public ResponseEntity<MembershipPrice> setMembershipPrice(@RequestBody MembershipPrice membershipPrice)
     {
         return membershipPriceService.setMembershipPrice(membershipPrice);

@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequestMapping(Routes.FILE_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class FileController {
 
     @Autowired
     private FileService fileService;
 
-    @PostMapping(Routes.FILE_BASE+"/upload")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping("/upload")
     public String parseCSV(@RequestBody FileRequestDTO fileRequestDTO)
     {
         return fileService.parseCsv(fileRequestDTO);

@@ -16,81 +16,75 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.APP_USERS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class AppUserController {
 
     @Autowired
     private AppUserService appUserService;
 
-    @GetMapping(Routes.APP_USERS_BASE+"/members")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/members")
     public List<AppUser> getAllMembers()
     {
         return appUserService.getAllMembers();
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/{id}")
     public AppUser getById(@PathVariable("id")Integer id)
     {
         return appUserService.getById(id);
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/staff")
+    @GetMapping("/staff")
     public List<AppUser>getAllStaff(){
         return appUserService.getAllStaff();
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/members/ungrouped")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/members/ungrouped")
     public List<AppUser> getUngroupedMembers()
     {
         return appUserService.getUngroupedMembers();
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/group/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/group/{id}")
     public List<AppUser> getAllInMemberGroup(@PathVariable("id")Integer id)
     {
         return appUserService.getAllInMemberGroup(id);
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/search/username")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/search/username")
+    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
     public AppUser getByUsername(@RequestParam String username)
     {
         return appUserService.getByUsername(username);
     }
 
-    @GetMapping(Routes.APP_USERS_BASE+"/search/jmbg")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/search/jmbg")
     public AppUser getByJmbg(@RequestParam String jmbg)
     {
         return appUserService.getByJmbg(jmbg);
     }
 
-    @PostMapping(Routes.APP_USERS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<AppUser> insert(@RequestBody AppUserRequestDTO appUserRequestDTO)
     {
         return appUserService.insert(appUserRequestDTO);
     }
 
-    @PutMapping(Routes.APP_USERS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PutMapping
     public ResponseEntity<AppUser> update(@RequestBody AppUserRequestDTO appUserRequestDTO)
     {
         return appUserService.update(appUserRequestDTO);
     }
 
-    @PutMapping(Routes.APP_USERS_BASE+"/update-self")
+    @PutMapping("/update-self")
     @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
     public ResponseEntity<AppUser> updateSelf(@RequestBody AppUserRequestDTO appUserRequestDTO)
     {
         return appUserService.updateSelf(appUserRequestDTO);
     }
 
-    @DeleteMapping(Routes.APP_USERS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<AppUser>delete(@PathVariable ("id") Integer id)
     {
         return appUserService.delete(id);

@@ -13,27 +13,25 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.TERM_BASE)
 public class TermController {
 
     @Autowired
     private TermService termService;
 
-    @GetMapping(Routes.TERM_BASE+"/group/{groupId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/group/{groupId}")
     public List<Term> getAllByMemberGroup(@PathVariable("groupId")Integer memberGroupId)
     {
         return termService.getAllByMemberGroup(memberGroupId);
     }
 
-    @PostMapping(Routes.TERM_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<Term> insert(@RequestBody Term term)
     {
         return termService.insert(term);
     }
 
-    @DeleteMapping(Routes.TERM_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Term> delete(@PathVariable("id")Integer id)
     {
         return termService.delete(id);

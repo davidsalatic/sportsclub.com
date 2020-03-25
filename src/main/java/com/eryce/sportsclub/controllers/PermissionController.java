@@ -13,19 +13,20 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.PERMISSIONS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class PermissionController {
 
     @Autowired
     private PermissionService permissionService;
 
-    @GetMapping(Routes.PERMISSIONS_BASE)
+    @GetMapping
     public List<Permission> getAll()
     {
         return permissionService.getAll();
     }
 
-    @PostMapping(Routes.PERMISSIONS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<Permission> insert(@RequestBody Permission permission)
     {
         return permissionService.insert(permission);

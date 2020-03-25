@@ -14,47 +14,44 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.PAYMENTS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
 public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping(Routes.PAYMENTS_BASE+"/membership/{membershipId}/user/{userId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/membership/{membershipId}/user/{userId}")
     public List<Payment> getAllPaymentsForMembershipByAppUser(@PathVariable("membershipId") Integer membershipId,@PathVariable("userId")Integer userId)
     {
         return paymentService.getAllPaymentsForMembershipByAppUser(membershipId,userId);
     }
 
-    @GetMapping(Routes.PAYMENTS_BASE+"/membership/{membershipId}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/membership/{membershipId}")
     public List<Payment> getAllPaymentsForMembership(@PathVariable("membershipId") Integer membershipId)
     {
         return paymentService.getAllPaymentsForMembership(membershipId);
     }
 
-    @GetMapping(Routes.PAYMENTS_BASE+"/member/{memberId}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/member/{memberId}")
+    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
     public List<Payment> getAllPaymentsForAppUser(@PathVariable("memberId")Integer memberId)
     {
         return paymentService.getAllPaymentsForAppUser(memberId);
     }
 
-    @GetMapping(Routes.PAYMENTS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @GetMapping("/{id}")
     public Payment getById(@PathVariable("id")Integer id){
         return paymentService.getById(id);
     }
 
-    @PostMapping(Routes.PAYMENTS_BASE)
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @PostMapping
     public ResponseEntity<Payment> insert(@RequestBody PaymentRequestDTO paymentRequestDTO)
     {
         return paymentService.insert(paymentRequestDTO);
     }
 
-    @DeleteMapping(Routes.PAYMENTS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+Permissions.ACCESS_MEMBERSHIPS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Payment> delete(@PathVariable Integer id)
     {
         return paymentService.delete(id);

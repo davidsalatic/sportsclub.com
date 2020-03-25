@@ -14,55 +14,50 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.TRAINING_SESSIONS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
 public class TrainingSessionController {
 
     @Autowired
     private TrainingSessionService trainingSessionService;
 
-    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @GetMapping("/group/{groupId}")
     public List<TrainingSession>getAllByMemberGroup(@PathVariable("groupId")Integer groupId)
     {
         return trainingSessionService.getAllByMemberGroup(groupId);
     }
 
-    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}/period/{periodId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @GetMapping("/group/{groupId}/period/{periodId}")
     public List<TrainingSession>getAllByMemberGroupAndPeriod(@PathVariable("groupId")Integer groupId,@PathVariable("periodId")Integer periodId)
     {
         return trainingSessionService.getAllByMemberGroupAndPeriod(groupId,periodId);
     }
 
-    @GetMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @GetMapping("/{id}")
     public TrainingSession getById(@PathVariable("id")Integer id){
         return trainingSessionService.getById(id);
     }
 
-    @PostMapping(Routes.TRAINING_SESSIONS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @PostMapping
     public ResponseEntity<TrainingSession> insert(@RequestBody TrainingSession trainingSession)
     {
         return trainingSessionService.insert(trainingSession);
     }
 
-    @PostMapping(Routes.TRAINING_SESSIONS_BASE+"/generate/period/{periodId}/day/{day}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @PostMapping("/generate/period/{periodId}/day/{day}")
     public ResponseEntity<TrainingSession> generateInTerms(@RequestBody Term[] terms,
                                                            @PathVariable("periodId")Integer periodId, @PathVariable("day")Integer day)
     {
         return this.trainingSessionService.generateInTerms(terms,periodId,day);
     }
 
-    @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<TrainingSession> delete(@PathVariable Integer id)
     {
         return trainingSessionService.delete(id);
     }
 
-    @DeleteMapping(Routes.TRAINING_SESSIONS_BASE+"/group/{groupId}/{periodId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @DeleteMapping("/group/{groupId}/{periodId}")
     public ResponseEntity<TrainingSession> deleteByMemberGroupAndPeriod(@PathVariable("groupId")Integer groupId,@PathVariable("periodId")Integer periodId)
     {
         return trainingSessionService.deleteByMemberGroupAndPeriod(groupId,periodId);

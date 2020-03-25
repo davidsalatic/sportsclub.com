@@ -14,27 +14,26 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.ROLES_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class RoleController  {
 
     @Autowired
     private RoleService roleService;
 
-    @GetMapping(Routes.ROLES_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping
     public List<Role> getAll()
     {
         return roleService.getAll();
     }
 
-    @GetMapping(Routes.ROLES_BASE+"/search")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/search")
     public Role getByName(@RequestParam String name)
     {
         return roleService.getByName(name);
     }
 
-    @PostMapping(Routes.ROLES_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<Role> insert(@RequestBody Role role)
     {
         return roleService.insert(role);

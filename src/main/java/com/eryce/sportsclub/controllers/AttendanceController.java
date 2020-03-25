@@ -14,42 +14,40 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.ATTENDANCES_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
 public class AttendanceController {
 
     @Autowired
     private AttendanceService attendanceService;
 
-    @GetMapping(Routes.ATTENDANCES_BASE+"/training/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @GetMapping("/training/{id}")
     public List<Attendance> getAllByTrainingSessionId(@PathVariable("id")Integer id)
     {
         return attendanceService.getAllByTrainingSessionId(id);
     }
 
-    @GetMapping(Routes.ATTENDANCES_BASE+"/member/{id}")
+    @GetMapping("/member/{id}")
     @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
     public List<Attendance> getAllByAppUser(@PathVariable ("id") Integer appUserId)
     {
         return this.attendanceService.getByAppUser(appUserId);
     }
 
-    @GetMapping(Routes.ATTENDANCES_BASE+"/session/{sessionId}/user/{userId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @GetMapping("/session/{sessionId}/user/{userId}")
     public Attendance getByTrainingSessionAndAppUser(@PathVariable("sessionId")Integer sessionId,
                                                      @PathVariable("userId")Integer userId)
     {
         return attendanceService.getByTrainingSessionAndAppUser(sessionId,userId);
     }
 
-    @PostMapping(Routes.ATTENDANCES_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @PostMapping
     public ResponseEntity<Attendance> insert(@RequestBody AttendanceRequestDTO attendanceRequestDTO)
     {
         return attendanceService.insert(attendanceRequestDTO);
     }
 
-    @DeleteMapping(Routes.ATTENDANCES_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Attendance> delete(@PathVariable("id")Integer id)
     {
         return attendanceService.delete(id);

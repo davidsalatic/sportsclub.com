@@ -8,6 +8,9 @@ import com.eryce.sportsclub.controllers.RoleController;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.Permission;
 import com.eryce.sportsclub.models.Role;
+import com.eryce.sportsclub.services.AppUserService;
+import com.eryce.sportsclub.services.PermissionService;
+import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,22 +21,21 @@ import org.springframework.stereotype.Component;
 public class RunnerData implements CommandLineRunner {
 
     @Autowired
-    private PermissionController permissionController;
+    private PermissionService permissionService;
     @Autowired
-    private RoleController roleController;
+    private RoleService roleService;
     @Autowired
-    private AppUserController appUserController;
+    private AppUserService appUserService;
 
     @Override
     public void run(String... args) {
         insertRolesAndPermissions();
-
         System.out.println("***************APP STARTED*****************");
     }
 
 
     private void insertRolesAndPermissions() {
-        if(permissionController.getAll().isEmpty())
+        if(permissionService.getAll().isEmpty())
         {
             Permission accessMemberships = new Permission();
             accessMemberships.setName(Permissions.ACCESS_MEMBERSHIPS);
@@ -64,16 +66,16 @@ public class RunnerData implements CommandLineRunner {
             managerRole.getPermissions().add(accessSelf);
             managerRole.getPermissions().add(accessMembers);
 
-            permissionController.insert(accessMemberships);
-            permissionController.insert(accessTrainingSessions);
-            permissionController.insert(accessMembers);
-            permissionController.insert(accessSelf);
+            permissionService.insert(accessMemberships);
+            permissionService.insert(accessTrainingSessions);
+            permissionService.insert(accessMembers);
+            permissionService.insert(accessSelf);
 
-            roleController.insert(memberRole);
-            roleController.insert(coachRole);
-            roleController.insert(managerRole);
+            roleService.insert(memberRole);
+            roleService.insert(coachRole);
+            roleService.insert(managerRole);
 
-            if(appUserController.getAllStaff().isEmpty())
+            if(appUserService.getAllStaff().isEmpty())
             {
                 AppUserRequestDTO defaultManager = new AppUserRequestDTO();
                 defaultManager.setId(99999);
@@ -83,7 +85,7 @@ public class RunnerData implements CommandLineRunner {
                 defaultManager.setUsername("manager");
                 defaultManager.setPassword("manager");
                 defaultManager.setRole(managerRole);
-                appUserController.insert(defaultManager);
+                appUserService.insert(defaultManager);
             }
         }
     }

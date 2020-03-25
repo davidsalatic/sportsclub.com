@@ -11,50 +11,47 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.MEMBER_GROUPS_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class MemberGroupController {
 
     @Autowired
     private MemberGroupService memberGroupService;
 
-    @GetMapping(Routes.MEMBER_GROUPS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
-    public Collection<MemberGroup> getAll() {
+    @GetMapping
+    public List<MemberGroup> getAll() {
         return memberGroupService.getAll();
     }
 
-    @GetMapping(Routes.MEMBER_GROUPS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/{id}")
     public MemberGroup getById(@PathVariable("id")Integer id)
     {
         return memberGroupService.getById(id);
     }
 
-    @GetMapping(Routes.MEMBER_GROUPS_BASE+"/search/name")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/search/name")
     public MemberGroup getByName(@RequestParam String name)
     {
         return memberGroupService.getByName(name);
     }
 
-    @PostMapping(Routes.MEMBER_GROUPS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<MemberGroup>insert(@RequestBody MemberGroup memberGroup)
     {
         return memberGroupService.insert(memberGroup);
     }
 
-    @PutMapping(Routes.MEMBER_GROUPS_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PutMapping
     public ResponseEntity<MemberGroup>update(@RequestBody MemberGroup memberGroup)
     {
         return memberGroupService.update(memberGroup);
     }
 
-    @DeleteMapping(Routes.MEMBER_GROUPS_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MemberGroup>delete(@PathVariable Integer id)
     {
         return memberGroupService.delete(id);

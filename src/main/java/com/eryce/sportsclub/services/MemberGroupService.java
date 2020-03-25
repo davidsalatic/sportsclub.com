@@ -28,7 +28,7 @@ public class MemberGroupService {
     @Autowired
     private TermRepository termRepository;
 
-    public Collection<MemberGroup> getAll() {
+    public List<MemberGroup> getAll() {
         List<MemberGroup> memberGroups = memberGroupRepository.findAll();
         return memberGroupRepository.findAll();
     }

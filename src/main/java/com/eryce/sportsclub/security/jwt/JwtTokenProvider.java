@@ -20,8 +20,8 @@ import java.util.Date;
 public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
+    @Value("${security.jwt.token.expire-length:86400000}")
+    private long validityInMilliseconds = 86400000; // 1h
     @Autowired
     private UserDetailsService userDetailsService;
     @PostConstruct
@@ -61,6 +61,7 @@ public class JwtTokenProvider {
         return null;
     }
     public boolean validateToken(String token){
+
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         if (claims.getBody().getExpiration().before(new Date())) {
             return false;

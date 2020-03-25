@@ -13,34 +13,32 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping(Routes.PERIOD_BASE)
+@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
 public class PeriodController {
 
     @Autowired
     private PeriodService periodService;
 
-    @GetMapping(Routes.PERIOD_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping
     public List<Period> getAll()
     {
         return periodService.getAll();
     }
 
-    @GetMapping(Routes.PERIOD_BASE+"/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/{id}")
     public Period getById(@PathVariable("id")Integer id)
     {
         return periodService.getById(id);
     }
 
-    @GetMapping(Routes.PERIOD_BASE+"/month/{month}/year/{year}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @GetMapping("/month/{month}/year/{year}")
     public Period getByMonthAndYear(@PathVariable("month")Integer month,@PathVariable("year")Integer year)
     {
         return periodService.getByMonthAndYear(month,year);
     }
 
-    @PostMapping(Routes.PERIOD_BASE)
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+    @PostMapping
     public ResponseEntity<Period>insert(@RequestBody Period period)
     {
         return periodService.insertIfNotExist(period);
