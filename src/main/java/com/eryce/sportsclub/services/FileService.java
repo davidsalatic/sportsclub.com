@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.eryce.sportsclub.constants.Roles.MANAGER;
+
 @Service
 public class FileService {
 
@@ -50,18 +52,33 @@ public class FileService {
         String jmbg = userProperties[3];
         String role = userProperties[7].trim();
 
-        return usernameIsValid(username) && name!=null && surname!=null && isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
+        return hasEmailIfStaff(username,role) && usernameIsValid(username) && name!=null && surname!=null && isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
+    }
+
+    private boolean hasEmailIfStaff(String username, String role) {
+        if(role.equals(MANAGER) || role.equals(Roles.COACH))
+        {
+            if(username==null)
+                return false;
+            else
+                return true;
+        }
+        return true;
     }
 
     private boolean usernameIsValid(String username)
     {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
+        if(username.length()>0)//if username was entered
+        {
+            String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                    "[a-zA-Z0-9_+&*-]+)*@" +
+                    "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                    "A-Z]{2,7}$";
 
-        Pattern pat = Pattern.compile(emailRegex);
-        return pat.matcher(username).matches();
+            Pattern pat = Pattern.compile(emailRegex);
+            return pat.matcher(username).matches();
+        }
+        else return true;
     }
 
     private boolean isValidJmbg(String jmbg)
@@ -72,7 +89,7 @@ public class FileService {
     private boolean isValidRole(String role)
     {
         String upperCaseRole = role.toUpperCase();
-        return upperCaseRole.equals(Roles.COACH) || upperCaseRole.equals(Roles.MANAGER) || upperCaseRole.equals(Roles.MEMBER);
+        return upperCaseRole.equals(Roles.COACH) || upperCaseRole.equals(MANAGER) || upperCaseRole.equals(Roles.MEMBER);
     }
 
     private boolean appUserNotExists(String username,String jmbg)

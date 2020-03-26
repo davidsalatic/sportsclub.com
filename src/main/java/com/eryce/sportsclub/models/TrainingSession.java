@@ -22,7 +22,7 @@ public class TrainingSession {
     @JoinColumn(name = "member_group_id")
     private MemberGroup memberGroup;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_id")
     private Period period;
 

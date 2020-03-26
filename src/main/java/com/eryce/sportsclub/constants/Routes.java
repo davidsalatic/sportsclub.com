@@ -1,7 +1,7 @@
 package com.eryce.sportsclub.constants;
 
 public class Routes {
-    public static final String REGISTRATION_FRONT_LINK = "http://localhost:4200/register";
+    public static final String FRONT_URL = "http://localhost:4200";
     public static final String APP_USERS_BASE = "/users";
     public static final String ATTENDANCES_BASE = "/attendances";
     public static final String MEMBER_GROUPS_BASE = "/groups";
@@ -14,5 +14,6 @@ public class Routes {
     public static final String PERIOD_BASE="/period";
     public static final String FILE_BASE="/files";
     public static final String AUTH_BASE="/auth";
+    public static final String COMPETITION_BASE="/competitions";
     public static final String ANY="/**";
 }

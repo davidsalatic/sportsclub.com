@@ -34,7 +34,7 @@ public class PaymentController {
     }
 
     @GetMapping("/member/{memberId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
+    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF +"')")
     public List<Payment> getAllPaymentsForAppUser(@PathVariable("memberId")Integer memberId)
     {
         return paymentService.getAllPaymentsForAppUser(memberId);

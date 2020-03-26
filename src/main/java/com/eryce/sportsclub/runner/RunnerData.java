@@ -82,7 +82,7 @@ public class RunnerData implements CommandLineRunner {
                 defaultManager.setName("Manager");
                 defaultManager.setSurname("Manager");
                 defaultManager.setJmbg("0000000000000");
-                defaultManager.setUsername("manager");
+                defaultManager.setUsername("manager@sports.com");
                 defaultManager.setPassword("manager");
                 defaultManager.setRole(managerRole);
                 appUserService.insert(defaultManager);
