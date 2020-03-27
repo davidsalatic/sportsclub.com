@@ -36,6 +36,8 @@ public class AppUserService implements UserDetailsService {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private CompetitionRepository competitionRepository;
+    @Autowired
+    private CompetitionApplicationRepository competitionApplicationRepository;
 
     public List<AppUser> getAllMembers() {
         Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
@@ -85,7 +87,7 @@ public class AppUserService implements UserDetailsService {
             appUser.setDateJoined(LocalDate.now());
         appUserRepository.save(appUser);
 
-        if(appUserRequestDTO.getUsername()!="" && appUserRequestDTO.getUsername()!=null)//if email was entered, send reg mail
+        if(!appUserRequestDTO.getUsername().equals("") && appUserRequestDTO.getUsername()!=null)//if email was entered, send reg mail
             sendRegistationEmail(appUser);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -145,7 +147,10 @@ public class AppUserService implements UserDetailsService {
     }
 
     private void deleteApplicationsForUser(AppUser appUser) {
-        //TODO
+        for(CompetitionApplication competitionApplication : competitionApplicationRepository.findAllByAppUser(appUser))
+        {
+            competitionApplicationRepository.delete(competitionApplication);
+        }
     }
 
     @Override

@@ -57,7 +57,6 @@ public class AppUserController {
     @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public AppUser getByUsername(@RequestParam String username)
     {
-        AppUser a = appUserRepository.findByUsernameIgnoreCase(username);
         //This method does not call method getByUsername() from Service class but from the repository
         //because we want to avoid checking authentication that the service method does
         return appUserRepository.findByUsernameIgnoreCase(username);

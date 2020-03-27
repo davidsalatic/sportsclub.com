@@ -29,7 +29,7 @@ public class CompetitionService {
         return competitionRepository.getOne(id);
     }
 
-    public ResponseEntity insert(Competition competition) {
+    public ResponseEntity<Competition> insert(Competition competition) {
         competitionRepository.save(competition);
         return new ResponseEntity<>(HttpStatus.OK);
     }

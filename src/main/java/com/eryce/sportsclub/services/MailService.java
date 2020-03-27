@@ -3,6 +3,7 @@ package com.eryce.sportsclub.services;
 import com.eryce.sportsclub.constants.Routes;
 import java.util.List;
 
+import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.models.Competition;
 import com.eryce.sportsclub.models.CompetitionApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +45,17 @@ public class MailService {
         simpleMailMessage.setSubject(competition.getName());
         simpleMailMessage.setText(competition.getName()+"\n"+competition.getDescription()+"\n"+
                 "Date of competition: "+competition.getDateHeld()+ " "+competition.getTimeHeld()+"\n"+
-                "Location: "+competition.getLocation()+"\n\nTo apply for this competition, visit the next link:"+
+                "Location: "+competition.getLocation()+"\n\nTo apply for this competition, visit the next link: "+
                 Routes.FRONT_URL+"/competitions/"+competition.getId()+"/apply");
         return simpleMailMessage;
     }
 
-    public void sendEmailToStaffRegardingNewCompetitionApplication(List<String> recipients, CompetitionApplication application) {
+    public void sendEmailToStaffRegardingNewCompetitionApplication(List<String> recipients, CompetitionApplicationRequestDTO application) {
         final SimpleMailMessage applicationMessage = createNewCompetitionApplicationEmailMessage(recipients,application);
         this.sendMessageAsync(applicationMessage);
     }
 
-    private SimpleMailMessage createNewCompetitionApplicationEmailMessage(List<String> recipients, CompetitionApplication application) {
+    private SimpleMailMessage createNewCompetitionApplicationEmailMessage(List<String> recipients, CompetitionApplicationRequestDTO application) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
         simpleMailMessage.setSubject(application.getAppUser().getName()+" applied for "+application.getCompetition().getName());

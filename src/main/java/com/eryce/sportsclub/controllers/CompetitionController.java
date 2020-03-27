@@ -57,5 +57,4 @@ public class CompetitionController {
     {
         return competitionService.delete(id);
     }
-
 }
