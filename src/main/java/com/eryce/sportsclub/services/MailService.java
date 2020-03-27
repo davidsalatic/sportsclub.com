@@ -4,12 +4,11 @@ import com.eryce.sportsclub.constants.Routes;
 import java.util.List;
 
 import com.eryce.sportsclub.models.Competition;
+import com.eryce.sportsclub.models.CompetitionApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import javax.mail.internet.InternetAddress;
 
 @Service
 public class MailService {
@@ -40,7 +39,6 @@ public class MailService {
     }
 
     private SimpleMailMessage createCompetitionEmailMessage(List<String> recipients, Competition competition) {
-
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
         simpleMailMessage.setSubject(competition.getName());
@@ -51,9 +49,29 @@ public class MailService {
         return simpleMailMessage;
     }
 
+    public void sendEmailToStaffRegardingNewCompetitionApplication(List<String> recipients, CompetitionApplication application) {
+        final SimpleMailMessage applicationMessage = createNewCompetitionApplicationEmailMessage(recipients,application);
+        this.sendMessageAsync(applicationMessage);
+    }
+
+    private SimpleMailMessage createNewCompetitionApplicationEmailMessage(List<String> recipients, CompetitionApplication application) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
+        simpleMailMessage.setSubject(application.getAppUser().getName()+" applied for "+application.getCompetition().getName());
+        String text = application.getAppUser().getName()+" applied for the competition: "+application.getCompetition().getName();
+        if(application.getMessage()!=null && application.getMessage().length()>0)
+        {
+            text=text+" and left you a message: \n\n'"+application.getMessage()+"'.";
+        }
+        simpleMailMessage.setText(text);
+
+        return simpleMailMessage;
+    }
+
     private void sendMessageAsync(final SimpleMailMessage emailMessage)
     {
         Thread sendMailThread = new Thread(() -> javaMailSender.send(emailMessage));
         sendMailThread.start();
     }
+
 }

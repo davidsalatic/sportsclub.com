@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.Term;
 import com.eryce.sportsclub.models.TrainingSession;
@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.TRAINING_SESSIONS_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class TrainingSessionController {
 
     @Autowired

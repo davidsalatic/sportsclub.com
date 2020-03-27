@@ -4,21 +4,11 @@ import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.LoginRequestDTO;
 import com.eryce.sportsclub.dto.LoginResponseDTO;
 import com.eryce.sportsclub.dto.RegisterRequestDTO;
-import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.repositories.AppUserRepository;
-import com.eryce.sportsclub.security.jwt.JwtTokenProvider;
 import com.eryce.sportsclub.services.AuthService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @CrossOrigin
 @RestController

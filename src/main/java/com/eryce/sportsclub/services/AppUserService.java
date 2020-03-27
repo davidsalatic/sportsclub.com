@@ -23,8 +23,6 @@ public class AppUserService implements UserDetailsService {
     @Autowired
     private AppUserRepository appUserRepository;
     @Autowired
-    private PermissionRepository permissionRepository;
-    @Autowired
     private MemberGroupRepository memberGroupRepository;
     @Autowired
     private AttendanceRepository attendanceRepository;
@@ -36,6 +34,8 @@ public class AppUserService implements UserDetailsService {
     private MailService mailService;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private CompetitionRepository competitionRepository;
 
     public List<AppUser> getAllMembers() {
         Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
@@ -85,7 +85,7 @@ public class AppUserService implements UserDetailsService {
             appUser.setDateJoined(LocalDate.now());
         appUserRepository.save(appUser);
 
-        if(appUserRequestDTO.getUsername()!="")//if email was entered, send reg mail
+        if(appUserRequestDTO.getUsername()!="" && appUserRequestDTO.getUsername()!=null)//if email was entered, send reg mail
             sendRegistationEmail(appUser);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -128,6 +128,7 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = getById(id);
         deleteAttendancesForUser(appUser);
         deletePaymentsForUser(appUser);
+        deleteApplicationsForUser(appUser);
         appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -141,6 +142,10 @@ public class AppUserService implements UserDetailsService {
     private void deletePaymentsForUser(AppUser appUser) {
         for(Payment payment : paymentRepository.findAllByAppUser(appUser))
             paymentRepository.delete(payment);
+    }
+
+    private void deleteApplicationsForUser(AppUser appUser) {
+        //TODO
     }
 
     @Override

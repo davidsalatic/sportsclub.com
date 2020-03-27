@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.Term;
 import com.eryce.sportsclub.services.TermService;
@@ -14,6 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.TERM_BASE)
+@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class TermController {
 
     @Autowired

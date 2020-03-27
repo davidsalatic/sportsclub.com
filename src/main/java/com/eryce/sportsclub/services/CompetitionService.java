@@ -25,6 +25,10 @@ public class CompetitionService {
         return competitionRepository.findAll();
     }
 
+    public Competition getById(Integer id) {
+        return competitionRepository.getOne(id);
+    }
+
     public ResponseEntity insert(Competition competition) {
         competitionRepository.save(competition);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -43,16 +47,20 @@ public class CompetitionService {
         List<String> emails = new ArrayList<>();
         for(AppUser member : members)
         {
-            if(member.getUsername()!=null)
+            if(member.getUsername()!=null && member.getUsername().length()>0)
                 emails.add(member.getUsername());
         }
 
         mailService.sendCompetitionMessage(emails,competition);
     }
 
+    public ResponseEntity<Competition> update(Competition competition) {
+        this.competitionRepository.save(competition);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     public ResponseEntity<Competition> delete(Integer id) {
         competitionRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

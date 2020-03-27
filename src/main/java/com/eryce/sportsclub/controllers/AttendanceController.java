@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.AttendanceRequestDTO;
 import com.eryce.sportsclub.models.Attendance;
@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.ATTENDANCES_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_TRAINING_SESSIONS+"')")
+@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class AttendanceController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/member/{id}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
+    @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public List<Attendance> getAllByAppUser(@PathVariable ("id") Integer appUserId)
     {
         return this.attendanceService.getByAppUser(appUserId);

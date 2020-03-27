@@ -1,12 +1,11 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.security.jwt.JWT;
+import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.services.AppUserService;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,11 +16,13 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.APP_USERS_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class AppUserController {
 
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @GetMapping("/members")
     public List<AppUser> getAllMembers()
@@ -53,10 +54,13 @@ public class AppUserController {
     }
 
     @GetMapping("/search/username")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
+    @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public AppUser getByUsername(@RequestParam String username)
     {
-        return appUserService.getByUsername(username);
+        AppUser a = appUserRepository.findByUsernameIgnoreCase(username);
+        //This method does not call method getByUsername() from Service class but from the repository
+        //because we want to avoid checking authentication that the service method does
+        return appUserRepository.findByUsernameIgnoreCase(username);
     }
 
     @GetMapping("/search/jmbg")
@@ -78,7 +82,7 @@ public class AppUserController {
     }
 
     @PutMapping("/update-self")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF+"')")
+    @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public ResponseEntity<AppUser> updateSelf(@RequestBody AppUserRequestDTO appUserRequestDTO)
     {
         return appUserService.updateSelf(appUserRequestDTO);

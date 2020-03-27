@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.PaymentRequestDTO;
 import com.eryce.sportsclub.models.Payment;
@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.PAYMENTS_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
+@PreAuthorize(Authorize.HAS_MANAGER_ROLE)
 public class PaymentController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class PaymentController {
     }
 
     @GetMapping("/member/{memberId}")
-    @PreAuthorize("hasAuthority('"+ Permissions.ACCESS_SELF +"')")
+    @PreAuthorize(Authorize.HAS_MANAGER_OR_MEMBER_ROLE)
     public List<Payment> getAllPaymentsForAppUser(@PathVariable("memberId")Integer memberId)
     {
         return paymentService.getAllPaymentsForAppUser(memberId);

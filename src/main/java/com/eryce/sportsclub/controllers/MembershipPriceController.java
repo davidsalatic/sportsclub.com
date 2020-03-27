@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.MembershipPrice;
 import com.eryce.sportsclub.services.MembershipPriceService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.MEMBERSHIPS_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERSHIPS+"')")
+@PreAuthorize(Authorize.HAS_MANAGER_ROLE)
 public class MembershipPriceController {
 
     @Autowired

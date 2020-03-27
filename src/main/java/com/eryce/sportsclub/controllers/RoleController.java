@@ -1,8 +1,7 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Permissions;
+import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.ROLES_BASE)
-@PreAuthorize("hasAuthority('"+ Permissions.ACCESS_MEMBERS+"')")
+@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class RoleController  {
 
     @Autowired
