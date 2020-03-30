@@ -20,6 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -36,6 +37,9 @@ public class AuthService {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     public Claims extractAllClaims(String token) {
         if(token.length()>0)
@@ -66,12 +70,12 @@ public class AuthService {
 
     }
 
-    public ResponseEntity register(RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity<RegisterRequestDTO> register(RegisterRequestDTO registerRequestDTO) {
         String username = jwtTokenProvider.getUsername(registerRequestDTO.getToken());
         AppUser appUser = appUserRepository.findByUsernameIgnoreCase(username);
-        appUser.setPassword(registerRequestDTO.getPassword());
+        appUser.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         appUserRepository.save(appUser);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public boolean canRegister(LoginResponseDTO tokenDTO) {
@@ -80,10 +84,8 @@ public class AuthService {
             {
                 String username = jwtTokenProvider.getUsername(tokenDTO.getToken());
                 AppUser appUser = appUserRepository.findByUsernameIgnoreCase(username);
-                if(appUser.getPassword()==null)
-                    return true;//okay to register
-                else
-                    return false;//don't register,user already exists
+
+                return appUser.getPassword() == null; //if is null - register, else skip the registration process
             }
             return false;
         } catch (ExpiredJwtException expiredException)

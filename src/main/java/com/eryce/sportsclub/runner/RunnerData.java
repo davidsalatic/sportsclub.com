@@ -7,6 +7,7 @@ import com.eryce.sportsclub.services.AppUserService;
 import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,8 @@ public class RunnerData implements CommandLineRunner {
     private RoleService roleService;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -49,7 +52,7 @@ public class RunnerData implements CommandLineRunner {
                 defaultManager.setSurname("Manager");
                 defaultManager.setJmbg("0000000000000");
                 defaultManager.setUsername("salaticdavid@gmail.com");
-                defaultManager.setPassword("123");
+
                 defaultManager.setRole(managerRole);
                 appUserService.insert(defaultManager);
             }
