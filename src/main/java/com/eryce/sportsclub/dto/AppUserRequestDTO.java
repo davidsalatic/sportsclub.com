@@ -21,8 +21,26 @@ public class AppUserRequestDTO {
     private String address;
     private String phoneNumber;
     private LocalDate dateJoined;
+    private LocalDate dateOfBirth;
+    private String gender;
     private MemberGroup memberGroup;
     private Role role;
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -127,6 +145,8 @@ public class AppUserRequestDTO {
         appUser.setPhoneNumber(this.getPhoneNumber());
         appUser.setAddress(this.getAddress());
         appUser.setJmbg(this.getJmbg());
+        appUser.setGender(this.gender);
+        appUser.setDateOfBirth(this.dateOfBirth);
         return appUser;
     }
 }

@@ -52,7 +52,7 @@ public class FileService {
         String jmbg = userProperties[3];
         String role = userProperties[7].trim();
 
-        return hasEmailIfStaff(username,role) && usernameIsValid(username) && name!=null && surname!=null && isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
+        return hasEmailIfStaff(username,role) && usernameIsValid(username) && name!=null && surname!=null && appUserService.isValidJmbg(jmbg) && isValidRole(role) && appUserNotExists(username,jmbg);
     }
 
     private boolean hasEmailIfStaff(String username, String role) {
@@ -79,11 +79,6 @@ public class FileService {
             return pat.matcher(username).matches();
         }
         else return true;
-    }
-
-    private boolean isValidJmbg(String jmbg)
-    {
-        return jmbg!=null && jmbg.length()==13;
     }
 
     private boolean isValidRole(String role)

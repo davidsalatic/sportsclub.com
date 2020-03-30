@@ -25,6 +25,8 @@ public class AppUser implements UserDetails {
     private String address;
     private String phoneNumber;
     private LocalDate dateJoined;
+    private LocalDate dateOfBirth;
+    private String gender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_group_id")
@@ -33,6 +35,22 @@ public class AppUser implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     public Integer getId() {
         return id;

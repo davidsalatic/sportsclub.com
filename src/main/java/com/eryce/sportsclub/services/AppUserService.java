@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,17 +84,99 @@ public class AppUserService implements UserDetailsService {
 
     public ResponseEntity<AppUser> insert(AppUserRequestDTO appUserRequestDTO) {
         AppUser appUser = appUserRequestDTO.generateAppUser();
+
         if(appUser.getDateJoined()==null)
             appUser.setDateJoined(LocalDate.now());
+
+        parseJmbg(appUser);
+
         appUserRepository.save(appUser);
 
         if(!appUserRequestDTO.getUsername().equals("") && appUserRequestDTO.getUsername()!=null)//if email was entered, send reg mail
-            sendRegistationEmail(appUser);
+            sendRegistrationEmail(appUser);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void sendRegistationEmail(AppUser appUser)
+    private void parseJmbg(AppUser appUser) {
+
+        String jmbg = appUser.getJmbg();
+
+        if(isValidJmbg(jmbg))
+            extractAndSetValues(appUser);
+    }
+
+    public boolean isValidJmbg(String jmbg) {
+        return isValidJmbgLength(jmbg) && isNumeric(jmbg) && isValidJmbgFormat(jmbg);
+    }
+
+    private boolean isValidJmbgLength(String jmbg) {
+        return jmbg!=null && jmbg.length()==13;
+    }
+
+    private boolean isNumeric(String jmbg)
+    {
+        return jmbg.matches("\\d+");
+    }
+
+    private boolean isValidJmbgFormat(String jmbg) {
+        return isValidDateJmbgPart(getUnformattedDatePartFromJmbg(jmbg));
+    }
+
+    private String getUnformattedDatePartFromJmbg(String jmbg)
+    {
+        return jmbg.substring(0,7);
+    }
+
+    private boolean isValidDateJmbgPart(String unformattedDate) {
+        try
+        {
+            String formattedDate = formatDateText(unformattedDate); //the date part of the jmbg
+            LocalDate.parse(formattedDate); //ISO_LOCAL_DATE default formatting
+            return true;
+        }catch (DateTimeException dte)
+        {
+            return false;
+        }
+    }
+
+    private String formatDateText(String unformattedDate)  //example: "31123997"
+    {
+        String formattedDate="";
+        //INPUT:'ddMMyyy',  OUTPUT: 'yyyyMMdd'
+        boolean isBornBefore2000 = true;
+        if(unformattedDate.charAt(4)=='0') //only for people born after 1999
+            isBornBefore2000=false;
+
+        if(isBornBefore2000)
+            formattedDate+="1";
+        else
+            formattedDate+="2";
+
+        formattedDate+=unformattedDate.substring(4,7)+"-"; //1997-
+        formattedDate+=unformattedDate.substring(2,4)+"-"; //1997-12-
+        formattedDate+=unformattedDate.substring(0,2); //1997-12-31
+
+        return formattedDate;
+    }
+
+    private void extractAndSetValues(AppUser appUser) {
+        String formattedDateText = formatDateText(getUnformattedDatePartFromJmbg(appUser.getJmbg()));
+        appUser.setDateOfBirth(LocalDate.parse(formattedDateText));
+        appUser.setGender(getGenderFromJmbg(appUser.getJmbg()));
+    }
+
+    private String getGenderFromJmbg(String jmbg) {
+        String genderPartOfJmbg = jmbg.substring(9,12);
+        int genderCode = Integer.parseInt(genderPartOfJmbg);
+        if(genderCode<500)
+            return "Male";
+        else
+            return "Female";
+    }
+
+
+    private void sendRegistrationEmail(AppUser appUser)
     {
         final String token = jwtTokenProvider.createToken(appUser.getUsername(),appUser);
         //async sending email
@@ -101,14 +184,25 @@ public class AppUserService implements UserDetailsService {
     }
 
     public ResponseEntity<AppUser> update(AppUserRequestDTO appUserRequestDTO) {
-        String usernameBeforeUpdate = appUserRepository.getOne(appUserRequestDTO.getId()).getUsername();
+
+        AppUser appUserBeforeUpdate = appUserRepository.getOne(appUserRequestDTO.getId());
+
+        String usernameBeforeUpdate = appUserBeforeUpdate.getUsername();
         String usernameInRequest = appUserRequestDTO.getUsername();
+
+        String jmbgBeforeUpdate = appUserBeforeUpdate.getJmbg();
+        String jmbgAfterUpdate = appUserRequestDTO.getJmbg();
 
         if(isAddingEmail(usernameBeforeUpdate,usernameInRequest)
                 || isEditingEmail(usernameBeforeUpdate,usernameInRequest))
-            sendRegistationEmail(appUserRequestDTO.generateAppUser());
+            sendRegistrationEmail(appUserRequestDTO.generateAppUser());
 
-        this.appUserRepository.save(appUserRequestDTO.generateAppUser());
+        AppUser updatedAppUser = appUserRequestDTO.generateAppUser();
+
+        if(isEditingJmbg(jmbgBeforeUpdate,jmbgAfterUpdate))
+            parseJmbg(updatedAppUser);
+
+        this.appUserRepository.save(updatedAppUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -120,6 +214,10 @@ public class AppUserService implements UserDetailsService {
     private boolean isEditingEmail(String usernameBeforeUpdate,String usernameInRequest)
     {
         return usernameBeforeUpdate!=null && (!usernameBeforeUpdate.equals(usernameInRequest));
+    }
+
+    private boolean isEditingJmbg(String jmbgBeforeUpdate, String jmbgAfterUpdate) {
+        return !jmbgBeforeUpdate.equals(jmbgAfterUpdate);
     }
 
     public ResponseEntity<AppUser> updateSelf(AppUserRequestDTO appUserRequestDTO) {
