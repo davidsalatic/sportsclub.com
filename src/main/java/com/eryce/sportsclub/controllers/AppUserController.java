@@ -57,12 +57,14 @@ public class AppUserController {
     @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public AppUser getByUsername(@RequestParam String username)
     {
-        //This method does not call method getByUsername() from Service class but from the repository
-        //because we want to avoid checking authentication that the service method does
-        return appUserRepository.findByUsernameIgnoreCase(username);
+        // the '+' symbol is automatically replaced with ' ' when sending a request
+        // therefor we must replace it back to '+' here.
+        username=username.replace(' ','+');
+        return appUserService.getByUsername(username);
     }
 
     @GetMapping("/search/jmbg")
+    @PreAuthorize(Authorize.HAS_ANY_ROLE)
     public AppUser getByJmbg(@RequestParam String jmbg)
     {
         return appUserService.getByJmbg(jmbg);

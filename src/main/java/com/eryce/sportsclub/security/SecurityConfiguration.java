@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers(Routes.AUTH_BASE+Routes.ANY).permitAll()
-
+                .antMatchers(Routes.PERIOD_BASE+Routes.ANY).permitAll()
         .anyRequest().authenticated()
         .and()
         .apply(new JwtConfigurer(jwtTokenProvider));

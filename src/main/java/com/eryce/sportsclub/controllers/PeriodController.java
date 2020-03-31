@@ -1,12 +1,10 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.services.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(Routes.PERIOD_BASE)
-@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
 public class PeriodController {
 
     @Autowired

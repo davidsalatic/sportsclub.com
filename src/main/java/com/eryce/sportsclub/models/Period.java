@@ -15,6 +15,19 @@ public class Period {
     private Integer month;
     private Integer year;
 
+    //on specific date-of-month, notify managers with the list of users who had not
+    //made enough payments for a membership in this period.
+    //if true, the managers were already notified in this period and will not be notified anymore.
+    private Boolean notifiedManagersOfMembershipDebts=false;
+
+    public Boolean getNotifiedManagersOfMembershipDebts() {
+        return notifiedManagersOfMembershipDebts;
+    }
+
+    public void setNotifiedManagersOfMembershipDebts(Boolean notifiedManagersOfMembershipDebts) {
+        this.notifiedManagersOfMembershipDebts = notifiedManagersOfMembershipDebts;
+    }
+
     public Integer getId() {
         return id;
     }

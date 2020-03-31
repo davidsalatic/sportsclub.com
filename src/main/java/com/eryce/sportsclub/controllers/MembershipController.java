@@ -32,7 +32,7 @@ public class MembershipController {
         return membershipService.getById(id);
     }
 
-    @GetMapping("/period/{periodId}")
+    @GetMapping("/per/{periodId}")
     public Membership getByPeriod(@PathVariable ("periodId")Integer periodId)
     {
         return membershipService.getByPeriod(periodId);

@@ -27,7 +27,7 @@ public class TrainingSessionController {
         return trainingSessionService.getAllByMemberGroup(groupId);
     }
 
-    @GetMapping("/group/{groupId}/period/{periodId}")
+    @GetMapping("/group/{groupId}/per/{periodId}")
     public List<TrainingSession>getAllByMemberGroupAndPeriod(@PathVariable("groupId")Integer groupId,@PathVariable("periodId")Integer periodId)
     {
         return trainingSessionService.getAllByMemberGroupAndPeriod(groupId,periodId);
@@ -44,7 +44,7 @@ public class TrainingSessionController {
         return trainingSessionService.insert(trainingSession);
     }
 
-    @PostMapping("/generate/period/{periodId}/day/{day}")
+    @PostMapping("/generate/per/{periodId}/day/{day}")
     public ResponseEntity<TrainingSession> generateInTerms(@RequestBody Term[] terms,
                                                            @PathVariable("periodId")Integer periodId, @PathVariable("day")Integer day)
     {
