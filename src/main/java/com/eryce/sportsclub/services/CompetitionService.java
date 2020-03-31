@@ -34,7 +34,6 @@ public class CompetitionService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     public ResponseEntity<Competition> inviteMembers(Competition competition) {
         sendEmailToMembers(competition);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -46,10 +45,8 @@ public class CompetitionService {
 
         List<String> emails = new ArrayList<>();
         for(AppUser member : members)
-        {
             if(member.getUsername()!=null && member.getUsername().length()>0)
                 emails.add(member.getUsername());
-        }
 
         mailService.sendCompetitionMessage(emails,competition);
     }

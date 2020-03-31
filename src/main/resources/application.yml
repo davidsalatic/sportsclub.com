@@ -1,0 +1,8 @@
+spring:
+  profiles.active: development
+
+---
+spring:
+  profiles: development
+values:
+  membershipDeadline: 20

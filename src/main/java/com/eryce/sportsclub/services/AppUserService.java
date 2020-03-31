@@ -246,9 +246,7 @@ public class AppUserService implements UserDetailsService {
 
     private void deleteApplicationsForUser(AppUser appUser) {
         for(CompetitionApplication competitionApplication : competitionApplicationRepository.findAllByAppUser(appUser))
-        {
             competitionApplicationRepository.delete(competitionApplication);
-        }
     }
 
     @Override
