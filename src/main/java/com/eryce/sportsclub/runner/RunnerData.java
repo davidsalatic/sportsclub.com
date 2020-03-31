@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.runner;
 
-import com.eryce.sportsclub.configuration.ApplicationValuesConfiguration;
+import com.eryce.sportsclub.configuration.ApplicationValues;
 import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.Role;
@@ -20,8 +20,6 @@ public class RunnerData implements CommandLineRunner {
     private AppUserService appUserService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ApplicationValuesConfiguration applicationValuesConfiguration;
 
     @Override
     public void run(String... args) {

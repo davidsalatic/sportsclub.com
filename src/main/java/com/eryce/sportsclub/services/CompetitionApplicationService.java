@@ -46,11 +46,7 @@ public class CompetitionApplicationService {
 
     private void sendEmailToStaff(CompetitionApplicationRequestDTO application)
     {
-        List<AppUser> staff = appUserService.getAllStaff();
-        List<String> emailAddresses = new ArrayList<>();
-        for(AppUser staffMember : staff)
-            emailAddresses.add(staffMember.getUsername());
-
+        List<String> emailAddresses = appUserService.getEmails(appUserService.getAllStaff());
         mailService.sendEmailToStaffRegardingNewCompetitionApplication(emailAddresses,application);
     }
 

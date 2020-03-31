@@ -4,6 +4,7 @@ import com.eryce.sportsclub.constants.Routes;
 import java.util.List;
 
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
+import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
 import com.eryce.sportsclub.models.CompetitionApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +62,44 @@ public class MailService {
         simpleMailMessage.setSubject(application.getAppUser().getName()+" applied for "+application.getCompetition().getName());
         String text = application.getAppUser().getName()+" applied for the competition: "+application.getCompetition().getName();
         if(application.getMessage()!=null && application.getMessage().length()>0)
-        {
             text=text+" and left you a message: \n\n'"+application.getMessage()+"'.";
-        }
         simpleMailMessage.setText(text);
+
+        return simpleMailMessage;
+    }
+
+    public void sendUnpaidMembershipsListMessageToStaff(List<String> staffEmails, List<AppUser> membersWithInsufficientPayments) {
+        final SimpleMailMessage unpaidMemberships = createUnpaidMembershipsMessageForStaff(staffEmails,membersWithInsufficientPayments);
+        this.sendMessageAsync(unpaidMemberships);
+    }
+
+    private SimpleMailMessage createUnpaidMembershipsMessageForStaff(List<String> recipients, List<AppUser> membersWithInsufficientPayments) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
+        simpleMailMessage.setSubject("Monthly report on membership");
+        String text = "Here is the list of users who haven't made enough payments in this month:\n\n";
+        int counter=1;
+        for(AppUser member : membersWithInsufficientPayments)
+        {
+            text+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
+            counter++;
+        }
+
+        simpleMailMessage.setText(text);
+
+        return simpleMailMessage;
+    }
+
+    public void sendUnpaidMembershipMessageToMember(String username) {
+        final SimpleMailMessage unpaidMembership = createUnpaidMembershipForMember(username);
+        this.sendMessageAsync(unpaidMembership);
+    }
+
+    private SimpleMailMessage createUnpaidMembershipForMember(String username) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(username);
+        simpleMailMessage.setSubject("Reminder - Unpaid membership");
+        simpleMailMessage.setText("You haven't made enough payments in this month.");
 
         return simpleMailMessage;
     }
@@ -74,5 +109,4 @@ public class MailService {
         Thread sendMailThread = new Thread(() -> javaMailSender.send(emailMessage));
         sendMailThread.start();
     }
-
 }

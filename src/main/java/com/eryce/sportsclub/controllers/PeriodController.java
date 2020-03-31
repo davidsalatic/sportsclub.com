@@ -40,4 +40,10 @@ public class PeriodController {
     {
         return periodService.insertIfNotExist(period);
     }
+
+    @PostMapping("notify")
+    public ResponseEntity<Period> notifyManagersOfUnpaidMemberships(@RequestBody Period period)
+    {
+        return periodService.notifyManagersOfUnpaidMemberships(period);
+    }
 }

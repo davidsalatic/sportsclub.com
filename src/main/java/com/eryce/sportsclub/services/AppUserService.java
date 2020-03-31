@@ -82,6 +82,14 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findByJmbgIgnoreCase(jmbg);
     }
 
+    public List<String> getEmails(List<AppUser>appUsers)
+    {
+        List<String> emailAddresses = new ArrayList<>();
+        for(AppUser appUser :appUsers)
+            emailAddresses.add(appUser.getUsername());
+        return emailAddresses;
+    }
+
     public ResponseEntity<AppUser> insert(AppUserRequestDTO appUserRequestDTO) {
         AppUser appUser = appUserRequestDTO.generateAppUser();
 

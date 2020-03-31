@@ -41,14 +41,8 @@ public class CompetitionService {
 
     private void sendEmailToMembers(Competition competition)
     {
-        List<AppUser> members = appUserService.getAllMembers();
-
-        List<String> emails = new ArrayList<>();
-        for(AppUser member : members)
-            if(member.getUsername()!=null && member.getUsername().length()>0)
-                emails.add(member.getUsername());
-
-        mailService.sendCompetitionMessage(emails,competition);
+        List<String> memberEmails = appUserService.getEmails(appUserService.getAllMembers());
+        mailService.sendCompetitionMessage(memberEmails,competition);
     }
 
     public ResponseEntity<Competition> update(Competition competition) {
