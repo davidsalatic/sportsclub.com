@@ -47,7 +47,7 @@ public class CompetitionApplicationService {
     private void sendEmailToStaff(CompetitionApplicationRequestDTO application)
     {
         List<String> emailAddresses = appUserService.getEmails(appUserService.getAllStaff());
-        mailService.sendEmailToStaffRegardingNewCompetitionApplication(emailAddresses,application);
+        mailService.sendNewCompetitionApplicationMessageToStaff(emailAddresses,application);
     }
 
     public ResponseEntity<CompetitionApplication> delete(Integer id) {

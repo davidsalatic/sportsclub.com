@@ -1,12 +1,13 @@
 package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.constants.Routes;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
-import com.eryce.sportsclub.models.CompetitionApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,85 +23,57 @@ public class MailService {
 
     public void sendRegistrationMessage(String recipientEmailAddress, String registrationToken)
     {
-        final SimpleMailMessage emailMessage = createRegistrationEmailMessage(recipientEmailAddress,registrationToken);
-        this.sendMessageAsync(emailMessage);
+        String subject= "Complete your registration";
+        String body = "To complete your registration, follow the link: "+ this.REGISTER_URL+"/"+registrationToken;
+        List<String> recipients = new ArrayList<>();
+        recipients.add(recipientEmailAddress);
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
-    private SimpleMailMessage createRegistrationEmailMessage(String recipient, String token) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(recipient);
-        simpleMailMessage.setSubject("Complete your registration");
-        simpleMailMessage.setText("To complete your registration, follow the link: "+ this.REGISTER_URL+"/"+token);
-        return simpleMailMessage;
-    }
-
-    public void sendCompetitionMessage(List<String> recipients, Competition competition)
+    public void sendCompetitionMessageToMember(List<String> recipients, Competition competition)
     {
-        final SimpleMailMessage competitionMessage = createCompetitionEmailMessage(recipients,competition);
-        this.sendMessageAsync(competitionMessage);
-    }
-
-    private SimpleMailMessage createCompetitionEmailMessage(List<String> recipients, Competition competition) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
-        simpleMailMessage.setSubject(competition.getName());
-        simpleMailMessage.setText(competition.getName()+"\n"+competition.getDescription()+"\n"+
+        String subject = competition.getName();
+        String body=competition.getName()+"\n"+competition.getDescription()+"\n"+
                 "Date of competition: "+competition.getDateHeld()+ " "+competition.getTimeHeld()+"\n"+
                 "Location: "+competition.getLocation()+"\n\nTo apply for this competition, visit the next link: "+
-                Routes.FRONT_URL+"/competitions/"+competition.getId()+"/apply");
-        return simpleMailMessage;
+                Routes.FRONT_URL+"/competitions/"+competition.getId()+"/apply";
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
-    public void sendEmailToStaffRegardingNewCompetitionApplication(List<String> recipients, CompetitionApplicationRequestDTO application) {
-        final SimpleMailMessage applicationMessage = createNewCompetitionApplicationEmailMessage(recipients,application);
-        this.sendMessageAsync(applicationMessage);
-    }
-
-    private SimpleMailMessage createNewCompetitionApplicationEmailMessage(List<String> recipients, CompetitionApplicationRequestDTO application) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
-        simpleMailMessage.setSubject(application.getAppUser().getName()+" applied for "+application.getCompetition().getName());
-        String text = application.getAppUser().getName()+" applied for the competition: "+application.getCompetition().getName();
+    public void sendNewCompetitionApplicationMessageToStaff(List<String> recipients, CompetitionApplicationRequestDTO application) {
+        String subject = application.getAppUser().getName()+" applied for "+application.getCompetition().getName();
+        String body = application.getAppUser().getName()+" applied for the competition: "+application.getCompetition().getName();
         if(application.getMessage()!=null && application.getMessage().length()>0)
-            text=text+" and left you a message: \n\n'"+application.getMessage()+"'.";
-        simpleMailMessage.setText(text);
-
-        return simpleMailMessage;
+            body=body+" and left you a message: \n\n'"+application.getMessage()+"'.";
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
-    public void sendUnpaidMembershipsListMessageToStaff(List<String> staffEmails, List<AppUser> membersWithInsufficientPayments) {
-        final SimpleMailMessage unpaidMemberships = createUnpaidMembershipsMessageForStaff(staffEmails,membersWithInsufficientPayments);
-        this.sendMessageAsync(unpaidMemberships);
-    }
-
-    private SimpleMailMessage createUnpaidMembershipsMessageForStaff(List<String> recipients, List<AppUser> membersWithInsufficientPayments) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(recipients.toArray(new String[recipients.size()]));
-        simpleMailMessage.setSubject("Monthly report on membership");
-        String text = "Here is the list of users who haven't made enough payments in this month:\n\n";
+    public void sendUnpaidMembershipsListMessageToStaff(List<String> recipients, List<AppUser> membersWithInsufficientPayments) {
+        String subject ="Monthly report on membership";
+        String body = "Here is the list of users who haven't made enough payments in this month:\n\n";
         int counter=1;
         for(AppUser member : membersWithInsufficientPayments)
         {
-            text+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
+            body+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
             counter++;
         }
-
-        simpleMailMessage.setText(text);
-
-        return simpleMailMessage;
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
-    public void sendUnpaidMembershipMessageToMember(String username) {
-        final SimpleMailMessage unpaidMembership = createUnpaidMembershipForMember(username);
-        this.sendMessageAsync(unpaidMembership);
+    public void sendUnpaidMembershipMessageToMember(String recipient) {
+        String subject ="Reminder - Unpaid membership";
+        String body="You haven't made enough payments in this month.";
+        List<String> recipients = new ArrayList<>();
+        recipients.add(recipient);
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
-    private SimpleMailMessage createUnpaidMembershipForMember(String username) {
+    public SimpleMailMessage createEmailMessage(List<String>recipients,String subject,String body)
+    {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(username);
-        simpleMailMessage.setSubject("Reminder - Unpaid membership");
-        simpleMailMessage.setText("You haven't made enough payments in this month.");
-
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setTo(recipients.toArray(new String[0]));
+        simpleMailMessage.setText(body);
         return simpleMailMessage;
     }
 

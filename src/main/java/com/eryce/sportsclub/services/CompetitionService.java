@@ -42,7 +42,7 @@ public class CompetitionService {
     private void sendEmailToMembers(Competition competition)
     {
         List<String> memberEmails = appUserService.getEmails(appUserService.getAllMembers());
-        mailService.sendCompetitionMessage(memberEmails,competition);
+        mailService.sendCompetitionMessageToMember(memberEmails,competition);
     }
 
     public ResponseEntity<Competition> update(Competition competition) {
