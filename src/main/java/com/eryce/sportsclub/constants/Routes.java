@@ -15,5 +15,7 @@ public class Routes {
     public static final String AUTH_BASE="/auth";
     public static final String COMPETITION_BASE="/competitions";
     public static final String COMPETITION_APPLICATION_BASE="/applications";
+    public static final String POST_BASE="/posts";
+    public static final String COMMENT_BASE="/comments";
     public static final String ANY="/**";
 }
