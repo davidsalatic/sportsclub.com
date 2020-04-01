@@ -90,13 +90,11 @@ public class TrainingSessionService {
     private void deleteTrainingSessionsInGroupInPeriodIfGreaterThan(MemberGroup memberGroup,Period period,Integer fromDay) {
         List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
         for(TrainingSession trainingSession : trainingSessions)
-        {
             if(trainingSession.getDateHeld().getDayOfMonth()>=fromDay)
             {
                 this.deleteAttendancesForTrainingSession(trainingSession);
                 trainingSessionRepository.delete(trainingSession);
             }
-        }
     }
 
     public ResponseEntity<TrainingSession> delete(Integer id) {
@@ -109,9 +107,7 @@ public class TrainingSessionService {
     private void deleteAttendancesForTrainingSession(TrainingSession trainingSession) {
         List<Attendance> attendances = attendanceRepository.findAllByTrainingSession(trainingSession);
         for(Attendance attendance: attendances)
-        {
             attendanceRepository.delete(attendance);
-        }
     }
 
     public ResponseEntity<TrainingSession> deleteByMemberGroupAndPeriod(Integer groupId, Integer periodId) {

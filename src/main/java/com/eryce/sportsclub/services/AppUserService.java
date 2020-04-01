@@ -85,32 +85,27 @@ public class AppUserService implements UserDetailsService {
     public List<String> getEmails(List<AppUser>appUsers)
     {
         List<String> emailAddresses = new ArrayList<>();
-        for(AppUser appUser :appUsers)
+        for(AppUser appUser:appUsers)
             emailAddresses.add(appUser.getUsername());
         return emailAddresses;
     }
 
     public ResponseEntity<AppUser> insert(AppUserRequestDTO appUserRequestDTO) {
         AppUser appUser = appUserRequestDTO.generateAppUser();
-
         if(appUser.getDateJoined()==null)
             appUser.setDateJoined(LocalDate.now());
 
         parseJmbg(appUser);
-
         appUserRepository.save(appUser);
 
-        if(!appUserRequestDTO.getUsername().equals("") && appUserRequestDTO.getUsername()!=null)//if email was entered, send reg mail
+        //if email was entered, send reg mail
+        if(appUserRequestDTO.getUsername()!=null && !appUserRequestDTO.getUsername().equals(""))
             sendRegistrationEmail(appUser);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private void parseJmbg(AppUser appUser) {
-
-        String jmbg = appUser.getJmbg();
-
-        if(isValidJmbg(jmbg))
+        if(isValidJmbg(appUser.getJmbg()))
             extractAndSetValues(appUser);
     }
 
@@ -128,24 +123,20 @@ public class AppUserService implements UserDetailsService {
     }
 
     private boolean isValidJmbgFormat(String jmbg) {
-        return isValidDateJmbgPart(getUnformattedDatePartFromJmbg(jmbg));
-    }
-
-    private String getUnformattedDatePartFromJmbg(String jmbg)
-    {
-        return jmbg.substring(0,7);
-    }
-
-    private boolean isValidDateJmbgPart(String unformattedDate) {
         try
         {
-            String formattedDate = formatDateText(unformattedDate); //the date part of the jmbg
+            String formattedDate = formatDateText(getUnformattedDatePartFromJmbg(jmbg));
             LocalDate.parse(formattedDate); //ISO_LOCAL_DATE default formatting
             return true;
         }catch (DateTimeException dte)
         {
             return false;
         }
+    }
+
+    private String getUnformattedDatePartFromJmbg(String jmbg)
+    {
+        return jmbg.substring(0,7);
     }
 
     private String formatDateText(String unformattedDate)  //example: "31123997"

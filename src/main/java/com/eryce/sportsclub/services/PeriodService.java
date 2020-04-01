@@ -79,13 +79,12 @@ public class PeriodService {
 
         Membership membership = membershipRepository.findByPeriod(period);
         for(AppUser member : appUserService.getAllMembers())
-        {
             if(!totalPaymentsIsSufficientForMembershipPrice(member,membership))
             {
                 membersWithInsufficientPayments.add(member);
                 mailService.sendUnpaidMembershipMessageToMember(member.getUsername());
             }
-        }
+
         return membersWithInsufficientPayments;
     }
 

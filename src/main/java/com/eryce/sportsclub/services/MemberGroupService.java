@@ -29,7 +29,6 @@ public class MemberGroupService {
     private TermRepository termRepository;
 
     public List<MemberGroup> getAll() {
-        List<MemberGroup> memberGroups = memberGroupRepository.findAll();
         return memberGroupRepository.findAll();
     }
 
@@ -69,9 +68,7 @@ public class MemberGroupService {
     private void deleteTrainingSessionsForGroup(MemberGroup memberGroup) {
         List<TrainingSession> trainingSessions = trainingSessionService.getAllByMemberGroup(memberGroup.getId());
         for(TrainingSession trainingSession:trainingSessions)
-        {
             trainingSessionService.delete(trainingSession.getId());
-        }
     }
 
     private void deleteTermsForGroup(MemberGroup memberGroup) {
