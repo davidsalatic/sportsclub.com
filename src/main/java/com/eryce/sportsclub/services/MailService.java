@@ -55,7 +55,6 @@ public class MailService {
         StringBuilder bodyBuilder = new StringBuilder();
         bodyBuilder.append("Here is the list of users who haven't made enough payments in this month:\n\n");
         for (AppUser member : membersWithInsufficientPayments) {
-//            bodyBuilder.append(counter+"."+member.getName()+" "+member.getSurname()+", "+member.getMemberGroup().getName());
             bodyBuilder.append(counter);
             bodyBuilder.append(".");
             bodyBuilder.append(member.getName());
@@ -64,12 +63,6 @@ public class MailService {
             bodyBuilder.append(member.getMemberGroup().getName());
         }
         String body = bodyBuilder.toString();
-//
-//        for(AppUser member : membersWithInsufficientPayments)
-//        {
-//            body+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
-//            counter++;
-//        }
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
