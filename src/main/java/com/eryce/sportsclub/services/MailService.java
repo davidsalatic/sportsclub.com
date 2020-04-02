@@ -5,6 +5,7 @@ import com.eryce.sportsclub.constants.Routes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eryce.sportsclub.dto.CommentRequestDTO;
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.dto.PostRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
@@ -80,6 +81,13 @@ public class MailService {
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
+    public void sendNewCommentMessageToParticipants(List<String> recipients, CommentRequestDTO commentRequestDTO) {
+        String subject = "New comment by "+commentRequestDTO.getAppUser().getName()+ " "+commentRequestDTO.getAppUser().getSurname();
+        String body=commentRequestDTO.getAppUser().getName()+ " "+commentRequestDTO.getAppUser().getSurname()+" commented on the post '"+
+                commentRequestDTO.getPost().getTitle()+"'.\n\n'"+commentRequestDTO.getText()+"'";
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
+    }
+
     public SimpleMailMessage createEmailMessage(List<String>recipients,String subject,String body)
     {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -94,4 +102,6 @@ public class MailService {
         Thread sendMailThread = new Thread(() -> javaMailSender.send(emailMessage));
         sendMailThread.start();
     }
+
+
 }

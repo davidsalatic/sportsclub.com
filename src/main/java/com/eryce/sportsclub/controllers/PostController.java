@@ -26,6 +26,12 @@ public class PostController {
         return postService.getAll();
     }
 
+    @GetMapping("{id}")
+    public Post getById(@PathVariable("id")Integer id)
+    {
+        return postService.getById(id);
+    }
+
     @PostMapping
     public ResponseEntity<Post> insert(@RequestBody PostRequestDTO postRequestDTO)
     {

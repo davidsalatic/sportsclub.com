@@ -39,6 +39,10 @@ public class AppUserService implements UserDetailsService {
     private CompetitionRepository competitionRepository;
     @Autowired
     private CompetitionApplicationRepository competitionApplicationRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     public List<AppUser> getAll()
     {
@@ -233,8 +237,20 @@ public class AppUserService implements UserDetailsService {
         deleteAttendancesForUser(appUser);
         deletePaymentsForUser(appUser);
         deleteApplicationsForUser(appUser);
+        deleteCommentsByUser(appUser);
+        deletePostsByUser(appUser);
         appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void deleteCommentsByUser(AppUser appUser) {
+        for(Comment comment: commentRepository.findAllByAppUser(appUser))
+            commentRepository.delete(comment);
+    }
+
+    private void deletePostsByUser(AppUser appUser) {
+        for(Post post : postRepository.findAllByAppUser(appUser))
+            postRepository.delete(post);
     }
 
     private void deleteAttendancesForUser(AppUser appUser)
