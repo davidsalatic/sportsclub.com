@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
+import com.eryce.sportsclub.dto.PostRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +51,25 @@ public class MailService {
 
     public void sendUnpaidMembershipsListMessageToStaff(List<String> recipients, List<AppUser> membersWithInsufficientPayments) {
         String subject ="Monthly report on membership";
-        String body = "Here is the list of users who haven't made enough payments in this month:\n\n";
         int counter=1;
-        for(AppUser member : membersWithInsufficientPayments)
-        {
-            body+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
-            counter++;
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append("Here is the list of users who haven't made enough payments in this month:\n\n");
+        for (AppUser member : membersWithInsufficientPayments) {
+//            bodyBuilder.append(counter+"."+member.getName()+" "+member.getSurname()+", "+member.getMemberGroup().getName());
+            bodyBuilder.append(counter);
+            bodyBuilder.append(".");
+            bodyBuilder.append(member.getName());
+            bodyBuilder.append(member.getSurname());
+            bodyBuilder.append(", ");
+            bodyBuilder.append(member.getMemberGroup().getName());
         }
+        String body = bodyBuilder.toString();
+//
+//        for(AppUser member : membersWithInsufficientPayments)
+//        {
+//            body+=(counter+"."+member.getName()+ " "+member.getSurname()+", "+member.getMemberGroup().getName());
+//            counter++;
+//        }
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
@@ -65,6 +78,12 @@ public class MailService {
         String body="You haven't made enough payments in this month.";
         List<String> recipients = new ArrayList<>();
         recipients.add(recipient);
+        this.sendMessageAsync(createEmailMessage(recipients,subject,body));
+    }
+
+    public void sendNewPostMessageToAllUsers(List<String> recipients, PostRequestDTO postRequestDTO) {
+        String subject =postRequestDTO.getAppUser().getName()+" posted on Sports Club";
+        String body= postRequestDTO.getTitle()+"\n\n"+postRequestDTO.getText();
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 

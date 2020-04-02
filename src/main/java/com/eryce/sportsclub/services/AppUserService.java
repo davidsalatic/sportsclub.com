@@ -40,6 +40,11 @@ public class AppUserService implements UserDetailsService {
     @Autowired
     private CompetitionApplicationRepository competitionApplicationRepository;
 
+    public List<AppUser> getAll()
+    {
+        return appUserRepository.findAll();
+    }
+
     public List<AppUser> getAllMembers() {
         Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
         return appUserRepository.findAllByRole(memberRole);

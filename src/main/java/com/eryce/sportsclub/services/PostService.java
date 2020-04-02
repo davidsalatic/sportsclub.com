@@ -15,6 +15,10 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private AppUserService appUserService;
 
     public List<Post> getAll() {
         return postRepository.findAll();
@@ -22,6 +26,7 @@ public class PostService {
 
     public ResponseEntity<Post> insert(PostRequestDTO postRequestDTO) {
         postRepository.save(postRequestDTO.generatePost());
+        mailService.sendNewPostMessageToAllUsers(appUserService.getEmails(appUserService.getAll()),postRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
