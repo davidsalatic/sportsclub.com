@@ -11,7 +11,7 @@
 	<groupId>com.eryce</groupId>
 	<artifactId>sportsclub</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sportsclub</name>
+	<name>SportsClub</name>
 	<description>A simple app developed for the purpose of learning Spring</description>
 	<properties>
 		<java.version>1.8</java.version>

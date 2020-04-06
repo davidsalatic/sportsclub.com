@@ -1,4 +1,4 @@
-# sportsclub.com
+# SportsClub
 ## **_A simple Spring Boot application for managing a sports club, developed while learning the Spring framework._**
 
 ### Data Model:
