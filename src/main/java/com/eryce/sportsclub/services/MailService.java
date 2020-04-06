@@ -21,7 +21,9 @@ public class MailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    private final String REGISTER_URL = Routes.FRONT_URL+"/register";
+    private final String FRONT_URL = "http://localhost:4200";
+    private final String REGISTER_URL = FRONT_URL+"/register";
+
 
     public void sendRegistrationMessage(String recipientEmailAddress, String registrationToken)
     {
@@ -38,7 +40,7 @@ public class MailService {
         String body=competition.getName()+"\n"+competition.getDescription()+"\n"+
                 "Date of competition: "+competition.getDateHeld()+ " "+competition.getTimeHeld()+"\n"+
                 "Location: "+competition.getLocation()+"\n\nTo apply for this competition, visit the next link: "+
-                Routes.FRONT_URL+"/competitions/"+competition.getId()+"/apply";
+                FRONT_URL+"/competitions/"+competition.getId()+"/apply";
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 

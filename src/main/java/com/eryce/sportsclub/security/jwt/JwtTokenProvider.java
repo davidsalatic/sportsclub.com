@@ -21,7 +21,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
     @Value("${security.jwt.token.expire-length:86400000}")
-    private long validityInMilliseconds = 86400000; // 1h
+    private long validityInMilliseconds = 86400000; // 24h
     @Autowired
     private UserDetailsService userDetailsService;
     @PostConstruct
@@ -56,16 +56,13 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }
     public boolean validateToken(String token){
 
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-        if (claims.getBody().getExpiration().before(new Date())) {
-            return false;
-        }
-        return true;
+        return !claims.getBody().getExpiration().before(new Date());
     }
 }

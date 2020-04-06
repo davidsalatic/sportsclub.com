@@ -20,6 +20,8 @@ public class RunnerData implements CommandLineRunner {
     private AppUserService appUserService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ApplicationValues applicationValues;
 
     @Override
     public void run(String... args) {
@@ -46,13 +48,7 @@ public class RunnerData implements CommandLineRunner {
 
             if(appUserService.getAllStaff().isEmpty())
             {
-                AppUserRequestDTO defaultManager = new AppUserRequestDTO();
-                defaultManager.setId(99999);
-                defaultManager.setName("Manager");
-                defaultManager.setSurname("Manager");
-                defaultManager.setJmbg("0000000000000");
-                defaultManager.setUsername("salaticdavid@gmail.com");
-
+                AppUserRequestDTO defaultManager = applicationValues.getDefaultUser();
                 defaultManager.setRole(managerRole);
                 appUserService.insert(defaultManager);
             }

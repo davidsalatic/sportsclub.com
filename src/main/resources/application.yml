@@ -5,3 +5,8 @@ spring:
   profiles: development
 values:
   membershipDeadline: 20
+default_user:
+  default_name: Default_Name
+  default_surname: Default_Surname
+  default_jmbg: 1111111111111
+  default_username: salaticdavid@gmail.com
