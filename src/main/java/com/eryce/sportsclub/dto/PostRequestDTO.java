@@ -1,6 +1,5 @@
 package com.eryce.sportsclub.dto;
 
-import com.eryce.sportsclub.models.CompetitionApplication;
 import com.eryce.sportsclub.models.Post;
 
 import java.time.LocalDateTime;

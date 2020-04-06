@@ -1,8 +1,10 @@
 package com.eryce.sportsclub.security.jwt;
 
 import com.eryce.sportsclub.models.AppUser;
-import com.sun.tools.javac.util.List;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,9 +23,10 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
     @Value("${security.jwt.token.expire-length:86400000}")
-    private long validityInMilliseconds = 86400000; // 24h
+    private final long validityInMilliseconds = 86400000; // 24h
     @Autowired
     private UserDetailsService userDetailsService;
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());

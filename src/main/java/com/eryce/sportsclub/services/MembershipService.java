@@ -2,7 +2,6 @@ package com.eryce.sportsclub.services;
 
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.models.Period;
-import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MembershipRepository;
 import com.eryce.sportsclub.repositories.PeriodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ public class MembershipService {
 
     @Autowired
     private MembershipRepository membershipRepository;
-    @Autowired
-    private AppUserRepository appUserRepository;
     @Autowired
     private PeriodRepository periodRepository;
 

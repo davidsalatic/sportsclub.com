@@ -4,9 +4,6 @@ import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Role;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 public class AppUserRequestDTO {

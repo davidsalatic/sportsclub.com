@@ -4,7 +4,6 @@ import com.eryce.sportsclub.constants.Authorize;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
-import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,6 @@ public class AppUserController {
 
     @Autowired
     private AppUserService appUserService;
-    @Autowired
-    private AppUserRepository appUserRepository;
 
     @GetMapping("/members")
     public List<AppUser> getAllMembers()

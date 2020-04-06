@@ -5,15 +5,12 @@ import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.PeriodRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Member;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,8 +24,6 @@ public class TrainingSessionService {
     private AttendanceRepository attendanceRepository;
     @Autowired
     private PeriodRepository periodRepository;
-
-    private final Integer FIRST_DAY_OF_MONTH=1;
 
     public List<TrainingSession> getAllByMemberGroup(Integer groupId) {
         MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
@@ -53,6 +48,7 @@ public class TrainingSessionService {
 
     public ResponseEntity<TrainingSession> generateInTerms(Term[] terms,Integer periodId,Integer generateFromDay) {
 
+        Integer FIRST_DAY_OF_MONTH=1;
         LocalDate today = LocalDate.now();
         int numberOfDaysInCurrentMonth=today.lengthOfMonth();
 

@@ -1,6 +1,5 @@
 package com.eryce.sportsclub.dto;
 
-import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.models.Competition;
 import com.eryce.sportsclub.models.CompetitionApplication;
 

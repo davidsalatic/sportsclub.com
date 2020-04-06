@@ -8,7 +8,6 @@ import com.eryce.sportsclub.services.AppUserService;
 import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,8 +17,6 @@ public class RunnerData implements CommandLineRunner {
     private RoleService roleService;
     @Autowired
     private AppUserService appUserService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private ApplicationValues applicationValues;
 

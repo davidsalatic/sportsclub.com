@@ -1,6 +1,5 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
 import com.eryce.sportsclub.repositories.CompetitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

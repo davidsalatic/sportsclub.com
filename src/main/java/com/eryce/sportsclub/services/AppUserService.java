@@ -36,8 +36,6 @@ public class AppUserService implements UserDetailsService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
-    private CompetitionRepository competitionRepository;
-    @Autowired
     private CompetitionApplicationRepository competitionApplicationRepository;
     @Autowired
     private CommentRepository commentRepository;

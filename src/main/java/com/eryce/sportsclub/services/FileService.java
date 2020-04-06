@@ -5,13 +5,11 @@ import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.dto.FileRequestDTO;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Role;
-import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.eryce.sportsclub.constants.Roles.MANAGER;
@@ -57,12 +55,7 @@ public class FileService {
 
     private boolean hasEmailIfStaff(String username, String role) {
         if(role.equals(MANAGER) || role.equals(Roles.COACH))
-        {
-            if(username==null)
-                return false;
-            else
-                return true;
-        }
+            return username != null;
         return true;
     }
 

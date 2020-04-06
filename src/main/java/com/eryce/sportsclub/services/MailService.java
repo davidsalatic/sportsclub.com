@@ -1,10 +1,5 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.constants.Routes;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.eryce.sportsclub.dto.CommentRequestDTO;
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.dto.PostRequestDTO;
@@ -15,6 +10,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class MailService {
 
@@ -22,13 +20,13 @@ public class MailService {
     private JavaMailSender javaMailSender;
 
     private final String FRONT_URL = "http://localhost:4200";
-    private final String REGISTER_URL = FRONT_URL+"/register";
 
 
     public void sendRegistrationMessage(String recipientEmailAddress, String registrationToken)
     {
+        String REGISTER_URL = FRONT_URL+"/register";
         String subject= "Complete your registration";
-        String body = "To complete your registration, follow the link: "+ this.REGISTER_URL+"/"+registrationToken;
+        String body = "To complete your registration, follow the link: "+ REGISTER_URL+"/"+registrationToken;
         List<String> recipients = new ArrayList<>();
         recipients.add(recipientEmailAddress);
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));

@@ -24,8 +24,6 @@ public class CommentService {
     private PostRepository postRepository;
     @Autowired
     private MailService mailService;
-    @Autowired
-    private AppUserService appUserService;
 
     public List<Comment> getByPost(Integer postId) {
         Post post = postRepository.getOne(postId);
