@@ -26,6 +26,16 @@ public class TrainingSession {
     @JoinColumn(name = "period_id")
     private Period period;
 
+    private String dayOfWeek;
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
     public Period getPeriod() {
         return period;
     }
@@ -40,6 +50,7 @@ public class TrainingSession {
 
     public void setDateHeld(LocalDate dateHeld) {
         this.dateHeld = dateHeld;
+         this.dayOfWeek = dateHeld.getDayOfWeek().toString();
     }
 
     public LocalTime getTimeHeld() {
