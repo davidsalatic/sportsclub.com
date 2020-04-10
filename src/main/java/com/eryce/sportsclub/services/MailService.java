@@ -1,5 +1,6 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.configuration.ServerProperties;
 import com.eryce.sportsclub.dto.CommentRequestDTO;
 import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.dto.PostRequestDTO;
@@ -18,13 +19,14 @@ public class MailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private ServerProperties serverProperties;
 
-    private final String FRONT_URL = "http://localhost:4200";
-
+    private final String FRONT_PORT ="4200";
 
     public void sendRegistrationMessage(String recipientEmailAddress, String registrationToken)
     {
-        String REGISTER_URL = FRONT_URL+"/register";
+        String REGISTER_URL = serverProperties.getAddress()+":"+FRONT_PORT+"/register";
         String subject= "Complete your registration";
         String body = "To complete your registration, follow the link: "+ REGISTER_URL+"/"+registrationToken;
         List<String> recipients = new ArrayList<>();
@@ -38,7 +40,7 @@ public class MailService {
         String body=competition.getName()+"\n"+competition.getDescription()+"\n"+
                 "Date of competition: "+competition.getDateHeld()+ " "+competition.getTimeHeld()+"\n"+
                 "Location: "+competition.getLocation()+"\n\nTo apply for this competition, visit the next link: "+
-                FRONT_URL+"/competitions/"+competition.getId()+"/apply";
+                serverProperties.getAddress()+":"+FRONT_PORT+"/competitions/"+competition.getId()+"/apply";
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
     }
 
@@ -102,6 +104,4 @@ public class MailService {
         Thread sendMailThread = new Thread(() -> javaMailSender.send(emailMessage));
         sendMailThread.start();
     }
-
-
 }

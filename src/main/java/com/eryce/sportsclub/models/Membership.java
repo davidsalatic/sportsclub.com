@@ -12,7 +12,7 @@ public class Membership {
     private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "month_id", nullable = false)
+    @JoinColumn(name = "period_id", nullable = false)
     private Period period;
 
     public void setPrice(Integer price) {
