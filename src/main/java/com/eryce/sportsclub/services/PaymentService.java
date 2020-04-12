@@ -49,6 +49,11 @@ public class PaymentService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public ResponseEntity<Payment> update(PaymentRequestDTO paymentRequestDTO) {
+        this.insert(paymentRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     public ResponseEntity<Payment> delete(Integer id) {
         paymentRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);

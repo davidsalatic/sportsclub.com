@@ -51,6 +51,12 @@ public class PaymentController {
         return paymentService.insert(paymentRequestDTO);
     }
 
+    @PutMapping
+    public ResponseEntity<Payment> update(@RequestBody PaymentRequestDTO paymentRequestDTO)
+    {
+        return paymentService.update(paymentRequestDTO);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Payment> delete(@PathVariable Integer id)
     {
