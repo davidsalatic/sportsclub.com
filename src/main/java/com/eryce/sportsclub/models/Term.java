@@ -1,5 +1,7 @@
 package com.eryce.sportsclub.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 
@@ -10,6 +12,7 @@ public class Term {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
     private Integer durationMinutes;
     private Integer dayOfWeek;

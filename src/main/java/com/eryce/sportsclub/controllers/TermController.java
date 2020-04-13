@@ -26,10 +26,22 @@ public class TermController {
         return termService.getAllByMemberGroup(memberGroupId);
     }
 
+    @GetMapping("{id}")
+    public Term getById(@PathVariable("id")Integer id)
+    {
+        return termService.getById(id);
+    }
+
     @PostMapping
     public ResponseEntity<Term> insert(@RequestBody Term term)
     {
         return termService.insert(term);
+    }
+
+    @PutMapping
+    public ResponseEntity<Term> update(@RequestBody Term term)
+    {
+        return termService.update(term);
     }
 
     @DeleteMapping("/{id}")

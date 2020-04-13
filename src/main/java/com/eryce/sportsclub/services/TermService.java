@@ -24,8 +24,17 @@ public class TermService {
         return termRepository.findAllByMemberGroup(memberGroup);
     }
 
+    public Term getById(Integer id) {
+        return termRepository.getOne(id);
+    }
+
     public ResponseEntity<Term> insert(Term term) {
         termRepository.save(term);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Term> update(Term term) {
+        this.insert(term);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
