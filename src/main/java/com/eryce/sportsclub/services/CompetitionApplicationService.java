@@ -50,7 +50,9 @@ public class CompetitionApplicationService {
     }
 
     public ResponseEntity<CompetitionApplication> delete(Integer id) {
-        this.competitionApplicationRepository.deleteById(id);
+        CompetitionApplication competitionApplication = competitionApplicationRepository.getOne(id);
+        competitionApplicationRepository.delete(competitionApplication);
+        mailService.sendCanceledCompetitionApplicationMessageToStaff(appUserService.getEmails(appUserService.getAllStaff()),competitionApplication);
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 }

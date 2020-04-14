@@ -44,6 +44,9 @@ public class FileService {
     private boolean isValidLine(String line)
     {
         String [] userProperties = line.split(",");
+        if(userProperties.length!=8)
+            return false;
+
         String username = userProperties[0];
         String name = userProperties[1];
         String surname = userProperties[2];

@@ -6,6 +6,7 @@ import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
 import com.eryce.sportsclub.dto.PostRequestDTO;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
+import com.eryce.sportsclub.models.CompetitionApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -50,6 +51,13 @@ public class MailService {
         if(application.getMessage()!=null && application.getMessage().length()>0)
             body=body+" and left you a message: \n\n'"+application.getMessage()+"'.";
         this.sendMessageAsync(createEmailMessage(recipients,subject,body));
+    }
+
+    public void sendCanceledCompetitionApplicationMessageToStaff(List<String> emails, CompetitionApplication competitionApplication) {
+        String subject = competitionApplication.getAppUser().getName()+" canceled application for "+competitionApplication.getCompetition().getName();
+        String body = competitionApplication.getAppUser().getName()+" "+competitionApplication.getAppUser().getSurname()+
+                " canceled the application for the competition: "+competitionApplication.getCompetition().getName();
+        this.sendMessageAsync(createEmailMessage(emails,subject,body));
     }
 
     public void sendUnpaidMembershipsListMessageToStaff(List<String> recipients, List<AppUser> membersWithInsufficientPayments) {

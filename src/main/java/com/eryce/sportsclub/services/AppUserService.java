@@ -93,7 +93,8 @@ public class AppUserService implements UserDetailsService {
     {
         List<String> emailAddresses = new ArrayList<>();
         for(AppUser appUser:appUsers)
-            emailAddresses.add(appUser.getUsername());
+            if(appUser.getUsername()!=null && appUser.getUsername().length()>0)
+                emailAddresses.add(appUser.getUsername());
         return emailAddresses;
     }
 
