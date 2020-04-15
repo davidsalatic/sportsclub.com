@@ -8,7 +8,6 @@ import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.repositories.MembershipRepository;
 import com.eryce.sportsclub.repositories.PaymentRepository;
 import com.eryce.sportsclub.repositories.PeriodRepository;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +53,8 @@ public class PeriodService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //each 1st day in month at 00:00
-    @Scheduled(cron = "0 0 0 1 * *")
+    //each 1st and 2nd day in month at 00:00
+    @Scheduled(cron = "0 0 0 1-2 * *")
     public void createPeriodIfNotExist()
     {
         if(getPeriodForCurrentMonth()==null)
