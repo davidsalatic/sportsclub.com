@@ -36,16 +36,4 @@ public class PeriodController {
     {
         return periodService.getByMonthAndYear(month,year);
     }
-
-    @PostMapping
-    public ResponseEntity<Period>insert(@RequestBody Period period)
-    {
-        return periodService.insertIfNotExist(period);
-    }
-
-    @PostMapping("notify")
-    public ResponseEntity<Period> notifyManagersOfUnpaidMemberships(@RequestBody Period period)
-    {
-        return periodService.notifyManagersOfUnpaidMemberships(period);
-    }
 }

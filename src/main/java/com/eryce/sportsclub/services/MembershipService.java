@@ -7,6 +7,7 @@ import com.eryce.sportsclub.repositories.PeriodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class MembershipService {
     @Autowired
     private MembershipRepository membershipRepository;
     @Autowired
-    private PeriodRepository periodRepository;
+    private PeriodService periodService;
+    @Autowired
+    private MembershipPriceService priceService;
 
     public List<Membership> getAll() {
 
@@ -25,7 +28,7 @@ public class MembershipService {
     }
 
     public Membership getByPeriod(Integer periodId) {
-        Period period = periodRepository.getOne(periodId);
+        Period period = periodService.getById(periodId);
         return membershipRepository.findByPeriod(period);
     }
 
@@ -34,9 +37,25 @@ public class MembershipService {
     }
 
 
-    public ResponseEntity<Membership> insert(Membership membership) {
+    private ResponseEntity<Membership> insert(Membership membership) {
         membershipRepository.save(membership);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public void createMembershipForCurrentPeriod()
+    {
+        Period currentPeriod = periodService.getPeriodForCurrentMonth();
+        if(!membershipExistsInPeriod(currentPeriod))
+        {
+            Membership membership = new Membership();
+            membership.setPeriod(currentPeriod);
+            membership.setPrice(priceService.getMembershipPrice().getPrice());
+            this.insert(membership);
+        }
+    }
+
+    private boolean membershipExistsInPeriod(Period period) {
+        return membershipRepository.findByPeriod(period)!=null;
     }
 
     public ResponseEntity<Membership> update(Membership membership) {

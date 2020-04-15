@@ -8,9 +8,11 @@ import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.repositories.MembershipRepository;
 import com.eryce.sportsclub.repositories.PaymentRepository;
 import com.eryce.sportsclub.repositories.PeriodRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +34,8 @@ public class PeriodService {
     private PaymentRepository paymentRepository;
     @Autowired
     private ApplicationValues applicationValues;
+    @Autowired
+    private MembershipService membershipService;
 
     public List<Period> getAll() {
         return periodRepository.findAll();
@@ -45,18 +49,39 @@ public class PeriodService {
         return periodRepository.findByMonthAndYear(month,year);
     }
 
-    public ResponseEntity<Period> insertIfNotExist(Period period) {
-        if(this.getByMonthAndYear(period.getMonth(),period.getYear())==null)
-        {
-            this.periodRepository.save(period);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    private ResponseEntity<Period> insert(Period period) {
+        this.periodRepository.save(period);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Period> notifyManagersOfUnpaidMemberships(Period period) {
-        if(!period.getNotifiedManagersOfMembershipDebts() && isDeadlineForMembershipsExpired())
+    //each 1st day in month at 00:00
+    @Scheduled(cron = "0 0 0 1 * *")
+    public void createPeriodIfNotExist()
+    {
+        if(getPeriodForCurrentMonth()==null)
+        {
+            Period period = new Period();
+            period.setMonth(LocalDate.now().getMonthValue());
+            period.setYear(LocalDate.now().getYear());
+            period.setNotifiedManagersOfMembershipDebts(false);
+            this.insert(period);
+            membershipService.createMembershipForCurrentPeriod();
+        }
+    }
+
+    public Period getPeriodForCurrentMonth()
+    {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+        return periodRepository.findByMonthAndYear(currentMonth,currentYear);
+    }
+
+    //every day at 12:00
+    @Scheduled(cron = "0 0 12 * * *")
+    public void notifyManagersOfUnpaidMemberships() {
+        Period period = this.getPeriodForCurrentMonth();
+
+        if(!managersAlreadyNotified(period) && isDeadlineForMembershipsExpired())
         {
             //members who do not have enough payments to settle membership debt
             List<AppUser> membersWithInsufficientPayments = getMembersWithInsufficientPaymentsForMembership(period);
@@ -65,7 +90,10 @@ public class PeriodService {
             period.setNotifiedManagersOfMembershipDebts(true);
             periodRepository.save(period);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean managersAlreadyNotified(Period period) {
+        return period.getNotifiedManagersOfMembershipDebts();
     }
 
     private boolean isDeadlineForMembershipsExpired() {

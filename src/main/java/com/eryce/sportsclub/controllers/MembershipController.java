@@ -38,12 +38,6 @@ public class MembershipController {
         return membershipService.getByPeriod(periodId);
     }
 
-    @PostMapping
-    public ResponseEntity<Membership> insert(@RequestBody Membership membership)
-    {
-        return membershipService.insert(membership);
-    }
-
     @PutMapping
     public ResponseEntity<Membership> update(@RequestBody Membership membership)
     {

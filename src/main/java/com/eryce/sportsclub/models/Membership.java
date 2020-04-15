@@ -38,8 +38,4 @@ public class Membership {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }
