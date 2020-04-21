@@ -22,12 +22,12 @@ public class RunnerData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        insertRolesAndPermissions();
+        insertRoles();
         System.out.println("***************APP STARTED*****************");
     }
 
 
-    private void insertRolesAndPermissions() {
+    private void insertRoles() {
         if(roleService.getAll().isEmpty())
         {
             Role memberRole = new Role();

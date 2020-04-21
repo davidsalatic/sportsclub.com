@@ -13,10 +13,6 @@ public class Role {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private List<Permission> permissions=new ArrayList<>();
-
     public Integer getId() {
         return id;
     }
@@ -31,13 +27,5 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
     }
 }
