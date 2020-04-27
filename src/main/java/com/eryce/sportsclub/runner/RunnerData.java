@@ -5,10 +5,10 @@ import com.eryce.sportsclub.constants.Roles;
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.AppUserService;
+import com.eryce.sportsclub.services.PeriodService;
 import com.eryce.sportsclub.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,14 +21,14 @@ public class RunnerData implements CommandLineRunner {
     @Autowired
     private ApplicationValues applicationValues;
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PeriodService periodService;
 
     @Override
     public void run(String... args) {
         insertRoles();
+        insertPeriod();
         System.out.println("***************APP STARTED*****************");
     }
-
 
     private void insertRoles() {
         if(roleService.getAll().isEmpty())
@@ -53,5 +53,9 @@ public class RunnerData implements CommandLineRunner {
                 appUserService.insert(defaultManager);
             }
         }
+    }
+
+    private void insertPeriod() {
+        periodService.createPeriodIfNotExist();
     }
 }

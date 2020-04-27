@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
   # APP*****************************************
   springbootapp:
-    image: sports-club:latest
+    image: davidsalatic6/sports-club:server
     network_mode: bridge
     container_name: sports-club
     expose:
@@ -29,5 +29,15 @@ services:
       - postgres
     links:
       - postgres
+
+  angularapp:
+    image: davidsalatic6/sports-club:front
+    network_mode: bridge
+    container_name: sports-club-front
+    expose:
+      - 4200
+    ports:
+      - 4200:80
+    restart: unless-stopped
 volumes:
   postgres-data:

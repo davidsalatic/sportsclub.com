@@ -33,7 +33,6 @@ public class ApplicationValues {
         appUser.setName(this.name);
         appUser.setSurname(this.surname);
         appUser.setJmbg(this.jmbg);
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getJmbg()));
         return appUser;
     }
 
