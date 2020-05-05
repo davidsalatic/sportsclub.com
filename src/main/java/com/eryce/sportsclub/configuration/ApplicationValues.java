@@ -1,19 +1,14 @@
 package com.eryce.sportsclub.configuration;
 
 import com.eryce.sportsclub.dto.AppUserRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @Configuration
 public class ApplicationValues {
 
     @Value("${values.membershipDeadline}")
     private String membershipDeadline;
-
     @Value("${default_user.default_username}")
     private String username;
     @Value("${default_user.default_name}")
@@ -22,9 +17,6 @@ public class ApplicationValues {
     private String surname;
     @Value("${default_user.default_jmbg}")
     private String jmbg;
-
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
 
     public AppUserRequestDTO getDefaultUser()
     {
