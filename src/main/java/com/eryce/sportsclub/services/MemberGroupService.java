@@ -44,7 +44,7 @@ public class MemberGroupService {
         if (memberGroup != null) {
             return memberGroup.convertToDto();
         }
-        return new MemberGroupDto();
+        return null;
     }
 
     public MemberGroupDto insert(MemberGroupDto memberGroupDto) {

@@ -8,15 +8,17 @@ import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
 import static com.eryce.sportsclub.constants.Roles.MANAGER;
-import static org.springframework.util.StringUtils.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class FileService {
 
     private AppUserService appUserService;
@@ -51,7 +53,7 @@ public class FileService {
         String jmbg = userProperties[3];
         String role = userProperties[7].trim();
 
-        return hasEmailIfStaff(username, role) && usernameIsValid(username) && name != null && surname != null && appUserService.isValidJmbg(jmbg) && isValidRole(role) && userNotExists(username, jmbg);
+        return hasEmailIfStaff(username, role) && usernameIsValid(username) && name != null && surname != null && appUserService.isValidJmbg(jmbg) && isValidRole(role) && !appUserService.userExists(username, jmbg);
     }
 
     private boolean hasEmailIfStaff(String username, String role) {
@@ -77,10 +79,6 @@ public class FileService {
     private boolean isValidRole(String role) {
         String upperCaseRole = role.toUpperCase();
         return upperCaseRole.equals(Roles.COACH) || upperCaseRole.equals(MANAGER) || upperCaseRole.equals(Roles.MEMBER);
-    }
-
-    private boolean userNotExists(String username, String jmbg) {
-        return appUserService.getByUsername(username) == null && appUserService.getByJmbg(jmbg) == null;
     }
 
     private void parseLine(String line) {

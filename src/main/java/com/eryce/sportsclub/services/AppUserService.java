@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -68,22 +67,22 @@ public class AppUserService implements UserDetailsService {
 
     public AppUserDto getByUsername(String username) {
         AppUser appUser = appUserRepository.findByUsernameIgnoreCase(username);
-        if (appUser == null) {
-            throw new EntityNotFoundException();
+        if (appUser != null) {
+            return appUser.convertToDto();
         }
-        return appUser.convertToDto();
+        return null;
     }
 
     public AppUserDto getByJmbg(String jmbg) {
         AppUser appUser = appUserRepository.findByJmbgIgnoreCase(jmbg);
-        if (appUser == null) {
-            throw new EntityNotFoundException();
+        if (appUser != null) {
+            appUser.convertToDto();
         }
-        return appUser.convertToDto();
+        return null;
     }
 
     public AppUserDto insert(AppUserDto appUserDto) {
-        if (userExists(appUserDto)) {
+        if (userExists(appUserDto.getUsername(), appUserDto.getJmbg())) {
             throw new EntityExistsException();
         }
 
@@ -99,8 +98,8 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.save(appUser).convertToDto();
     }
 
-    private boolean userExists(AppUserDto appUserDto) {
-        return userNameExists(appUserDto.getUsername()) || jmbgExists(appUserDto.getJmbg());
+    public boolean userExists(String username, String jmbg) {
+        return userNameExists(username) || jmbgExists(jmbg);
     }
 
     private boolean userNameExists(String username) {
@@ -192,6 +191,8 @@ public class AppUserService implements UserDetailsService {
 
         if (isAddingEmail(existingUsername, updatedUsername)
                 || isEditingEmail(existingUsername, updatedUsername)) {
+            updatedAppUser.setPassword(null);
+            appUserRepository.save(updatedAppUser);
             mailService.sendRegistrationMessage(updatedAppUser);
         }
         if (isEditingJmbg(existingJmbg, updatedJmbg)) {

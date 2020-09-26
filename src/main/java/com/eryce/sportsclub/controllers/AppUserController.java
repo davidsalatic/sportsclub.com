@@ -66,21 +66,13 @@ public class AppUserController {
         // the '+' symbol is automatically replaced with ' ' when sending a request
         // therefore we must replace it back to '+' here.
         username = username.replace(' ', '+');
-        try {
-            return ok(appUserService.getByUsername(username));
-        } catch (EntityNotFoundException exception) {
-            return badRequest().body(new AppUserDto());
-        }
+        return ok(appUserService.getByUsername(username));
     }
 
     @GetMapping("/search/jmbg")
     @PreAuthorize(HAS_ANY_ROLE)
     public ResponseEntity<AppUserDto> getByJmbg(@RequestParam String jmbg) {
-        try {
-            return ok(appUserService.getByJmbg(jmbg));
-        } catch (EntityNotFoundException exception) {
-            return badRequest().body(new AppUserDto());
-        }
+        return ok(appUserService.getByJmbg(jmbg));
     }
 
     @PostMapping
