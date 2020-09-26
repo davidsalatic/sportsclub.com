@@ -1,94 +1,123 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.dto.AppUserRequestDTO;
-import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.dto.AppUserDto;
 import com.eryce.sportsclub.services.AppUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.eryce.sportsclub.constants.Authorize.HAS_ANY_ROLE;
+import static com.eryce.sportsclub.constants.Authorize.HAS_COACH_OR_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.APP_USERS_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.APP_USERS_BASE)
-@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
+@RequestMapping(APP_USERS_BASE)
+@PreAuthorize(HAS_COACH_OR_MANAGER_ROLE)
+@AllArgsConstructor
 public class AppUserController {
 
-    @Autowired
     private AppUserService appUserService;
 
     @GetMapping("/members")
-    public List<AppUser> getAllMembers()
-    {
-        return appUserService.getAllMembers();
-    }
-
-    @GetMapping("/{id}")
-    public AppUser getById(@PathVariable("id")Integer id)
-    {
-        return appUserService.getById(id);
-    }
-
-    @GetMapping("/staff")
-    public List<AppUser>getAllStaff(){
-        return appUserService.getAllStaff();
+    public ResponseEntity<List<AppUserDto>> getAllMembers() {
+        return ok(appUserService.getAllMembers());
     }
 
     @GetMapping("/members/ungrouped")
-    public List<AppUser> getUngroupedMembers()
-    {
-        return appUserService.getUngroupedMembers();
+    public ResponseEntity<List<AppUserDto>> getUngroupedMembers() {
+        return ok(appUserService.getUngroupedMembers());
+    }
+
+    @GetMapping("/staff")
+    public ResponseEntity<List<AppUserDto>> getAllStaff() {
+        return ok(appUserService.getAllStaff());
     }
 
     @GetMapping("/group/{id}")
-    public List<AppUser> getAllInMemberGroup(@PathVariable("id")Integer id)
-    {
-        return appUserService.getAllInMemberGroup(id);
+    public ResponseEntity<List<AppUserDto>> getAllInMemberGroup(@PathVariable("id") Integer memberGroupId) {
+        try {
+            return ok(appUserService.getAllInMemberGroup(memberGroupId));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new ArrayList<>());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AppUserDto> getById(@PathVariable("id") Integer id) {
+        try {
+            return ok(appUserService.getById(id));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new AppUserDto());
+        }
     }
 
     @GetMapping("/search/username")
-    @PreAuthorize(Authorize.HAS_ANY_ROLE)
-    public AppUser getByUsername(@RequestParam String username)
-    {
+    @PreAuthorize(HAS_ANY_ROLE)
+    public ResponseEntity<AppUserDto> getByUsername(@RequestParam String username) {
         // the '+' symbol is automatically replaced with ' ' when sending a request
-        // therefor we must replace it back to '+' here.
-        username=username.replace(' ','+');
-        return appUserService.getByUsername(username);
+        // therefore we must replace it back to '+' here.
+        username = username.replace(' ', '+');
+        try {
+            return ok(appUserService.getByUsername(username));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new AppUserDto());
+        }
     }
 
     @GetMapping("/search/jmbg")
-    @PreAuthorize(Authorize.HAS_ANY_ROLE)
-    public AppUser getByJmbg(@RequestParam String jmbg)
-    {
-        return appUserService.getByJmbg(jmbg);
+    @PreAuthorize(HAS_ANY_ROLE)
+    public ResponseEntity<AppUserDto> getByJmbg(@RequestParam String jmbg) {
+        try {
+            return ok(appUserService.getByJmbg(jmbg));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new AppUserDto());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<AppUser> insert(@RequestBody AppUserRequestDTO appUserRequestDTO)
-    {
-        return appUserService.insert(appUserRequestDTO);
+    public ResponseEntity<AppUserDto> insert(@RequestBody AppUserDto appUserDto) {
+        try {
+            return ok(appUserService.insert(appUserDto));
+        } catch (EntityExistsException exception) {
+            return badRequest().body(appUserDto);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<AppUser> update(@RequestBody AppUserRequestDTO appUserRequestDTO)
-    {
-        return appUserService.update(appUserRequestDTO);
+    public ResponseEntity<AppUserDto> update(@RequestBody AppUserDto appUserDto) {
+        try {
+            return ok(appUserService.update(appUserDto));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(appUserDto);
+        }
     }
 
     @PutMapping("/update-self")
-    @PreAuthorize(Authorize.HAS_ANY_ROLE)
-    public ResponseEntity<AppUser> updateSelf(@RequestBody AppUserRequestDTO appUserRequestDTO)
-    {
-        return appUserService.updateSelf(appUserRequestDTO);
+    @PreAuthorize(HAS_ANY_ROLE)
+    public ResponseEntity<AppUserDto> updateSelf(@RequestBody AppUserDto appUserDto) {
+        try {
+            return ok(appUserService.updateSelf(appUserDto));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(appUserDto);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AppUser>delete(@PathVariable ("id") Integer id)
-    {
-        return appUserService.delete(id);
+    public ResponseEntity<Integer> delete(@PathVariable("id") Integer id) {
+        try {
+            appUserService.delete(id);
+            return ResponseEntity.ok(id);
+        } catch (EntityNotFoundException exception) {
+            return ResponseEntity.badRequest().body(id);
+        }
     }
 }
