@@ -1,41 +1,45 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.Role;
+import com.eryce.sportsclub.dto.RoleDto;
 import com.eryce.sportsclub.services.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+
+import static com.eryce.sportsclub.constants.Authorize.HAS_COACH_OR_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.ROLES_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.ROLES_BASE)
-@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
-public class RoleController  {
+@RequestMapping(ROLES_BASE)
+@PreAuthorize(HAS_COACH_OR_MANAGER_ROLE)
+@AllArgsConstructor
+public class RoleController {
 
-    @Autowired
     private RoleService roleService;
 
     @GetMapping
-    public List<Role> getAll()
-    {
-        return roleService.getAll();
+    public ResponseEntity<List<RoleDto>> getAll() {
+        return ok(roleService.getAll());
     }
 
     @GetMapping("/search")
-    public Role getByName(@RequestParam String name)
-    {
-        return roleService.getByName(name);
+    public ResponseEntity<RoleDto> getByName(@RequestParam String name) {
+        try {
+            return ok(roleService.getByName(name));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new RoleDto());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Role> insert(@RequestBody Role role)
-    {
-        return roleService.insert(role);
+    public ResponseEntity<RoleDto> insert(@RequestBody RoleDto role) {
+        return ok(roleService.insert(role));
     }
-
 }

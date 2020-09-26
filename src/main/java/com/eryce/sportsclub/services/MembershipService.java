@@ -1,65 +1,71 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.MembershipDto;
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.models.Period;
 import com.eryce.sportsclub.repositories.MembershipRepository;
-import com.eryce.sportsclub.repositories.PeriodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MembershipService {
 
-    @Autowired
     private MembershipRepository membershipRepository;
-    @Autowired
-    private PeriodService periodService;
-    @Autowired
     private MembershipPriceService priceService;
 
-    public List<Membership> getAll() {
+    @Autowired // field injection used because of circular bean dependency
+    private PeriodService periodService;
 
-        return membershipRepository.findAll();
+    public MembershipService(MembershipRepository membershipRepository, MembershipPriceService membershipPriceService) {
+        this.membershipRepository = membershipRepository;
+        this.priceService = membershipPriceService;
     }
 
-    public Membership getByPeriod(Integer periodId) {
-        Period period = periodService.getById(periodId);
-        return membershipRepository.findByPeriod(period);
+    public List<MembershipDto> getAll() {
+        return convertToDto(membershipRepository.findAll());
     }
 
-    public Membership getById(Integer id) {
-        return membershipRepository.getOne(id);
+    private List<MembershipDto> convertToDto(List<Membership> memberships) {
+        List<MembershipDto> membershipsDto = new ArrayList<>();
+        for (Membership membership : memberships) {
+            membershipsDto.add(membership.convertToDto());
+        }
+        return membershipsDto;
     }
 
-
-    private ResponseEntity<Membership> insert(Membership membership) {
-        membershipRepository.save(membership);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public MembershipDto getById(Integer id) {
+        return membershipRepository.getOne(id).convertToDto();
     }
 
-    public void createMembershipForCurrentPeriod()
-    {
+    public MembershipDto getByPeriod(Integer periodId) {
+        Period period = periodService.getById(periodId).convertToEntity();
+        return membershipRepository.findByPeriod(period).convertToDto();
+    }
+
+    public MembershipDto update(MembershipDto membershipDto) {
+        return insert(membershipDto);
+    }
+
+    private MembershipDto insert(MembershipDto membershipDto) {
+        Membership membership = membershipRepository.save(membershipDto.convertToEntity());
+        return membership.convertToDto();
+    }
+
+    public void createMembershipForCurrentPeriod() {
         Period currentPeriod = periodService.getPeriodForCurrentMonth();
-        if(!membershipExistsInPeriod(currentPeriod))
-        {
-            Membership membership = new Membership();
-            membership.setPeriod(currentPeriod);
-            membership.setPrice(priceService.getMembershipPrice().getPrice());
-            this.insert(membership);
+        if (!membershipExistsInPeriod(currentPeriod)) {
+            MembershipDto membershipDto = MembershipDto.builder()
+                    .period(currentPeriod.convertToDto())
+                    .price(priceService.getMembershipPrice().getPrice())
+                    .build();
+            this.insert(membershipDto);
         }
     }
 
     private boolean membershipExistsInPeriod(Period period) {
-        return membershipRepository.findByPeriod(period)!=null;
+        return membershipRepository.findByPeriod(period) != null;
     }
-
-    public ResponseEntity<Membership> update(Membership membership) {
-        return this.insert(membership);
-    }
-
 }

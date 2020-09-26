@@ -1,12 +1,19 @@
 package com.eryce.sportsclub.models;
 
+import com.eryce.sportsclub.dto.TrainingSessionDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TrainingSession {
 
     @Id
@@ -28,52 +35,19 @@ public class TrainingSession {
 
     private String dayOfWeek;
 
-    public String getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    public Period getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(Period period) {
-        this.period = period;
-    }
-
-    public LocalDate getDateHeld() {
-        return dateHeld;
-    }
-
     public void setDateHeld(LocalDate dateHeld) {
         this.dateHeld = dateHeld;
-         this.dayOfWeek = dateHeld.getDayOfWeek().toString();
+        this.dayOfWeek = dateHeld.getDayOfWeek().toString();
     }
 
-    public LocalTime getTimeHeld() {
-        return timeHeld;
-    }
-
-    public void setTimeHeld(LocalTime timeHeld) {
-        this.timeHeld = timeHeld;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public MemberGroup getMemberGroup() {
-        return memberGroup;
-    }
-
-    public void setMemberGroup(MemberGroup memberGroup) {
-        this.memberGroup = memberGroup;
+    public TrainingSessionDto convertToDto() {
+        return TrainingSessionDto.builder()
+                .dateHeld(dateHeld)
+                .dayOfWeek(dayOfWeek)
+                .id(id)
+                .memberGroupDto(memberGroup.convertToDto())
+                .period(period.convertToDto())
+                .timeHeld(timeHeld)
+                .build();
     }
 }

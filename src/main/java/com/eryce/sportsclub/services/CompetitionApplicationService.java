@@ -1,58 +1,65 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.dto.CompetitionApplicationRequestDTO;
+import com.eryce.sportsclub.dto.CompetitionApplicationDto;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Competition;
 import com.eryce.sportsclub.models.CompetitionApplication;
 import com.eryce.sportsclub.repositories.CompetitionApplicationRepository;
 import com.eryce.sportsclub.repositories.CompetitionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CompetitionApplicationService {
 
-    @Autowired
     private CompetitionApplicationRepository competitionApplicationRepository;
-    @Autowired
     private AppUserService appUserService;
-    @Autowired
     private MailService mailService;
-    @Autowired
     private CompetitionRepository competitionRepository;
 
-    public List<CompetitionApplication> getByCompetition(Integer competitionId) {
+    public List<CompetitionApplicationDto> getByCompetition(Integer competitionId) {
         Competition competition = competitionRepository.getOne(competitionId);
-        return competitionApplicationRepository.findAllByCompetition(competition);
+        return convertToDto(competitionApplicationRepository.findAllByCompetition(competition));
     }
 
-    public CompetitionApplication getByCompetitionAndAppUser(Integer competitionId, Integer appUserId) {
+    private List<CompetitionApplicationDto> convertToDto(List<CompetitionApplication> competitionApplications) {
+        List<CompetitionApplicationDto> competitionApplicationsDto = new ArrayList<>();
+        for (CompetitionApplication competitionApplication : competitionApplications) {
+            competitionApplicationsDto.add(competitionApplication.convertToDto());
+        }
+        return competitionApplicationsDto;
+    }
+
+    public CompetitionApplicationDto getByCompetitionAndUser(Integer competitionId, Integer userId) {
         Competition competition = competitionRepository.getOne(competitionId);
-        AppUser appUser = appUserService.getById(appUserId);
-        return competitionApplicationRepository.findByCompetitionAndAppUser(competition,appUser);
+        AppUser appUser = appUserService.getById(userId).convertToEntity();
+        return competitionApplicationRepository.findByCompetitionAndAppUser(competition, appUser).convertToDto();
     }
 
-    public ResponseEntity<CompetitionApplication> insert(CompetitionApplicationRequestDTO competitionApplication) {
-        competitionApplicationRepository.save(competitionApplication.generateCompetitionApplication());
+    public CompetitionApplicationDto insert(CompetitionApplicationDto competitionApplicationDto) {
+        if (competitionApplicationExists(competitionApplicationDto)) {
+            throw new EntityExistsException();
+        }
+        List<String> emailAddresses = appUserService.getEmailsOfUsers(appUserService.getAllStaff());
+        mailService.sendNewCompetitionApplicationMessageToStaff(emailAddresses, competitionApplicationDto);
 
-        sendEmailToStaff(competitionApplication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return competitionApplicationRepository.save(competitionApplicationDto.convertToEntity()).convertToDto();
     }
 
-    private void sendEmailToStaff(CompetitionApplicationRequestDTO application)
-    {
-        List<String> emailAddresses = appUserService.getEmails(appUserService.getAllStaff());
-        mailService.sendNewCompetitionApplicationMessageToStaff(emailAddresses,application);
+    private boolean competitionApplicationExists(CompetitionApplicationDto competitionApplicationDto) {
+        Competition competition = competitionApplicationDto.getCompetition().convertToEntity();
+        AppUser appUser = competitionApplicationDto.getAppUser().convertToEntity();
+        return competitionApplicationRepository.findByCompetitionAndAppUser(competition, appUser) != null;
     }
 
-    public ResponseEntity<CompetitionApplication> delete(Integer id) {
+    public void delete(Integer id) {
         CompetitionApplication competitionApplication = competitionApplicationRepository.getOne(id);
         competitionApplicationRepository.delete(competitionApplication);
-        mailService.sendCanceledCompetitionApplicationMessageToStaff(appUserService.getEmails(appUserService.getAllStaff()),competitionApplication);
-        return  new ResponseEntity<>(HttpStatus.OK);
+        mailService.sendCanceledCompetitionApplicationMessageToStaff(appUserService.getEmailsOfUsers(appUserService.getAllStaff()), competitionApplication);
     }
 }

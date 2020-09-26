@@ -1,39 +1,46 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.Period;
+import com.eryce.sportsclub.dto.PeriodDto;
 import com.eryce.sportsclub.services.PeriodService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+
+import static com.eryce.sportsclub.constants.Routes.PERIOD_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.PERIOD_BASE)
+@RequestMapping(PERIOD_BASE)
+@AllArgsConstructor
 public class PeriodController {
 
-    @Autowired
     private PeriodService periodService;
 
     @GetMapping
-    public List<Period> getAll()
-    {
-        return periodService.getAll();
+    public ResponseEntity<List<PeriodDto>> getAll() {
+        return ok(periodService.getAll());
     }
 
     @GetMapping("/{id}")
-    public Period getById(@PathVariable("id")Integer id)
-    {
-        return periodService.getById(id);
+    public ResponseEntity<PeriodDto> getById(@PathVariable("id") Integer id) {
+        try {
+            return ok(periodService.getById(id));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new PeriodDto());
+        }
     }
 
     @GetMapping("/month/{month}/year/{year}")
-    public Period getByMonthAndYear(@PathVariable("month")Integer month,@PathVariable("year")Integer year)
-    {
-        return periodService.getByMonthAndYear(month,year);
+    public ResponseEntity<PeriodDto> getByMonthAndYear(@PathVariable("month") Integer month, @PathVariable("year") Integer year) {
+        try {
+            return ok(periodService.getByMonthAndYear(month, year));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new PeriodDto());
+        }
     }
 }

@@ -1,52 +1,65 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.Term;
+import com.eryce.sportsclub.dto.TermDto;
 import com.eryce.sportsclub.services.TermService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.eryce.sportsclub.constants.Authorize.HAS_COACH_OR_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.TERM_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.TERM_BASE)
-@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
+@RequestMapping(TERM_BASE)
+@PreAuthorize(HAS_COACH_OR_MANAGER_ROLE)
+@AllArgsConstructor
 public class TermController {
 
-    @Autowired
     private TermService termService;
 
     @GetMapping("/group/{groupId}")
-    public List<Term> getAllByMemberGroup(@PathVariable("groupId")Integer memberGroupId)
-    {
-        return termService.getAllByMemberGroup(memberGroupId);
+    public ResponseEntity<List<TermDto>> getAllByMemberGroup(@PathVariable("groupId") Integer memberGroupId) {
+        try {
+            return ok(termService.getAllByMemberGroup(memberGroupId));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new ArrayList<>());
+        }
     }
 
     @GetMapping("{id}")
-    public Term getById(@PathVariable("id")Integer id)
-    {
-        return termService.getById(id);
+    public ResponseEntity<TermDto> getById(@PathVariable("id") Integer id) {
+        try {
+            return ok(termService.getById(id));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new TermDto());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Term> insert(@RequestBody Term term)
-    {
-        return termService.insert(term);
+    public ResponseEntity<TermDto> insert(@RequestBody TermDto termDto) {
+        return ok(termService.insert(termDto));
     }
 
     @PutMapping
-    public ResponseEntity<Term> update(@RequestBody Term term)
-    {
-        return termService.update(term);
+    public ResponseEntity<TermDto> update(@RequestBody TermDto termDto) {
+        return ok(termService.update(termDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Term> delete(@PathVariable("id")Integer id)
-    {
-        return termService.delete(id);
+    public ResponseEntity<Integer> delete(@PathVariable("id") Integer id) {
+        try {
+            termService.delete(id);
+            return ok(id);
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(id);
+        }
     }
 }

@@ -1,25 +1,26 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.dto.FileRequestDTO;
+import com.eryce.sportsclub.dto.FileDto;
 import com.eryce.sportsclub.services.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.eryce.sportsclub.constants.Authorize.HAS_COACH_OR_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.FILE_BASE;
+
 @RestController
 @CrossOrigin
-@RequestMapping(Routes.FILE_BASE)
-@PreAuthorize(Authorize.HAS_COACH_OR_MANAGER_ROLE)
+@RequestMapping(FILE_BASE)
+@PreAuthorize(HAS_COACH_OR_MANAGER_ROLE)
+@AllArgsConstructor
 public class FileController {
 
-    @Autowired
     private FileService fileService;
 
     @PostMapping("/upload")
-    public String parseCSV(@RequestBody FileRequestDTO fileRequestDTO)
+    public String parseCSV(@RequestBody FileDto fileDto)
     {
-        return fileService.parseCsv(fileRequestDTO);
+        return fileService.parseCsv(fileDto);
     }
 }

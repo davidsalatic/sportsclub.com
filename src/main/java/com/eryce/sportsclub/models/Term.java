@@ -1,15 +1,24 @@
 package com.eryce.sportsclub.models;
 
+import com.eryce.sportsclub.dto.TermDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalTime;
 
+import static javax.persistence.GenerationType.*;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Term {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
     @JsonFormat(pattern = "HH:mm")
@@ -21,43 +30,13 @@ public class Term {
     @JoinColumn(name = "member_group_id", nullable = false)
     private MemberGroup memberGroup;
 
-    public MemberGroup getMemberGroup() {
-        return memberGroup;
-    }
-
-    public void setMemberGroup(MemberGroup memberGroup) {
-        this.memberGroup = memberGroup;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setDurationMinutes(Integer durationMinutes) {
-        this.durationMinutes = durationMinutes;
-    }
-
-    public Integer getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(Integer dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public TermDto convertToDto() {
+        return TermDto.builder()
+                .dayOfWeek(dayOfWeek)
+                .durationMinutes(durationMinutes)
+                .memberGroup(memberGroup.convertToDto())
+                .id(id)
+                .startTime(startTime)
+                .build();
     }
 }

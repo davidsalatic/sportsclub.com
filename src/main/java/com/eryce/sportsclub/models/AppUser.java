@@ -1,26 +1,38 @@
 package com.eryce.sportsclub.models;
 
+import com.eryce.sportsclub.dto.AppUserDto;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+
+import static javax.persistence.GenerationType.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AppUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String username;
+
     private String password;
     private String name;
     private String surname;
+
+    @Column(unique = true)
     private String jmbg;
     private String address;
     private String phoneNumber;
@@ -36,120 +48,13 @@ public class AppUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getJmbg() {
-        return jmbg;
-    }
-
-    public void setJmbg(String jmbg) {
-        this.jmbg = jmbg;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDate getDateJoined() {
-        return dateJoined;
-    }
-
-    public void setDateJoined(LocalDate dateJoined) {
-        this.dateJoined = dateJoined;
-    }
-
-    public MemberGroup getMemberGroup() {
-        return memberGroup;
-    }
-
-    public void setMemberGroup(MemberGroup memberGroup) {
-        this.memberGroup = memberGroup;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.getName()));
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority(role.getName()));
     }
 
-    public void setAuthority(Role role)
-    {
-        this.role=role;
+    public void setAuthority(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -170,5 +75,26 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public AppUserDto convertToDto() {
+        AppUserDto appUserDto = AppUserDto.builder()
+                .address(address)
+                .dateJoined(dateJoined)
+                .dateOfBirth(dateOfBirth)
+                .id(id)
+                .jmbg(jmbg)
+                .name(name)
+                .phoneNumber(phoneNumber)
+                .role(role.convertToDto())
+                .surname(surname)
+                .username(username)
+                .gender(gender)
+                .password(password)
+                .build();
+        if (memberGroup != null) {
+            appUserDto.setMemberGroup(memberGroup.convertToDto());
+        }
+        return appUserDto;
     }
 }

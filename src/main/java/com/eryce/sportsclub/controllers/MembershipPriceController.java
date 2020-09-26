@@ -1,32 +1,32 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.models.MembershipPrice;
+import com.eryce.sportsclub.dto.MembershipPriceDto;
 import com.eryce.sportsclub.services.MembershipPriceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.eryce.sportsclub.constants.Authorize.HAS_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.MEMBERSHIPS_BASE;
+import static org.springframework.http.ResponseEntity.ok;
+
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.MEMBERSHIPS_BASE)
-@PreAuthorize(Authorize.HAS_MANAGER_ROLE)
+@RequestMapping(MEMBERSHIPS_BASE)
+@PreAuthorize(HAS_MANAGER_ROLE)
+@AllArgsConstructor
 public class MembershipPriceController {
 
-    @Autowired
     private MembershipPriceService membershipPriceService;
 
     @GetMapping("/price")
-    public MembershipPrice getMembershipPrice()
-    {
-        return membershipPriceService.getMembershipPrice();
+    public ResponseEntity<MembershipPriceDto> getMembershipPrice() {
+        return ok(membershipPriceService.getMembershipPrice());
     }
 
     @PostMapping("/price")
-    public ResponseEntity<MembershipPrice> setMembershipPrice(@RequestBody MembershipPrice membershipPrice)
-    {
-        return membershipPriceService.setMembershipPrice(membershipPrice);
+    public ResponseEntity<MembershipPriceDto> setMembershipPrice(@RequestBody MembershipPriceDto membershipPriceDto) {
+        return ok(membershipPriceService.setMembershipPrice(membershipPriceDto));
     }
 }

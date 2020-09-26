@@ -1,275 +1,253 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.constants.Roles;
-import com.eryce.sportsclub.dto.AppUserRequestDTO;
-import com.eryce.sportsclub.models.*;
+import com.eryce.sportsclub.dto.AppUserDto;
+import com.eryce.sportsclub.models.AppUser;
+import com.eryce.sportsclub.models.MemberGroup;
+import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.*;
-import com.eryce.sportsclub.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.eryce.sportsclub.constants.Roles.*;
+import static org.springframework.util.StringUtils.isEmpty;
+
 @Service
+@AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-    @Autowired
     private AppUserRepository appUserRepository;
-    @Autowired
     private MemberGroupRepository memberGroupRepository;
-    @Autowired
     private AttendanceRepository attendanceRepository;
-    @Autowired
     private PaymentRepository paymentRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    @Autowired
     private MailService mailService;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-    @Autowired
     private CompetitionApplicationRepository competitionApplicationRepository;
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private PostRepository postRepository;
 
-    public List<AppUser> getAll()
-    {
-        return appUserRepository.findAll();
+    public List<AppUserDto> getAllMembers() {
+        Role memberRole = roleRepository.findByNameIgnoreCase(MEMBER);
+        List<AppUser> allMembers = appUserRepository.findAllByRole(memberRole);
+        return convertToDto(allMembers);
     }
 
-    public List<AppUser> getAllMembers() {
-        Role memberRole = roleRepository.findByNameIgnoreCase(Roles.MEMBER);
-        return appUserRepository.findAllByRole(memberRole);
+    public List<AppUserDto> getUngroupedMembers() {
+        Role memberRole = roleRepository.findByNameIgnoreCase(MEMBER);
+        List<AppUser> ungroupedMembers = appUserRepository.findAllByMemberGroupAndRole(null, memberRole);
+        return convertToDto(ungroupedMembers);
     }
 
-    public List<AppUser> getAllStaff() {
-        Role coachRole = roleRepository.findByNameIgnoreCase(Roles.COACH);
-        Role managerRole = roleRepository.findByNameIgnoreCase(Roles.MANAGER);
-        List<AppUser>coaches = appUserRepository.findAllByRole(coachRole);
-        List<AppUser>managers = appUserRepository.findAllByRole(managerRole);
+    public List<AppUserDto> getAllStaff() {
+        Role coachRole = roleRepository.findByNameIgnoreCase(COACH);
+        Role managerRole = roleRepository.findByNameIgnoreCase(MANAGER);
+        List<AppUser> coaches = appUserRepository.findAllByRole(coachRole);
+        List<AppUser> managers = appUserRepository.findAllByRole(managerRole);
 
-        List<AppUser>staff = new ArrayList<>(coaches);
+        List<AppUser> staff = new ArrayList<>(coaches);
         staff.addAll(managers);
-        return staff;
+        return convertToDto(staff);
     }
 
-    public List<AppUser> getUngroupedMembers() {
-        List<AppUser>ungrouped = new ArrayList<>();
-        List<AppUser> allMembers = this.getAllMembers();
-        for(AppUser appUser : allMembers)
-            if(appUser.getMemberGroup()==null)
-                ungrouped.add(appUser);
-        return ungrouped;
-    }
-
-    public List<AppUser> getAllInMemberGroup(Integer memberGroupId) {
+    public List<AppUserDto> getAllInMemberGroup(Integer memberGroupId) {
         MemberGroup memberGroup = memberGroupRepository.getOne(memberGroupId);
-        return appUserRepository.findAllByMemberGroup(memberGroup);
+        List<AppUser> appUsers = appUserRepository.findAllByMemberGroup(memberGroup);
+        return convertToDto(appUsers);
     }
 
-    public AppUser getById(Integer id) {
-        return appUserRepository.getOne(id);
+    public AppUserDto getById(Integer id) {
+        return appUserRepository.getOne(id).convertToDto();
     }
 
-    public AppUser getByUsername(String username) {
-        return appUserRepository.findByUsernameIgnoreCase(username);
+    public AppUserDto getByUsername(String username) {
+        AppUser appUser = appUserRepository.findByUsernameIgnoreCase(username);
+        if (appUser == null) {
+            throw new EntityNotFoundException();
+        }
+        return appUser.convertToDto();
     }
 
-    public AppUser getByJmbg(String jmbg) {
-        return appUserRepository.findByJmbgIgnoreCase(jmbg);
+    public AppUserDto getByJmbg(String jmbg) {
+        AppUser appUser = appUserRepository.findByJmbgIgnoreCase(jmbg);
+        if (appUser == null) {
+            throw new EntityNotFoundException();
+        }
+        return appUser.convertToDto();
     }
 
-    public List<String> getEmails(List<AppUser>appUsers)
-    {
-        List<String> emailAddresses = new ArrayList<>();
-        for(AppUser appUser:appUsers)
-            if(appUser.getUsername()!=null && appUser.getUsername().length()>0)
-                emailAddresses.add(appUser.getUsername());
-        return emailAddresses;
-    }
+    public AppUserDto insert(AppUserDto appUserDto) {
+        if (userExists(appUserDto)) {
+            throw new EntityExistsException();
+        }
 
-    public ResponseEntity<AppUser> insert(AppUserRequestDTO appUserRequestDTO) {
-        AppUser appUser = appUserRequestDTO.generateAppUser();
-        if(appUser.getDateJoined()==null)
+        AppUser appUser = appUserDto.convertToEntity();
+        parseUserJmbg(appUser);
+
+        if (appUser.getDateJoined() == null) {
             appUser.setDateJoined(LocalDate.now());
-
-        parseJmbg(appUser);
-        appUserRepository.save(appUser);
-
-        //if email was entered, send reg mail
-        if(appUserRequestDTO.getUsername()!=null && !appUserRequestDTO.getUsername().equals(""))
-            sendRegistrationEmail(appUser);
-        return new ResponseEntity<>(HttpStatus.OK);
+        }
+        if (!isEmpty(appUser.getUsername())) {
+            mailService.sendRegistrationMessage(appUser);
+        }
+        return appUserRepository.save(appUser).convertToDto();
     }
 
-    private void parseJmbg(AppUser appUser) {
-        if(isValidJmbg(appUser.getJmbg()))
-            extractAndSetValues(appUser);
+    private boolean userExists(AppUserDto appUserDto) {
+        return userNameExists(appUserDto.getUsername()) || jmbgExists(appUserDto.getJmbg());
+    }
+
+    private boolean userNameExists(String username) {
+        return appUserRepository.findByUsernameIgnoreCase(username) != null;
+    }
+
+    private boolean jmbgExists(String jmbg) {
+        return appUserRepository.findByJmbgIgnoreCase(jmbg) != null;
+    }
+
+    private void parseUserJmbg(AppUser appUser) {
+        String userJmbg = appUser.getJmbg();
+        if (isValidJmbg(userJmbg)) {
+            String formattedDateText = formatDateText(getUnformattedDatePartFromJmbg(userJmbg));
+            appUser.setDateOfBirth(LocalDate.parse(formattedDateText));
+            appUser.setGender(getGenderFromJmbg(userJmbg));
+        }
     }
 
     public boolean isValidJmbg(String jmbg) {
-        return isValidJmbgLength(jmbg) && isNumeric(jmbg) && isValidJmbgFormat(jmbg);
-    }
-
-    private boolean isValidJmbgLength(String jmbg) {
-        return jmbg!=null && jmbg.length()==13;
-    }
-
-    private boolean isNumeric(String jmbg)
-    {
-        return jmbg.matches("\\d+");
+        boolean validLength = jmbg != null && jmbg.length() == 13;
+        if (!validLength) {
+            return false;
+        }
+        boolean numeric = jmbg.matches("\\d+");
+        return numeric && isValidJmbgFormat(jmbg);
     }
 
     private boolean isValidJmbgFormat(String jmbg) {
-        try
-        {
+        try {
             String formattedDate = formatDateText(getUnformattedDatePartFromJmbg(jmbg));
             LocalDate.parse(formattedDate); //ISO_LOCAL_DATE default formatting
             return true;
-        }catch (DateTimeException dte)
-        {
+        } catch (DateTimeException dte) {
             return false;
         }
     }
 
-    private String getUnformattedDatePartFromJmbg(String jmbg)
-    {
-        return jmbg.substring(0,7);
+    private String getUnformattedDatePartFromJmbg(String jmbg) {
+        return jmbg.substring(0, 7);
     }
 
-    private String formatDateText(String unformattedDate)  //example: "31123997"
+    private String formatDateText(String unformattedDate) //yyyyMMdd
     {
-        String formattedDate="";
-        //INPUT:'ddMMyyy',  OUTPUT: 'yyyyMMdd'
-        boolean isBornBefore2000 = true;
-        if(unformattedDate.charAt(4)=='0') //only for people born after 1999
-            isBornBefore2000=false;
+        String formattedDate = "";
 
-        if(isBornBefore2000)
-            formattedDate+="1";
-        else
-            formattedDate+="2";
+        boolean isBornAfter1999 = unformattedDate.charAt(4) == '0';
+        if (isBornAfter1999) {
+            formattedDate += "2";
+        } else {
+            formattedDate += "1";
+        }
 
-        formattedDate+=unformattedDate.substring(4,7)+"-"; //1997-
-        formattedDate+=unformattedDate.substring(2,4)+"-"; //1997-12-
-        formattedDate+=unformattedDate.substring(0,2); //1997-12-31
+        formattedDate += unformattedDate.substring(4, 7) + "-"; //yyyy-
+        formattedDate += unformattedDate.substring(2, 4) + "-"; //yyyy-MM-
+        formattedDate += unformattedDate.substring(0, 2); //yyyy-MM-dd
 
         return formattedDate;
     }
 
-    private void extractAndSetValues(AppUser appUser) {
-        String formattedDateText = formatDateText(getUnformattedDatePartFromJmbg(appUser.getJmbg()));
-        appUser.setDateOfBirth(LocalDate.parse(formattedDateText));
-        appUser.setGender(getGenderFromJmbg(appUser.getJmbg()));
-    }
-
     private String getGenderFromJmbg(String jmbg) {
-        String genderPartOfJmbg = jmbg.substring(9,12);
+        String genderPartOfJmbg = jmbg.substring(9, 12);
         int genderCode = Integer.parseInt(genderPartOfJmbg);
-        if(genderCode<500)
+        if (genderCode < 500) {
             return "Male";
-        else
-            return "Female";
+        }
+        return "Female";
     }
 
-
-    private void sendRegistrationEmail(AppUser appUser)
-    {
-        final String token = jwtTokenProvider.createToken(appUser.getUsername(),appUser);
-        //async sending email
-        mailService.sendRegistrationMessage(appUser.getUsername(),token);
+    public List<String> getEmailsOfUsers(List<AppUserDto> users) {
+        List<String> emailAddresses = new ArrayList<>();
+        for (AppUserDto user : users) {
+            if (!isEmpty(user.getUsername())) {
+                emailAddresses.add(user.getUsername());
+            }
+        }
+        return emailAddresses;
     }
 
-    public ResponseEntity<AppUser> update(AppUserRequestDTO appUserRequestDTO) {
+    public AppUserDto update(AppUserDto appUserDto) {
+        AppUser existingAppUser = appUserRepository.getOne(appUserDto.getId());
+        AppUser updatedAppUser = appUserDto.convertToEntity();
 
-        AppUser appUserBeforeUpdate = appUserRepository.getOne(appUserRequestDTO.getId());
+        String existingUsername = existingAppUser.getUsername();
+        String updatedUsername = updatedAppUser.getUsername();
 
-        String usernameBeforeUpdate = appUserBeforeUpdate.getUsername();
-        String usernameInRequest = appUserRequestDTO.getUsername();
+        String existingJmbg = existingAppUser.getJmbg();
+        String updatedJmbg = updatedAppUser.getJmbg();
 
-        String jmbgBeforeUpdate = appUserBeforeUpdate.getJmbg();
-        String jmbgAfterUpdate = appUserRequestDTO.getJmbg();
+        if (isAddingEmail(existingUsername, updatedUsername)
+                || isEditingEmail(existingUsername, updatedUsername)) {
+            mailService.sendRegistrationMessage(updatedAppUser);
+        }
+        if (isEditingJmbg(existingJmbg, updatedJmbg)) {
+            parseUserJmbg(updatedAppUser);
+        }
 
-        if(isAddingEmail(usernameBeforeUpdate,usernameInRequest)
-                || isEditingEmail(usernameBeforeUpdate,usernameInRequest))
-            sendRegistrationEmail(appUserRequestDTO.generateAppUser());
-
-        AppUser updatedAppUser = appUserRequestDTO.generateAppUser();
-
-        if(isEditingJmbg(jmbgBeforeUpdate,jmbgAfterUpdate))
-            parseJmbg(updatedAppUser);
-
-        this.appUserRepository.save(updatedAppUser);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return appUserRepository.save(updatedAppUser).convertToDto();
     }
 
-    private boolean isAddingEmail(String usernameBeforeUpdate, String usernameInRequest)
-    {
-        return usernameBeforeUpdate==null && usernameInRequest!=null;
+    private boolean isAddingEmail(String usernameBeforeUpdate, String usernameInRequest) {
+        return usernameBeforeUpdate == null && usernameInRequest != null;
     }
 
-    private boolean isEditingEmail(String usernameBeforeUpdate,String usernameInRequest)
-    {
-        return usernameBeforeUpdate!=null && (!usernameBeforeUpdate.equals(usernameInRequest));
+    private boolean isEditingEmail(String usernameBeforeUpdate, String usernameInRequest) {
+        return usernameBeforeUpdate != null && (!usernameBeforeUpdate.equals(usernameInRequest));
     }
 
     private boolean isEditingJmbg(String jmbgBeforeUpdate, String jmbgAfterUpdate) {
         return !jmbgBeforeUpdate.equals(jmbgAfterUpdate);
     }
 
-    public ResponseEntity<AppUser> updateSelf(AppUserRequestDTO appUserRequestDTO) {
-        return this.update(appUserRequestDTO);
+    public AppUserDto updateSelf(AppUserDto appUserDto) {
+        return this.update(appUserDto);
     }
 
-    public ResponseEntity<AppUser> delete(Integer id) {
-        AppUser appUser = getById(id);
+    public void delete(Integer id) {
+        AppUser appUser = appUserRepository.getOne(id);
         deleteAttendancesForUser(appUser);
         deletePaymentsForUser(appUser);
-        deleteApplicationsForUser(appUser);
-        deleteCommentsByUser(appUser);
-        deletePostsByUser(appUser);
+        deleteCompetitionApplicationsForUser(appUser);
         appUserRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void deleteCommentsByUser(AppUser appUser) {
-        for(Comment comment: commentRepository.findAllByAppUser(appUser))
-            commentRepository.delete(comment);
-    }
-
-    private void deletePostsByUser(AppUser appUser) {
-        for(Post post : postRepository.findAllByAppUser(appUser))
-            postRepository.delete(post);
-    }
-
-    private void deleteAttendancesForUser(AppUser appUser)
-    {
-        for(Attendance attendance : attendanceRepository.findAllByAppUser(appUser))
-            attendanceRepository.delete(attendance);
+    private void deleteAttendancesForUser(AppUser appUser) {
+        attendanceRepository.deleteInBatch(attendanceRepository.findAllByAppUser(appUser));
     }
 
     private void deletePaymentsForUser(AppUser appUser) {
-        for(Payment payment : paymentRepository.findAllByAppUser(appUser))
-            paymentRepository.delete(payment);
+        paymentRepository.deleteInBatch(paymentRepository.findAllByAppUser(appUser));
     }
 
-    private void deleteApplicationsForUser(AppUser appUser) {
-        for(CompetitionApplication competitionApplication : competitionApplicationRepository.findAllByAppUser(appUser))
-            competitionApplicationRepository.delete(competitionApplication);
+    private void deleteCompetitionApplicationsForUser(AppUser appUser) {
+        competitionApplicationRepository.deleteInBatch(competitionApplicationRepository.findAllByAppUser(appUser));
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return this.getByUsername(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return appUserRepository.findByUsernameIgnoreCase(username);
     }
+
+    private List<AppUserDto> convertToDto(List<AppUser> appUsers) {
+        List<AppUserDto> usersDto = new ArrayList<>();
+        for (AppUser appUser : appUsers) {
+            usersDto.add(appUser.convertToDto());
+        }
+        return usersDto;
+    }
+
 }

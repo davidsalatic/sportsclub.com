@@ -1,30 +1,43 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.RoleDto;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.repositories.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class RoleService {
 
-    @Autowired
     private RoleRepository roleRepository;
 
-    public List<Role> getAll() {
-        return roleRepository.findAll();
+    public List<RoleDto> getAll() {
+        return convertToDto(roleRepository.findAll());
     }
 
-    public Role getByName(String name) {
-        return roleRepository.findByNameIgnoreCase(name);
+    private List<RoleDto> convertToDto(List<Role> roles) {
+        List<RoleDto> rolesDto = new ArrayList<>();
+        for (Role role : roles) {
+            rolesDto.add(role.convertToDto());
+        }
+        return rolesDto;
     }
 
-    public ResponseEntity<Role> insert(Role role) {
-        roleRepository.save(role);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public RoleDto getByName(String name) {
+        Role role = roleRepository.findByNameIgnoreCase(name);
+        if (role == null) {
+            throw new EntityNotFoundException();
+        }
+        return role.convertToDto();
+    }
+
+    public RoleDto insert(RoleDto roleDto) {
+        Role role = roleRepository.save(roleDto.convertToEntity());
+        return role.convertToDto();
     }
 }

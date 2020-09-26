@@ -1,9 +1,17 @@
 package com.eryce.sportsclub.models;
 
 
+import com.eryce.sportsclub.dto.CompetitionApplicationDto;
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CompetitionApplication {
 
     @Id
@@ -15,40 +23,17 @@ public class CompetitionApplication {
     private Competition competition;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "app_user_id")
+    @JoinColumn(name = "user_id")
     private AppUser appUser;
 
     private String message;
 
-    public Competition getCompetition() {
-        return competition;
-    }
-
-    public void setCompetition(Competition competition) {
-        this.competition = competition;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public CompetitionApplicationDto convertToDto() {
+        return CompetitionApplicationDto.builder()
+                .competition(competition.convertToDto())
+                .id(id)
+                .message(message)
+                .appUser(appUser.convertToDto())
+                .build();
     }
 }

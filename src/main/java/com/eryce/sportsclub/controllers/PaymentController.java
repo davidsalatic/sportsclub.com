@@ -1,65 +1,85 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Authorize;
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.dto.PaymentRequestDTO;
-import com.eryce.sportsclub.models.Payment;
+import com.eryce.sportsclub.dto.PaymentDto;
 import com.eryce.sportsclub.services.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.eryce.sportsclub.constants.Authorize.HAS_MANAGER_OR_MEMBER_ROLE;
+import static com.eryce.sportsclub.constants.Authorize.HAS_MANAGER_ROLE;
+import static com.eryce.sportsclub.constants.Routes.PAYMENTS_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.PAYMENTS_BASE)
-@PreAuthorize(Authorize.HAS_MANAGER_ROLE)
+@RequestMapping(PAYMENTS_BASE)
+@PreAuthorize(HAS_MANAGER_ROLE)
+@AllArgsConstructor
 public class PaymentController {
 
-    @Autowired
     private PaymentService paymentService;
 
     @GetMapping("/membership/{membershipId}/user/{userId}")
-    public List<Payment> getAllPaymentsForMembershipByAppUser(@PathVariable("membershipId") Integer membershipId,@PathVariable("userId")Integer userId)
-    {
-        return paymentService.getAllPaymentsForMembershipByAppUser(membershipId,userId);
+    public ResponseEntity<List<PaymentDto>> getAllPaymentsForMembershipByAppUser(@PathVariable("membershipId") Integer membershipId, @PathVariable("userId") Integer userId) {
+        try {
+            return ok(paymentService.getAllPaymentsForMembershipByAppUser(membershipId, userId));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new ArrayList<>());
+        }
     }
 
     @GetMapping("/membership/{membershipId}")
-    public List<Payment> getAllPaymentsForMembership(@PathVariable("membershipId") Integer membershipId)
-    {
-        return paymentService.getAllPaymentsForMembership(membershipId);
+    public ResponseEntity<List<PaymentDto>> getAllPaymentsForMembership(@PathVariable("membershipId") Integer membershipId) {
+        try {
+            return ok(paymentService.getAllPaymentsForMembership(membershipId));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new ArrayList<>());
+        }
     }
 
     @GetMapping("/member/{memberId}")
-    @PreAuthorize(Authorize.HAS_MANAGER_OR_MEMBER_ROLE)
-    public List<Payment> getAllPaymentsForAppUser(@PathVariable("memberId")Integer memberId)
-    {
-        return paymentService.getAllPaymentsForAppUser(memberId);
+    @PreAuthorize(HAS_MANAGER_OR_MEMBER_ROLE)
+    public ResponseEntity<List<PaymentDto>> getAllPaymentsForAppUser(@PathVariable("memberId") Integer memberId) {
+        try {
+            return ok(paymentService.getAllPaymentsForAppUser(memberId));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new ArrayList<>());
+        }
     }
 
     @GetMapping("/{id}")
-    public Payment getById(@PathVariable("id")Integer id){
-        return paymentService.getById(id);
+    public ResponseEntity<PaymentDto> getById(@PathVariable("id") Integer id) {
+        try {
+            return ok(paymentService.getById(id));
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(new PaymentDto());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Payment> insert(@RequestBody PaymentRequestDTO paymentRequestDTO)
-    {
-        return paymentService.insert(paymentRequestDTO);
+    public ResponseEntity<PaymentDto> insert(@RequestBody PaymentDto paymentDto) {
+        return ok(paymentService.insert(paymentDto));
     }
 
     @PutMapping
-    public ResponseEntity<Payment> update(@RequestBody PaymentRequestDTO paymentRequestDTO)
-    {
-        return paymentService.update(paymentRequestDTO);
+    public ResponseEntity<PaymentDto> update(@RequestBody PaymentDto paymentDto) {
+        return ok(paymentService.update(paymentDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Payment> delete(@PathVariable Integer id)
-    {
-        return paymentService.delete(id);
+    public ResponseEntity<Integer> delete(@PathVariable Integer id) {
+        try {
+            paymentService.delete(id);
+            return ok(id);
+        } catch (EntityNotFoundException exception) {
+            return badRequest().body(id);
+        }
     }
 }

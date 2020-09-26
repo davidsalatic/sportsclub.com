@@ -1,6 +1,6 @@
 package com.eryce.sportsclub.configuration;
 
-import com.eryce.sportsclub.dto.AppUserRequestDTO;
+import com.eryce.sportsclub.dto.AppUserDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,14 +18,13 @@ public class ApplicationValues {
     @Value("${default_user.default_jmbg}")
     private String jmbg;
 
-    public AppUserRequestDTO getDefaultUser()
-    {
-        AppUserRequestDTO appUser = new AppUserRequestDTO();
-        appUser.setUsername(this.username);
-        appUser.setName(this.name);
-        appUser.setSurname(this.surname);
-        appUser.setJmbg(this.jmbg);
-        return appUser;
+    public AppUserDto getDefaultUser() {
+        return AppUserDto.builder()
+                .username(username)
+                .name(name)
+                .surname(surname)
+                .jmbg(jmbg)
+                .build();
     }
 
     public String getMembershipDeadline() {

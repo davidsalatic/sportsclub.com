@@ -1,8 +1,16 @@
 package com.eryce.sportsclub.models;
 
+import com.eryce.sportsclub.dto.PaymentDto;
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Payment {
 
     @Id
@@ -22,59 +30,15 @@ public class Payment {
     @JoinColumn(name = "membership_id", nullable = false)
     private Membership membership;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public void setMembership(Membership membership) {
-        this.membership = membership;
-    }
-
-    public Membership getMembership() {
-        return membership;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Integer getMonthOfPayment() {
-        return monthOfPayment;
-    }
-
-    public void setMonthOfPayment(Integer monthOfPayment) {
-        this.monthOfPayment = monthOfPayment;
-    }
-
-    public Integer getDayOfMonth() {
-        return dayOfMonth;
-    }
-
-    public void setDayOfMonth(Integer dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
-
-    public Integer getYearOfPayment() {
-        return yearOfPayment;
-    }
-
-    public void setYearOfPayment(Integer yearOfPayment) {
-        this.yearOfPayment = yearOfPayment;
+    public PaymentDto convertToDto() {
+        return PaymentDto.builder()
+                .amount(amount)
+                .appUser(appUser.convertToDto())
+                .dayOfMonth(dayOfMonth)
+                .id(id)
+                .membership(membership.convertToDto())
+                .monthOfPayment(monthOfPayment)
+                .yearOfPayment(yearOfPayment)
+                .build();
     }
 }

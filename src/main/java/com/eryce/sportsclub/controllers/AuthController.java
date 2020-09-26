@@ -1,45 +1,54 @@
 package com.eryce.sportsclub.controllers;
 
-import com.eryce.sportsclub.constants.Routes;
-import com.eryce.sportsclub.dto.LoginRequestDTO;
-import com.eryce.sportsclub.dto.LoginResponseDTO;
-import com.eryce.sportsclub.dto.RegisterRequestDTO;
+import com.eryce.sportsclub.dto.LoginRequestDto;
+import com.eryce.sportsclub.dto.JwtTokenDto;
+import com.eryce.sportsclub.dto.RegistrationDto;
 import com.eryce.sportsclub.services.AuthService;
-import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.*;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
+import static com.eryce.sportsclub.constants.Routes.AUTH_BASE;
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
+
 @CrossOrigin
 @RestController
-@RequestMapping(Routes.AUTH_BASE)
+@AllArgsConstructor
+@RequestMapping(AUTH_BASE)
 public class AuthController {
 
-    @Autowired
     private AuthService authService;
 
     @GetMapping("/claims")
-    public Claims extractAllClaims(@RequestParam String token )
-    {
-        return authService.extractAllClaims(token);
+    public ResponseEntity<Claims> extractAllClaims(@RequestParam String token) {
+        try {
+            return ok(authService.extractAllClaims(token));
+        } catch (MalformedJwtException exception) {
+            return badRequest().body(null);
+        }
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO)
-    {
-        return this.authService.login(loginRequestDTO);
+    public ResponseEntity<JwtTokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ok(authService.login(loginRequestDto));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterRequestDTO> register(@RequestBody RegisterRequestDTO registerRequestDTO)
-    {
-        return this.authService.register(registerRequestDTO);
+    public ResponseEntity<RegistrationDto> register(@RequestBody RegistrationDto registrationDto) {
+        try {
+            authService.register(registrationDto);
+            return ok(registrationDto);
+        } catch (EntityNotFoundException | JwtException | IllegalArgumentException exception) {
+            return badRequest().body(registrationDto);
+        }
     }
 
     @PostMapping("/check-token")
-    public boolean checkToken(@RequestBody LoginResponseDTO tokenDTO)
-    {
-        return this.authService.canRegister(tokenDTO);
+    public ResponseEntity<Boolean> checkToken(@RequestBody JwtTokenDto tokenDto) {
+        return ok(authService.canRegister(tokenDto));
     }
-
 }

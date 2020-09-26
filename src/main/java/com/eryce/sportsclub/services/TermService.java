@@ -1,41 +1,49 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.TermDto;
 import com.eryce.sportsclub.models.MemberGroup;
 import com.eryce.sportsclub.models.Term;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.TermRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TermService {
 
-    @Autowired
     private TermRepository termRepository;
-    @Autowired
     private MemberGroupRepository memberGroupRepository;
 
-    public List<Term> getAllByMemberGroup(Integer memberGroupId) {
+    public List<TermDto> getAllByMemberGroup(Integer memberGroupId) {
         MemberGroup memberGroup = memberGroupRepository.getOne(memberGroupId);
-        return termRepository.findAllByMemberGroup(memberGroup);
+        return convertToDto(termRepository.findAllByMemberGroup(memberGroup));
     }
 
-    public Term getById(Integer id) {
-        return termRepository.getOne(id);
+    private List<TermDto> convertToDto(List<Term> terms) {
+        List<TermDto> termsDto = new ArrayList<>();
+        for (Term term : terms) {
+            termsDto.add(term.convertToDto());
+        }
+        return termsDto;
     }
 
-    public ResponseEntity<Term> insert(Term term) {
-        termRepository.save(term);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public TermDto getById(Integer id) {
+        return termRepository.getOne(id).convertToDto();
     }
 
-    public ResponseEntity<Term> update(Term term) {
-        this.insert(term);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public TermDto insert(TermDto termDto) {
+        Term term = termRepository.save(termDto.convertToEntity());
+        return term.convertToDto();
+    }
+
+    public TermDto update(TermDto termDto) {
+        return insert(termDto);
     }
 
     public ResponseEntity<Term> delete(Integer id) {

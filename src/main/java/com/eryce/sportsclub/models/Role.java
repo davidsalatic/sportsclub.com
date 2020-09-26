@@ -1,31 +1,30 @@
 package com.eryce.sportsclub.models;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.eryce.sportsclub.dto.RoleDto;
+import lombok.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public RoleDto convertToDto() {
+        return RoleDto.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }

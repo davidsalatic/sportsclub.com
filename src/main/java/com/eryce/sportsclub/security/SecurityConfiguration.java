@@ -3,7 +3,7 @@ package com.eryce.sportsclub.security;
 import com.eryce.sportsclub.constants.Routes;
 import com.eryce.sportsclub.security.jwt.JwtConfigurer;
 import com.eryce.sportsclub.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,12 +27,11 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@AllArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private UserDetailsService userDetailsService;
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -43,17 +42,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-        .cors().and()
-        .httpBasic().disable()
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers(Routes.AUTH_BASE+Routes.ANY).permitAll()
-        .antMatchers(Routes.PERIOD_BASE+Routes.ANY).permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .apply(new JwtConfigurer(jwtTokenProvider));
+                .cors().and()
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers(Routes.AUTH_BASE + Routes.ANY).permitAll()
+                .antMatchers(Routes.PERIOD_BASE + Routes.ANY).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .apply(new JwtConfigurer(jwtTokenProvider));
     }
 
     @Bean
@@ -75,7 +74,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){return new BCryptPasswordEncoder();}
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public DaoAuthenticationProvider authProvider() {

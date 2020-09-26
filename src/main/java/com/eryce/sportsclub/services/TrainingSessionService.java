@@ -1,117 +1,118 @@
 package com.eryce.sportsclub.services;
 
+import com.eryce.sportsclub.dto.TrainingSessionDto;
 import com.eryce.sportsclub.models.*;
 import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.MemberGroupRepository;
 import com.eryce.sportsclub.repositories.PeriodRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TrainingSessionService {
 
-    @Autowired
     private TrainingSessionRepository trainingSessionRepository;
-    @Autowired
     private MemberGroupRepository memberGroupRepository;
-    @Autowired
     private AttendanceRepository attendanceRepository;
-    @Autowired
     private PeriodRepository periodRepository;
 
-    public List<TrainingSession> getAllByMemberGroup(Integer groupId) {
-        MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
-        return trainingSessionRepository.findAllByMemberGroup(memberGroup);
+    public List<TrainingSessionDto> getAllByMemberGroup(Integer groupId) {
+        MemberGroup memberGroup = memberGroupRepository.getOne(groupId);
+        return convertToDto(trainingSessionRepository.findAllByMemberGroup(memberGroup));
     }
 
-    public List<TrainingSession> getAllByMemberGroupAndPeriod(Integer groupId, Integer periodId) {
-        MemberGroup memberGroup= memberGroupRepository.getOne(groupId);
+    public List<TrainingSessionDto> getAllByMemberGroupAndPeriod(Integer groupId, Integer periodId) {
+        MemberGroup memberGroup = memberGroupRepository.getOne(groupId);
         Period period = periodRepository.getOne(periodId);
-        return trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
+        return convertToDto(trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup, period));
     }
 
-    public TrainingSession getById(Integer id)
-    {
-        return trainingSessionRepository.getOne(id);
+    private List<TrainingSessionDto> convertToDto(List<TrainingSession> trainingSessions) {
+        List<TrainingSessionDto> trainingSessionsDto = new ArrayList<>();
+        for (TrainingSession trainingSession : trainingSessions) {
+            trainingSessionsDto.add(trainingSession.convertToDto());
+        }
+        return trainingSessionsDto;
     }
 
-    public ResponseEntity<TrainingSession> insert(TrainingSession trainingSession) {
-        trainingSessionRepository.save(trainingSession);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public TrainingSessionDto getById(Integer id) {
+        return trainingSessionRepository.getOne(id).convertToDto();
     }
 
-    public ResponseEntity<TrainingSession> generateInTerms(Term[] terms,Integer periodId,Integer generateFromDay) {
+    public TrainingSessionDto insert(TrainingSessionDto trainingSessionDto) {
+        TrainingSession trainingSession = trainingSessionRepository.save(trainingSessionDto.convertToEntity());
+        return trainingSession.convertToDto();
+    }
 
-        Integer FIRST_DAY_OF_MONTH=1;
+    public List<TrainingSessionDto> generateInTerms(Term[] terms, Integer periodId, Integer generateFromDay) {
+        List<TrainingSessionDto> trainingSessionDtos = new ArrayList<>();
         LocalDate today = LocalDate.now();
-        int numberOfDaysInCurrentMonth=today.lengthOfMonth();
+        int numberOfDaysInCurrentMonth = today.lengthOfMonth();
 
         Period period = periodRepository.getOne(periodId);
 
-        if(generateFromDay.equals(FIRST_DAY_OF_MONTH))
-            deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(),period,FIRST_DAY_OF_MONTH);
-        else
-            deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(),period,generateFromDay);
+        deleteTrainingSessionsInGroupInPeriodIfGreaterThan(terms[0].getMemberGroup(), period, generateFromDay);
 
-        for(int i=generateFromDay;i<=numberOfDaysInCurrentMonth;i++)
-        {
-            LocalDate date = LocalDate.of(period.getYear(),period.getMonth(),i);
+        for (int i = generateFromDay; i <= numberOfDaysInCurrentMonth; i++) {
+            LocalDate date = LocalDate.of(period.getYear(), period.getMonth(), i);
             for (Term term : terms) {
                 int loopDayOfWeek = date.getDayOfWeek().getValue();
                 int termDayOfWeek = term.getDayOfWeek();
 
                 //Sunday in JS is 0, in LocalDate is 7
-                if(termDayOfWeek==0)
-                    termDayOfWeek=7;
+                if (termDayOfWeek == 0) {
+                    termDayOfWeek = 7;
+                }
 
                 if (loopDayOfWeek == termDayOfWeek) {
-                    TrainingSession trainingSession = new TrainingSession();
-                    trainingSession.setDateHeld(date);
-                    trainingSession.setTimeHeld(term.getStartTime());
-                    trainingSession.setMemberGroup(term.getMemberGroup());
-                    trainingSession.setPeriod(period);
+                    TrainingSession trainingSession = TrainingSession.builder()
+                            .dateHeld(date)
+                            .timeHeld(term.getStartTime())
+                            .memberGroup(term.getMemberGroup())
+                            .period(period)
+                            .build();
+                    trainingSessionDtos.add(trainingSession.convertToDto());
                     trainingSessionRepository.save(trainingSession);
                 }
             }
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return trainingSessionDtos;
     }
 
-    private void deleteTrainingSessionsInGroupInPeriodIfGreaterThan(MemberGroup memberGroup,Period period,Integer fromDay) {
-        List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
-        for(TrainingSession trainingSession : trainingSessions)
-            if(trainingSession.getDateHeld().getDayOfMonth()>=fromDay)
-            {
-                this.deleteAttendancesForTrainingSession(trainingSession);
+    private void deleteTrainingSessionsInGroupInPeriodIfGreaterThan(MemberGroup memberGroup, Period period, Integer fromDay) {
+        List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup, period);
+        for (TrainingSession trainingSession : trainingSessions)
+            if (trainingSession.getDateHeld().getDayOfMonth() >= fromDay) {
+                deleteAttendancesForTrainingSession(trainingSession);
                 trainingSessionRepository.delete(trainingSession);
             }
     }
 
-    public ResponseEntity<TrainingSession> delete(Integer id) {
+    public void delete(Integer id) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(id);
         deleteAttendancesForTrainingSession(trainingSession);
         trainingSessionRepository.delete(trainingSession);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private void deleteAttendancesForTrainingSession(TrainingSession trainingSession) {
         List<Attendance> attendances = attendanceRepository.findAllByTrainingSession(trainingSession);
-        for(Attendance attendance: attendances)
+        for (Attendance attendance : attendances) {
             attendanceRepository.delete(attendance);
+        }
     }
 
-    public ResponseEntity<TrainingSession> deleteByMemberGroupAndPeriod(Integer groupId, Integer periodId) {
+    public void deleteByMemberGroupAndPeriod(Integer groupId, Integer periodId) {
         MemberGroup memberGroup = memberGroupRepository.getOne(groupId);
         Period period = periodRepository.getOne(periodId);
-        List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup,period);
-        for(TrainingSession trainingSession : trainingSessions)
-            this.delete(trainingSession.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<TrainingSession> trainingSessions = trainingSessionRepository.findAllByMemberGroupAndPeriod(memberGroup, period);
+        for (TrainingSession trainingSession : trainingSessions) {
+            delete(trainingSession.getId());
+        }
     }
 }

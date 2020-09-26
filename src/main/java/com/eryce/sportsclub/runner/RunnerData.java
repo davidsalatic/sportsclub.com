@@ -1,57 +1,59 @@
 package com.eryce.sportsclub.runner;
 
 import com.eryce.sportsclub.configuration.ApplicationValues;
-import com.eryce.sportsclub.constants.Roles;
-import com.eryce.sportsclub.dto.AppUserRequestDTO;
+import com.eryce.sportsclub.dto.AppUserDto;
+import com.eryce.sportsclub.dto.RoleDto;
 import com.eryce.sportsclub.models.Role;
 import com.eryce.sportsclub.services.AppUserService;
 import com.eryce.sportsclub.services.PeriodService;
 import com.eryce.sportsclub.services.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import static com.eryce.sportsclub.constants.Roles.*;
+
 @Component
+@AllArgsConstructor
 public class RunnerData implements CommandLineRunner {
 
-    @Autowired
     private RoleService roleService;
-    @Autowired
     private AppUserService appUserService;
-    @Autowired
     private ApplicationValues applicationValues;
-    @Autowired
     private PeriodService periodService;
 
     @Override
     public void run(String... args) {
         insertRoles();
+        insertDefaultManager();
         insertPeriod();
-        System.out.println("***************APP STARTED*****************");
+        System.out.println("*** SPORTS CLUB STARTED ***");
     }
 
     private void insertRoles() {
-        if(roleService.getAll().isEmpty())
-        {
+        if (roleService.getAll().isEmpty()) {
             Role memberRole = new Role();
-            memberRole.setName(Roles.MEMBER);
+            memberRole.setName(MEMBER);
 
             Role coachRole = new Role();
-            coachRole.setName(Roles.COACH);
+            coachRole.setName(COACH);
 
             Role managerRole = new Role();
-            managerRole.setName(Roles.MANAGER);
+            managerRole.setName(MANAGER);
 
-            roleService.insert(memberRole);
-            roleService.insert(coachRole);
-            roleService.insert(managerRole);
+            roleService.insert(memberRole.convertToDto());
+            roleService.insert(coachRole.convertToDto());
+            roleService.insert(managerRole.convertToDto());
+        }
+    }
 
-            if(appUserService.getAllStaff().isEmpty())
-            {
-                AppUserRequestDTO defaultManager = applicationValues.getDefaultUser();
-                defaultManager.setRole(managerRole);
-                appUserService.insert(defaultManager);
-            }
+    private void insertDefaultManager() {
+        RoleDto managerRoleDto = roleService.getByName(MANAGER);
+
+        if (appUserService.getAllStaff().isEmpty()) {
+            AppUserDto defaultManager = applicationValues.getDefaultUser();
+            defaultManager.setRole(managerRoleDto);
+            appUserService.insert(defaultManager);
         }
     }
 

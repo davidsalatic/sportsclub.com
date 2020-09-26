@@ -1,41 +1,35 @@
-package com.eryce.sportsclub.models;
+package com.eryce.sportsclub.dto;
 
-import com.eryce.sportsclub.dto.CompetitionDto;
+import com.eryce.sportsclub.models.Competition;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Competition {
+public class CompetitionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private LocalDate dateHeld;
-
     @JsonFormat(pattern = "HH:mm")
     private LocalTime timeHeld;
     private String location;
     private String description;
 
-    public CompetitionDto convertToDto() {
-        return CompetitionDto.builder()
+    public Competition convertToEntity() {
+        return Competition.builder()
                 .dateHeld(dateHeld)
                 .description(description)
+                .id(id)
                 .location(location)
                 .name(name)
                 .timeHeld(timeHeld)
-                .id(id)
                 .build();
     }
 }

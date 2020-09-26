@@ -1,52 +1,58 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.dto.AttendanceRequestDTO;
+import com.eryce.sportsclub.dto.AttendanceDto;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Attendance;
 import com.eryce.sportsclub.models.TrainingSession;
-import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.AttendanceRepository;
 import com.eryce.sportsclub.repositories.TrainingSessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.eryce.sportsclub.repositories.AppUserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AttendanceService {
 
-    @Autowired
     private AttendanceRepository attendanceRepository;
-    @Autowired
     private AppUserRepository appUserRepository;
-    @Autowired
     private TrainingSessionRepository trainingSessionRepository;
 
-    public List<Attendance> getAllByTrainingSessionId(Integer id) {
+    public List<AttendanceDto> getAllByTrainingSessionId(Integer id) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(id);
-        return attendanceRepository.findAllByTrainingSession(trainingSession);
+        List<Attendance> attendanceByTrainingSession = attendanceRepository.findAllByTrainingSession(trainingSession);
+        return convertToDto(attendanceByTrainingSession);
     }
 
-    public List<Attendance> getByAppUser(Integer appUserId) {
-        AppUser appUser=appUserRepository.getOne(appUserId);
-        return attendanceRepository.findAllByAppUser(appUser);
+    public List<AttendanceDto> getAllByUserId(Integer userId) {
+        AppUser appUser = appUserRepository.getOne(userId);
+        List<Attendance> attendance = attendanceRepository.findAllByAppUser(appUser);
+        return convertToDto(attendance);
     }
 
-    public Attendance getByTrainingSessionAndAppUser(Integer sessionId, Integer userId) {
+    private List<AttendanceDto> convertToDto(List<Attendance> attendance) {
+        List<AttendanceDto> attendanceDto = new ArrayList<>();
+        for (Attendance trainingAttendance : attendance) {
+            attendanceDto.add(trainingAttendance.convertToDto());
+        }
+        return attendanceDto;
+    }
+
+    public AttendanceDto getByTrainingSessionIdAndUserId(Integer sessionId, Integer userId) {
         TrainingSession trainingSession = trainingSessionRepository.getOne(sessionId);
         AppUser appUser = appUserRepository.getOne(userId);
-        return attendanceRepository.findByTrainingSessionAndAppUser(trainingSession,appUser);
+        Attendance attendance = attendanceRepository.findByTrainingSessionAndAppUser(trainingSession, appUser);
+        return attendance.convertToDto();
     }
 
-    public ResponseEntity<Attendance> insert(AttendanceRequestDTO attendanceRequestDTO) {
-        attendanceRepository.save(attendanceRequestDTO.generateAttendance());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public AttendanceDto insert(AttendanceDto attendanceDto) {
+        return attendanceRepository.save(attendanceDto.convertToEntity()).convertToDto();
     }
 
-    public ResponseEntity<Attendance> delete(Integer id) {
+    public void delete(Integer id) {
         attendanceRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

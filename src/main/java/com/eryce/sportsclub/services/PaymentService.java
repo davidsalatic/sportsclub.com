@@ -1,61 +1,65 @@
 package com.eryce.sportsclub.services;
 
-import com.eryce.sportsclub.dto.PaymentRequestDTO;
+import com.eryce.sportsclub.dto.PaymentDto;
 import com.eryce.sportsclub.models.AppUser;
 import com.eryce.sportsclub.models.Membership;
 import com.eryce.sportsclub.models.Payment;
 import com.eryce.sportsclub.repositories.AppUserRepository;
 import com.eryce.sportsclub.repositories.MembershipRepository;
 import com.eryce.sportsclub.repositories.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PaymentService {
 
-    @Autowired
     private PaymentRepository paymentRepository;
-    @Autowired
     private AppUserRepository appUserRepository;
-    @Autowired
     private MembershipRepository membershipRepository;
 
-    public List<Payment> getAllPaymentsForMembershipByAppUser(Integer membershipId, Integer appUserId) {
+    public List<PaymentDto> getAllPaymentsForMembershipByAppUser(Integer membershipId, Integer appUserId) {
         Membership membership = membershipRepository.getOne(membershipId);
         AppUser appUser = appUserRepository.getOne(appUserId);
-        return paymentRepository.findAllByMembershipAndAppUser(membership,appUser);
+        return convertToDto(paymentRepository.findAllByMembershipAndAppUser(membership, appUser));
     }
 
-    public List<Payment> getAllPaymentsForMembership(Integer membershipId) {
+    public List<PaymentDto> getAllPaymentsForMembership(Integer membershipId) {
         Membership membership = membershipRepository.getOne(membershipId);
-        return paymentRepository.findAllByMembership(membership);
+        return convertToDto(paymentRepository.findAllByMembership(membership));
     }
 
-    public List<Payment> getAllPaymentsForAppUser(Integer memberId) {
+    public List<PaymentDto> getAllPaymentsForAppUser(Integer memberId) {
         AppUser appUser = appUserRepository.getOne(memberId);
-        return paymentRepository.findAllByAppUser(appUser);
+        return convertToDto(paymentRepository.findAllByAppUser(appUser));
     }
 
-    public Payment getById(Integer id) {
-        return paymentRepository.getOne(id);
+    public List<PaymentDto> convertToDto(List<Payment> paymentList) {
+        List<PaymentDto> paymentsDto = new ArrayList<>();
+        for (Payment payment : paymentList) {
+            paymentsDto.add(payment.convertToDto());
+        }
+        return paymentsDto;
     }
 
-    public ResponseEntity<Payment> insert(PaymentRequestDTO paymentRequestDTO) {
-        paymentRepository.save(paymentRequestDTO.generatePayment());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public PaymentDto getById(Integer id) {
+        return paymentRepository.getOne(id).convertToDto();
     }
 
-    public ResponseEntity<Payment> update(PaymentRequestDTO paymentRequestDTO) {
-        this.insert(paymentRequestDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public PaymentDto insert(PaymentDto paymentDto) {
+        Payment payment = paymentRepository.save(paymentDto.convertToEntity());
+        return payment.convertToDto();
     }
 
-    public ResponseEntity<Payment> delete(Integer id) {
-        paymentRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public PaymentDto update(PaymentDto paymentDto) {
+        return insert(paymentDto);
+    }
+
+    public void delete(Integer id) {
+        Payment payment = paymentRepository.getOne(id);
+        paymentRepository.delete(payment);
     }
 }
