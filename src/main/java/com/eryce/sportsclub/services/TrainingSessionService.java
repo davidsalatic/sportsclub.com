@@ -73,6 +73,7 @@ public class TrainingSessionService {
                 if (loopDayOfWeek == termDayOfWeek) {
                     TrainingSession trainingSession = TrainingSession.builder()
                             .dateHeld(date)
+                            .dayOfWeek(date.getDayOfWeek().toString())
                             .timeHeld(term.getStartTime())
                             .memberGroup(term.getMemberGroup())
                             .period(period)

@@ -35,17 +35,12 @@ public class TrainingSession {
 
     private String dayOfWeek;
 
-    public void setDateHeld(LocalDate dateHeld) {
-        this.dateHeld = dateHeld;
-        this.dayOfWeek = dateHeld.getDayOfWeek().toString();
-    }
-
     public TrainingSessionDto convertToDto() {
         return TrainingSessionDto.builder()
                 .dateHeld(dateHeld)
                 .dayOfWeek(dayOfWeek)
                 .id(id)
-                .memberGroupDto(memberGroup.convertToDto())
+                .memberGroup(memberGroup.convertToDto())
                 .period(period.convertToDto())
                 .timeHeld(timeHeld)
                 .build();

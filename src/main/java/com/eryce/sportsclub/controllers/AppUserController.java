@@ -80,7 +80,7 @@ public class AppUserController {
         try {
             return ok(appUserService.insert(appUserDto));
         } catch (EntityExistsException exception) {
-            return badRequest().body(appUserDto);
+            return badRequest().body(null);
         }
     }
 

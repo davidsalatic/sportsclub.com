@@ -16,7 +16,7 @@ public class TrainingSessionDto {
     private Integer id;
     private LocalDate dateHeld;
     private LocalTime timeHeld;
-    private MemberGroupDto memberGroupDto;
+    private MemberGroupDto memberGroup;
     private PeriodDto period;
     private String dayOfWeek;
 
@@ -25,7 +25,7 @@ public class TrainingSessionDto {
                 .dateHeld(dateHeld)
                 .dayOfWeek(dayOfWeek)
                 .id(id)
-                .memberGroup(memberGroupDto.convertToEntity())
+                .memberGroup(memberGroup.convertToEntity())
                 .period(period.convertToEntity())
                 .timeHeld(timeHeld)
                 .build();

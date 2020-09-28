@@ -76,7 +76,7 @@ public class AppUserService implements UserDetailsService {
     public AppUserDto getByJmbg(String jmbg) {
         AppUser appUser = appUserRepository.findByJmbgIgnoreCase(jmbg);
         if (appUser != null) {
-            appUser.convertToDto();
+            return appUser.convertToDto();
         }
         return null;
     }
