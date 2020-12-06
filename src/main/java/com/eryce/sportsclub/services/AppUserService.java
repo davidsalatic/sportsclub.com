@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import java.time.DateTimeException;
@@ -103,7 +104,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     private boolean userNameExists(String username) {
-        return appUserRepository.findByUsernameIgnoreCase(username) != null;
+        return !StringUtils.isEmpty(username) && appUserRepository.findByUsernameIgnoreCase(username) != null;
     }
 
     private boolean jmbgExists(String jmbg) {
